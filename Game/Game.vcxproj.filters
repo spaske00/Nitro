@@ -4,11 +4,27 @@
     <Filter Include="src">
       <UniqueIdentifier>{6ed8950b-2bb9-4879-acfd-17e483d90013}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Core">
+      <UniqueIdentifier>{d0a01a3f-1882-4d26-8a4f-f68919ab8110}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="precomp.cpp" />
+    <ClCompile Include="precomp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="GameApp.cpp">
+      <Filter>src\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="precomp.h" />
+    <ClInclude Include="precomp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="GameApp.h">
+      <Filter>src\Core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
