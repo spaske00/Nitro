@@ -135,13 +135,17 @@
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="DebugController.cpp" />
     <ClCompile Include="GameApp.cpp" />
+    <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="precomp.cpp" />
+    <ClCompile Include="TextureController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="DebugController.h" />
     <ClInclude Include="GameApp.h" />
+    <ClInclude Include="PlayerController.h" />
     <ClInclude Include="precomp.h" />
+    <ClInclude Include="TextureController.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

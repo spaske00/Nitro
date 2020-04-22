@@ -24,6 +24,12 @@
     <ClCompile Include="DebugController.cpp">
       <Filter>src\Controllers</Filter>
     </ClCompile>
+    <ClCompile Include="TextureController.cpp">
+      <Filter>src\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>src\Controllers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="precomp.h">
@@ -36,6 +42,12 @@
       <Filter>src\Controllers</Filter>
     </ClInclude>
     <ClInclude Include="DebugController.h">
+      <Filter>src\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureController.h">
+      <Filter>src\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerController.h">
       <Filter>src\Controllers</Filter>
     </ClInclude>
   </ItemGroup>

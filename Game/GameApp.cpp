@@ -5,6 +5,8 @@
 
 #include "CameraController.h"
 #include "DebugController.h"
+#include "PlayerController.h"
+#include "TextureController.h"
 
 
 void Nitro::GameApp::GameSpecificWindowData()
@@ -27,11 +29,25 @@ bool Nitro::GameApp::GameSpecificInit()
 		return false;
 	}
 #endif
+
+	m_TextureController = TextureController::Create();
+	if (!m_TextureController->Init(m_RenderSystem->GetRenderer(), m_TextureManager.get(), "Resource"))
+	{
+		LOG_ERROR("Failed to initialize TextureController");
+		return false;
+	}
 	
 	m_CameraController = CameraController::Create();
 	if (!m_CameraController->Init(m_EntityManager.get(), &m_WindowData))
 	{
 		LOG_ERROR("Failed to initialize CameraController");
+		return false;
+	}
+
+	m_PlayerController = PlayerController::Create();
+	if (!m_PlayerController->Init(m_EntityManager.get(), m_TextureManager.get()))
+	{
+		LOG_ERROR("Failed to initialize PlayerController");
 		return false;
 	}
 	return true;
