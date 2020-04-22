@@ -61,5 +61,6 @@ bool Nitro::GameApp::GameSpecificShutdown()
 void Nitro::GameApp::GameSpecificUpdate(float dt)
 {
 	m_DebugController->Update(dt, m_EntityManager.get());
+	m_PlayerController->Update(dt, m_EntityManager.get());
 	m_CameraController->Update(dt, m_EntityManager.get());
 }

@@ -10,6 +10,9 @@
     <Filter Include="src\Controllers">
       <UniqueIdentifier>{ad1347f9-c752-4eb3-a31e-7d86d29aaf6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Components">
+      <UniqueIdentifier>{1e24d4b8-75fd-4880-8e40-c75ce426bf5a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="precomp.cpp">
@@ -49,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="PlayerController.h">
       <Filter>src\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameComponents.h">
+      <Filter>src\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
