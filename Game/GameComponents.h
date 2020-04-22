@@ -32,5 +32,13 @@ namespace Nitro
 		}
 	};
 
+
+	struct CarPhysicsComponent : public Engine::Component
+	{
+		float m_Acceleration{};
+		float m_Mass{};
+		float m_Speed{};
+		
+	};
 	
 }

@@ -25,6 +25,11 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 
 		player1->AddComponent<PlayerTagComponent>(PlayerTag::One);
 		
+		auto& physics = player1->AddComponent<CarPhysicsComponent>();
+		physics.m_Mass = 300.f;
+		physics.m_Acceleration = 1.f;
+		physics.m_Speed = 0.f;
+		
 		entityManager_->AddEntity(std::move(player1));
 	}
 
@@ -36,6 +41,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		player2->AddComponent<Engine::CollisionComponent>(50.f, 50.f);
 		player2->AddComponent<Engine::MoverComponent>();
 		player2->AddComponent<Engine::PlayerComponent>();
+		
 		auto& input = player2->AddComponent<Engine::InputComponent>();
 
 		input.inputActions.emplace_back("Player2MoveUp");
@@ -45,6 +51,12 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		// input.inputActions.emplace_back("Player1Jump");
 
 		player2->AddComponent<PlayerTagComponent>(PlayerTag::Two);
+
+		auto& physics = player2->AddComponent<CarPhysicsComponent>();
+		physics.m_Mass = 300.f;
+		physics.m_Acceleration = 1.f;
+		physics.m_Speed = 0.f;
+
 		entityManager_->AddEntity(std::move(player2));
 	}
 	
@@ -60,17 +72,22 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 	ASSERT(players.size() == 2, "Must be excatly two players");
 	for (auto player : players)
 	{
-		
+		auto physics = player->GetComponent<CarPhysicsComponent>();
 		auto mover = player->GetComponent<Engine::MoverComponent>();
 		auto input = player->GetComponent<Engine::InputComponent>();
-		auto speed = 500.f;
-
+		
+		
 		int tag = PlayerTagToInt(player->GetComponent<PlayerTagComponent>()->m_PlayerTag);
 		bool moveUp = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveUp", tag));
 		bool moveDown = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveDown", tag));
 		bool moveLeft = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveLeft", tag));
 		bool moveRight = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveRight", tag));
 
-		mover->m_TranslationSpeed = speed * vec2{ (moveRight ? 1.f : 0.f) + (moveLeft ? -1.f : 0.f), (moveUp ? -1.f : 0.f) + (moveDown ? 1.f : 0.f) };
+		int accelerationDirection = moveUp - moveDown;
+
+		physics->m_Speed += accelerationDirection * physics->m_Acceleration;
+		physics->m_Speed = std::max(0.f, physics->m_Speed);
+		physics->m_Speed = std::min(480.f, physics->m_Speed);
+		mover->m_TranslationSpeed = physics->m_Speed * vec2{ (moveRight ? 1.f : 0.f) + (moveLeft ? -1.f : 0.f), physics->m_Speed > 0 ? -1.f : 0.f};
 	}
 }
