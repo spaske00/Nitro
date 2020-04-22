@@ -4,6 +4,7 @@
 #include <Core/EntryPoint.h>
 
 #include "CameraController.h"
+#include "DebugController.h"
 
 
 void Nitro::GameApp::GameSpecificWindowData()
@@ -17,6 +18,16 @@ void Nitro::GameApp::GameSpecificWindowData()
 
 bool Nitro::GameApp::GameSpecificInit()
 {
+#if _DEBUG
+	m_DebugController = DebugController::Create();
+	if (!m_DebugController->Init(m_EntityManager.get(), m_TextureManager.get(), 
+		&m_WindowData))
+	{
+		LOG_ERROR("Failed to initialize DebugController");
+		return false;
+	}
+#endif
+	
 	m_CameraController = CameraController::Create();
 	if (!m_CameraController->Init(m_EntityManager.get(), &m_WindowData))
 	{
@@ -33,4 +44,6 @@ bool Nitro::GameApp::GameSpecificShutdown()
 
 void Nitro::GameApp::GameSpecificUpdate(float dt)
 {
+	m_DebugController->Update(dt, m_EntityManager.get());
+	m_CameraController->Update(dt, m_EntityManager.get());
 }

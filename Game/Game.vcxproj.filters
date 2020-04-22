@@ -21,6 +21,9 @@
     <ClCompile Include="CameraController.cpp">
       <Filter>src\Controllers</Filter>
     </ClCompile>
+    <ClCompile Include="DebugController.cpp">
+      <Filter>src\Controllers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="precomp.h">
@@ -30,6 +33,9 @@
       <Filter>src\Core</Filter>
     </ClInclude>
     <ClInclude Include="CameraController.h">
+      <Filter>src\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugController.h">
       <Filter>src\Controllers</Filter>
     </ClInclude>
   </ItemGroup>
