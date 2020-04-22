@@ -70,8 +70,21 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 {
 	auto players = entityManager_->GetAllEntitiesWithComponents<Engine::PlayerComponent>();
 	ASSERT(players.size() == 2, "Must be excatly two players");
-	for (auto player : players)
+	auto player1 = players[0];
+	auto player2 = players[1];
+	if (player1->GetComponent<PlayerTagComponent>()->m_PlayerTag == PlayerTag::Two)
 	{
+		std::swap(player1, player2);
+	}
+	// NOTE: Don't put this in the loop. This way is easier to handle mutual player
+	//       mutual player interaction
+	//       
+	// Update Player1
+	// TODO: Implement collision
+	// TODO: Implement jumping
+	{
+		auto player = player1;
+		auto otherPlayer = player2;
 		auto physics = player->GetComponent<CarPhysicsComponent>();
 		auto mover = player->GetComponent<Engine::MoverComponent>();
 		auto input = player->GetComponent<Engine::InputComponent>();
@@ -89,5 +102,28 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 		physics->m_Speed = std::max(0.f, physics->m_Speed);
 		physics->m_Speed = std::min(480.f, physics->m_Speed);
 		mover->m_TranslationSpeed = physics->m_Speed * vec2{ (moveRight ? 1.f : 0.f) + (moveLeft ? -1.f : 0.f), physics->m_Speed > 0 ? -1.f : 0.f};
+	}
+
+	// Update player2
+	{
+		auto player = player2;
+		auto otherPlayer = player1;
+		auto physics = player->GetComponent<CarPhysicsComponent>();
+		auto mover = player->GetComponent<Engine::MoverComponent>();
+		auto input = player->GetComponent<Engine::InputComponent>();
+
+
+		int tag = PlayerTagToInt(player->GetComponent<PlayerTagComponent>()->m_PlayerTag);
+		bool moveUp = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveUp", tag));
+		bool moveDown = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveDown", tag));
+		bool moveLeft = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveLeft", tag));
+		bool moveRight = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveRight", tag));
+
+		int accelerationDirection = moveUp - moveDown;
+
+		physics->m_Speed += accelerationDirection * physics->m_Acceleration;
+		physics->m_Speed = std::max(0.f, physics->m_Speed);
+		physics->m_Speed = std::min(480.f, physics->m_Speed);
+		mover->m_TranslationSpeed = physics->m_Speed * vec2{ (moveRight ? 1.f : 0.f) + (moveLeft ? -1.f : 0.f), physics->m_Speed > 0 ? -1.f : 0.f };
 	}
 }
