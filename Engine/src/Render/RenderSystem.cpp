@@ -57,12 +57,12 @@ namespace Engine
         // TODO: Support multiple cameras and switching between them
         auto cameras = entityManager->GetAllEntitiesWithComponents<CameraComponent, TransformComponent>();
         ASSERT(!cameras.empty(), "Must have at least one camera");
-
-        auto camera = *(cameras.begin());
-
-        // Find all entities to draw
-        auto renderables = entityManager->GetAllEntitiesWithComponents<TransformComponent, SpriteComponent>();
-        m_Renderer->DrawEntities(renderables, camera);
+		for (auto camera : cameras)
+		{
+			// Find all entities to draw
+			auto renderables = entityManager->GetAllEntitiesWithComponents<TransformComponent, SpriteComponent>();
+			m_Renderer->DrawEntities(renderables, camera);
+		}   
 
         m_Renderer->EndScene();
     }

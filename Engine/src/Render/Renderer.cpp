@@ -91,7 +91,7 @@ namespace Engine
 
         if (IsInsideScreen(transform->m_Position, vec2(size.x, size.y), camera))
         {
-            vec2 screenPosition = GetScreenPosition(transform->m_Position, camera);
+            vec2 screenPosition = GetScreenPosition(transform->m_Position, camera) + camera->GetComponent<CameraComponent>()->m_OnScreenPositionOffset;
             SDL_Rect dst{ (int)(screenPosition.x - size.x / 2), (int)(screenPosition.y - size.y / 2), (int)size.x, (int)size.y };
             SDL_RendererFlip flip = static_cast<SDL_RendererFlip>((sprite->m_FlipHorizontal ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE) | (sprite->m_FlipVertical ? SDL_FLIP_VERTICAL : SDL_FLIP_NONE));
 

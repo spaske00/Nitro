@@ -92,8 +92,13 @@ namespace Engine
         Entity* m_ReferenceEntity{};
         float m_PanSpeed{};
 
+		vec2 m_OnScreenPositionOffset;
+    	
         CameraComponent() = default;
-        CameraComponent(float speed) : m_PanSpeed(speed) {};
+        explicit CameraComponent(float speed, vec2 onScreenPositionOffset_ = {0.f, 0.f})
+    	: m_PanSpeed(speed)
+    	, m_OnScreenPositionOffset(onScreenPositionOffset_){};
+    	
     };
 
     struct InputComponent : public Component
