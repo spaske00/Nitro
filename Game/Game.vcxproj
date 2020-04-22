@@ -132,10 +132,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="precomp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CameraController.h" />
     <ClInclude Include="GameApp.h" />
     <ClInclude Include="precomp.h" />
   </ItemGroup>

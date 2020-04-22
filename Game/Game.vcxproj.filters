@@ -7,6 +7,9 @@
     <Filter Include="src\Core">
       <UniqueIdentifier>{d0a01a3f-1882-4d26-8a4f-f68919ab8110}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Controllers">
+      <UniqueIdentifier>{ad1347f9-c752-4eb3-a31e-7d86d29aaf6c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="precomp.cpp">
@@ -15,6 +18,9 @@
     <ClCompile Include="GameApp.cpp">
       <Filter>src\Core</Filter>
     </ClCompile>
+    <ClCompile Include="CameraController.cpp">
+      <Filter>src\Controllers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="precomp.h">
@@ -22,6 +28,9 @@
     </ClInclude>
     <ClInclude Include="GameApp.h">
       <Filter>src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraController.h">
+      <Filter>src\Controllers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

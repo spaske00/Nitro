@@ -16,6 +16,11 @@ namespace Engine
     public:
         Entity() { m_Id = m_CurrentId++; }
 
+    	static std::unique_ptr<Entity> Create()
+        {
+			return std::make_unique<Entity>();
+        }
+    	
         template <typename TComponent>
         TComponent* GetComponent() const
         {
