@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
-   sodipodi:docname="player1Texturef.svg">
+   sodipodi:docname="player2Texture.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.1724764"
-     inkscape:cx="309.17467"
-     inkscape:cy="-15.076272"
+     inkscape:cx="101.17467"
+     inkscape:cy="-91.963838"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
      showgrid="false"
@@ -44,8 +44,8 @@
     <inkscape:grid
        type="xygrid"
        id="grid4409"
-       originx="-102.86211"
-       originy="-367.49974" />
+       originx="-288.26702"
+       originy="-374.69605" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -64,13 +64,13 @@
      inkscape:groupmode="layer"
      id="layer1"
      sodipodi:insensitive="true"
-     transform="translate(832.13789,-166.00516)"
+     transform="translate(646.73297,-158.80885)"
      style="display:none" />
   <g
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Capa 3"
-     transform="translate(832.13789,-166.00516)"
+     transform="translate(646.73297,-158.80885)"
      style="display:inline;opacity:1">
     <g
        id="g6364">

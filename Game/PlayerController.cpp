@@ -10,10 +10,18 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 	
 	{
 		auto player1 = Engine::Entity::Create();
-		player1->AddComponent<Engine::TransformComponent>(-40.f, 0.f, 200.f, 200.f);
+		player1->AddComponent<Engine::TransformComponent>(-40.f, 0.f, 50.f, 50.f);
 		player1->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player1Texture");
 
 		entityManager_->AddEntity(std::move(player1));
+	}
+
+	{
+		auto player2 = Engine::Entity::Create();
+		player2->AddComponent<Engine::TransformComponent>(40.f, 0.f, 50.f, 50.f);
+		player2->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player2Texture");
+
+		entityManager_->AddEntity(std::move(player2));
 	}
 	
 

@@ -13,6 +13,15 @@ bool Nitro::TextureController::Init(Engine::Renderer* renderer_, Engine::Texture
 			return false;
 		}
 	}
+
+	{
+		std::string player2TexturePath = texturesRootDir_ + "/player2Texture.svg";
+		if (!textureManager_->CreateTexture(renderer_, "player2Texture", player2TexturePath))
+		{
+			LOG_ERROR("Failed to create player1Texture");
+			return false;
+		}
+	}
 	
 	return true;
 }
