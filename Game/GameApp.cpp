@@ -21,7 +21,7 @@ bool Nitro::GameApp::GameSpecificInit()
 #if _DEBUG
 	m_DebugController = DebugController::Create();
 	if (!m_DebugController->Init(m_EntityManager.get(), m_TextureManager.get(), 
-		&m_WindowData))
+	                             &m_WindowData, m_RenderSystem->GetRenderer()))
 	{
 		LOG_ERROR("Failed to initialize DebugController");
 		return false;
