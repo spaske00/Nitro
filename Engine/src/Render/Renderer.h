@@ -15,8 +15,9 @@ namespace Engine
         bool Init(const WindowData& windowData_ = WindowData());
         bool Shutdown();
 
-        void DrawEntities(const std::vector<Entity*> renderables_, const Entity* camera);
-        void DrawBackground(SDL_Texture* backgroundTexture_, const Entity* camera_);
+        void DrawBackgrounds(const std::vector<Entity*>& backgrounds_, const Entity* camera_);
+        void DrawEntities(const std::vector<Entity*>& renderables_, const Entity* camera);
+        void DrawBackground(const Entity* background_, const Entity* camera_);
         void DrawEntity(const Entity* r, const Entity* camera);
         void BeginScene() const;
         void EndScene() const;

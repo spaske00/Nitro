@@ -105,6 +105,9 @@
     <ClCompile Include="Matrix.cpp">
       <Filter>src\Util</Filter>
     </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="extern\spdlog\async.h">
@@ -1056,6 +1059,9 @@
       <Filter>src\PhysicsSystem</Filter>
     </ClInclude>
     <ClInclude Include="Matrix.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
       <Filter>src\Util</Filter>
     </ClInclude>
   </ItemGroup>

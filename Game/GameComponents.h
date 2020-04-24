@@ -52,5 +52,13 @@ namespace Nitro
 		float m_Speed{};
 		
 	};
+
+	struct TextComponent : public Engine::Component
+	{
+		std::string text;
+		vec2 screenPosiiton;
+	};
+
+	
 	
 }

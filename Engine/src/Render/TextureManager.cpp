@@ -1,5 +1,9 @@
 #include "precomp.h"
+#include "Color.h"
+#include "Matrix.h"
 #include "TextureManager.h"
+
+#include <SDL_surface.h>
 
 #include "Render/Texture.h"
 #include "Render/Renderer.h"
@@ -19,6 +23,24 @@ namespace Engine
         return m_Textures.at(name_)->m_Texture != nullptr;
     }
 
+
+	
+	bool TextureManager::CreateTextureFromColorTileMatrix(Renderer* renderer_, std::string name_, const Matrix<ColorA>& colorMap_,
+		int tileHeight_, int tileWidth_)
+    {
+		auto result = Texture::CreateTextureFromColorMatrix(renderer_, colorMap_, tileHeight_, tileWidth_);
+		if (!result)
+		{
+			LOG_ERROR("Failed to create a texture from color tile matrix");
+			return false;
+			
+		}
+		
+		m_Textures.emplace(std::move(name_), std::move(result));
+		return true;
+    }
+	
+	
     Texture* TextureManager::GetTexture(std::string name_)
     {
         if (m_Textures.find(name_) == m_Textures.end()) {

@@ -23,9 +23,6 @@ namespace Engine
         RenderSystem() = default;
     private:
         std::unique_ptr<Renderer> m_Renderer;
-
-		SDL_Surface* m_SDLBackgroundSurface;
-		SDL_Texture* m_BackgroundTexture;
     	
         RenderSystem(const RenderSystem& other) = delete;
         RenderSystem& operator=(RenderSystem& other) = delete;

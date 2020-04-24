@@ -110,24 +110,15 @@ namespace Engine
 
 
 	
-	struct TileMapComponent : public Component
-	{
-		using MatrixType = Matrix<SDL_Color>;
-		MatrixType m_Matrix;
-		vec2 m_IndividualTileSize;
-		vec2 m_TileMapStart;
-		vec2 m_TileMapDirection;
-	};
-
-
-	struct DrawableComponent : public Component
+	struct BackgroundComponent : public Component
 	{
 		
 	};
-	
-	struct TileMapCollisionComponent : public Component
+
+	struct DrawableEntity : public Component
 	{
-		TileMapComponent* m_TileMapComponent;
-		std::vector<TileMapComponent::MatrixType::Coords> m_CollidedWithTiles;
+		
 	};
+
+	
 }

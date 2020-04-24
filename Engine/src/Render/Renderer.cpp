@@ -70,7 +70,15 @@ namespace Engine
 			&& (screenPosition.y + targetSize.y / 2.0f >= 0 && screenPosition.y - targetSize.y / 2.0f <= camera->GetComponent<TransformComponent>()->m_Size.y);
 	}
 
-	void Renderer::DrawEntities(const std::vector<Entity*> renderables_, const Entity* camera)
+	void Renderer::DrawBackgrounds(const std::vector<Entity*>& backgrounds_, const Entity* camera_)
+	{
+		for (auto b : backgrounds_)
+		{
+			DrawBackground(b, camera_);
+		}
+	}
+
+	void Renderer::DrawEntities(const std::vector<Entity*>& renderables_, const Entity* camera)
 	{
 		for (const auto r : renderables_)
 		{
@@ -78,15 +86,91 @@ namespace Engine
 		}
 	}
 
-	void Renderer::DrawBackground(SDL_Texture* backgroundTexture_, const Entity* camera_)
+	SDL_Rect CenterPositionToSDL_Rect(vec2 position, vec2 size)
 	{
+		SDL_Rect result{
+			(int)(position.x - size.x / 2), (int)(position.y - size.y / 2), (int)size.x, (int)size.y
+		};
+		return result;
+	}
+	
+	
+	
+	void Renderer::DrawBackground(const Entity* background_, const Entity* camera_)
+	{
+		ASSERT(background_->HasComponent<BackgroundComponent>(), "background must have a background component");
+		
+		auto backgroundTransform = background_->GetComponent<TransformComponent>();
+		auto backgroundSprite = background_->GetComponent<SpriteComponent>();
+
+		
+		auto backgroundPosition = backgroundTransform->m_Position;
+		auto backgroundRotation = backgroundTransform->m_Rotation;
+		auto backgroundSize = backgroundTransform->m_Size;
+
+		auto cameraPosition = camera_->GetComponent<TransformComponent>()->m_Position;
+		auto cameraSize = camera_->GetComponent<TransformComponent>()->m_Size;
+		auto cameraOnScreenPositionOffset = camera_->GetComponent<CameraComponent>()->m_OnScreenPositionOffset;
+
+		if (IsInsideScreen(backgroundPosition, backgroundSize, camera_))
+		{
+			vec2 screenPosition = GetScreenPosition(backgroundPosition, camera_) + cameraOnScreenPositionOffset;
+			//SDL_Rect src{ (int)cameraPosition.x, (int)abs(cameraPosition.y), (int)cameraSize.x, (int)cameraSize.y };
+
+			SDL_Rect texture = CenterPositionToSDL_Rect(backgroundPosition, backgroundSize);
+			SDL_Rect camera = CenterPositionToSDL_Rect(cameraPosition, cameraSize);
+
+			SDL_Rect result;
+			if (!SDL_IntersectRect(&texture, &camera, &result))
+			{
+				
+				return;
+			}
+
+			SDL_Rect src = result;
+			src.x -= texture.x;
+			src.y -= texture.y;
+
+			SDL_Rect dst = result;
+			dst.x -= camera.x;
+			dst.y -= camera.y;
+			dst.x += (int)cameraOnScreenPositionOffset.x;
+			dst.y += (int)cameraOnScreenPositionOffset.y;
+			
+			
+			ASSERT(src.x >= 0 && src.y >= 0, "Must be greater then 0");
+			
+			//SDL_Rect dst{ (int)(screenPosition.x - backgroundSize.x / 2), (int)(screenPosition.y - backgroundSize.y / 2), (int)backgroundSize.x, (int)backgroundSize.y };
+			
+			//SDL_Rect dst{ (int)cameraOnScreenPositionOffset.x + dest.x, (int)cameraOnScreenPositionOffset.y, + dest.x, (int)cameraSize.x, (int)cameraSize.y };
+			SDL_RendererFlip flip = static_cast<SDL_RendererFlip>((backgroundSprite->m_FlipHorizontal ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE) | (backgroundSprite->m_FlipVertical ? SDL_FLIP_VERTICAL : SDL_FLIP_NONE));
+
+#if 0
+			SDL_Rect src;
+			SDL_Rect dst{ (int)(screenPosition.x - backgroundSize.x / 2), (int)(screenPosition.y - backgroundSize.y / 2), (int)backgroundSize.x, (int)backgroundSize.y };
+
+#endif
+			SDL_RenderCopyEx(
+				m_NativeRenderer,
+				backgroundSprite->m_Image->m_Texture,
+				&src,
+				&dst,
+				backgroundTransform->m_Rotation,
+				NULL,
+				flip
+			);
+		}
+		
+#if 0
 		auto transform = camera_->GetComponent<TransformComponent>();
 		
 		SDL_Rect src{ (int)transform->m_Position.x, (int)abs(transform->m_Position.y), (int)transform->m_Size.x, (int)transform->m_Size.y };
 		vec2 screenPosition = camera_->GetComponent<CameraComponent>()->m_OnScreenPositionOffset;
 		SDL_Rect dst{ (int)(screenPosition.x), (int)(screenPosition.y), (int)transform->m_Size.x, (int)transform->m_Size.y };
 		SDL_RenderCopyEx(m_NativeRenderer, backgroundTexture_, &src, &dst, 0.f, NULL, static_cast<SDL_RendererFlip>(SDL_FLIP_NONE));
+#endif
 	}
+	
 
 	void Renderer::DrawEntity(const Entity* r, const Entity* camera)
 	{

@@ -37,7 +37,7 @@ bool Nitro::GameApp::GameSpecificInit()
 	}
 #endif
 
-	if (!m_TrackController->Init(m_EntityManager.get()))
+	if (!m_TrackController->Init(m_RenderSystem->GetRenderer(), m_EntityManager.get(), m_TextureManager.get()))
 	{
 		LOG_ERROR("Failed to initialize track controller");
 		return false;
@@ -66,7 +66,9 @@ bool Nitro::GameApp::GameSpecificShutdown()
 
 void Nitro::GameApp::GameSpecificUpdate(float dt)
 {
+#if _DEBUG
 	m_DebugController->Update(dt, m_EntityManager.get());
+#endif
 	m_PlayerController->Update(dt, m_EntityManager.get());
 	m_CameraController->Update(dt, m_EntityManager.get());
 }

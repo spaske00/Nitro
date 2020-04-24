@@ -35,22 +35,6 @@ namespace Engine
         }
 
         m_Renderer->Init(windowData_);
-
-		m_SDLBackgroundSurface = SDL_CreateRGBSurface(0, 1000, 5200, 32, 0, 0, 0, 0);
-
-
-		for (int y = 0; y <= 5000; y += 16)
-		{
-			for (int x = 0; x <= 1000; x += 16)
-			{
-				SDL_Rect rect{ x, y, 8, 8 };
-				SDL_FillRect(m_SDLBackgroundSurface, &rect, SDL_MapRGBA(m_SDLBackgroundSurface->format, y % 256, y % 256, y % 256, 255));
-			}
-		}
-
-		m_BackgroundTexture = SDL_CreateTextureFromSurface(m_Renderer->GetNativeRenderer(), m_SDLBackgroundSurface);
-
-
     	
 
         LOG_INFO("RenderSystem initialized successfully");
@@ -75,16 +59,25 @@ namespace Engine
         // TODO: Support multiple cameras and switching between them
         auto cameras = entityManager->GetAllEntitiesWithComponents<CameraComponent, TransformComponent>();
         ASSERT(!cameras.empty(), "Must have at least one camera");
+
+		auto backgrounds = entityManager->GetAllEntitiesWithComponent<BackgroundComponent>();
+		auto renderables = entityManager->GetAllEntitiesWithComponent<DrawableEntity>();
+		
+    	
+		// render backgrounds
+    	for (auto camera : cameras)
+    	{	
+			m_Renderer->DrawBackgrounds(backgrounds, camera);
+    	}
+    	
 		for (auto camera : cameras)
 		{
-			// Find all entities to draw
-
-			m_Renderer->DrawBackground(m_BackgroundTexture, camera);
-			
-			auto renderables = entityManager->GetAllEntitiesWithComponents<TransformComponent, SpriteComponent>();
+			// Find all entities to draw	
 			m_Renderer->DrawEntities(renderables, camera);
 		}   
 
+    	
+    	
         m_Renderer->EndScene();
     }
 
