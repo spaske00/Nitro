@@ -2,6 +2,18 @@
 
 namespace Nitro
 {
+
+	enum class TileType
+	{
+		Road,
+		Water,
+		Grass,
+		RoadEdge,
+		Sand,
+	};
+
+	
+	
 	enum class PlayerTag
 	{
 		One = 1,

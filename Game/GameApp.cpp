@@ -7,7 +7,7 @@
 #include "DebugController.h"
 #include "PlayerController.h"
 #include "TextureController.h"
-
+#include "TrackController.h"
 
 void Nitro::GameApp::GameSpecificWindowData()
 {
@@ -20,6 +20,13 @@ void Nitro::GameApp::GameSpecificWindowData()
 
 bool Nitro::GameApp::GameSpecificInit()
 {
+	m_TextureController = TextureController::Create();
+	if (!m_TextureController->Init(m_RenderSystem->GetRenderer(), m_TextureManager.get(), "Resource"))
+	{
+		LOG_ERROR("Failed to initialize TextureController");
+		return false;
+	}
+	
 #if _DEBUG
 	m_DebugController = DebugController::Create();
 	if (!m_DebugController->Init(m_EntityManager.get(), m_TextureManager.get(), 
@@ -30,10 +37,9 @@ bool Nitro::GameApp::GameSpecificInit()
 	}
 #endif
 
-	m_TextureController = TextureController::Create();
-	if (!m_TextureController->Init(m_RenderSystem->GetRenderer(), m_TextureManager.get(), "Resource"))
+	if (!m_TrackController->Init(m_EntityManager.get()))
 	{
-		LOG_ERROR("Failed to initialize TextureController");
+		LOG_ERROR("Failed to initialize track controller");
 		return false;
 	}
 	

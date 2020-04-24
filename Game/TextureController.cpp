@@ -5,23 +5,32 @@ bool Nitro::TextureController::Init(Engine::Renderer* renderer_, Engine::Texture
 {
 	ASSERT(textureManager_ != nullptr, "Must pass a valid texture manager");
 
+
+	if (!textureManager_->CreateTexture(renderer_, "player1Texture", texturesRootDir_ + "/player1Texture.svg"))
 	{
-		std::string player1TexturePath = texturesRootDir_ + "/player1Texture.svg";
-		if(!textureManager_->CreateTexture(renderer_, "player1Texture", player1TexturePath))
-		{
-			LOG_ERROR("Failed to create player1Texture");
-			return false;
-		}
+		LOG_ERROR("Failed to create player1Texture");
+		return false;
 	}
 
+	if (!textureManager_->CreateTexture(renderer_, "player2Texture", texturesRootDir_ + "/player2Texture.svg"))
 	{
-		std::string player2TexturePath = texturesRootDir_ + "/player2Texture.svg";
-		if (!textureManager_->CreateTexture(renderer_, "player2Texture", player2TexturePath))
-		{
-			LOG_ERROR("Failed to create player1Texture");
-			return false;
-		}
+		LOG_ERROR("Failed to create player1Texture");
+		return false;
+	}
+
+#if _DEBUG
+	if (!textureManager_->CreateTexture(renderer_, "background_debug_texture_grid", texturesRootDir_ + "/background_debug_texture_grid.png"))
+	{
+		LOG_ERROR("Failed to load bacgkround_Debug_texture_gird");
+		return false;
 	}
 	
+	if (!textureManager_->CreateTexture(renderer_, "blank", texturesRootDir_ + "/blank.png"))
+	{
+		LOG_ERROR("Failed to load blank texture");
+		return false;
+	}
+#endif
+
 	return true;
 }

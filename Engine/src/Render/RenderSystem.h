@@ -1,5 +1,7 @@
 #pragma once
 #include "Render/WindowData.h"
+struct SDL_Surface;
+struct SDL_Texture;
 
 namespace Engine
 {
@@ -22,7 +24,12 @@ namespace Engine
     private:
         std::unique_ptr<Renderer> m_Renderer;
 
+		SDL_Surface* m_SDLBackgroundSurface;
+		SDL_Texture* m_BackgroundTexture;
+    	
         RenderSystem(const RenderSystem& other) = delete;
         RenderSystem& operator=(RenderSystem& other) = delete;
+
+		
     };
 }
