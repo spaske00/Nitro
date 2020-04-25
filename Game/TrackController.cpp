@@ -8,15 +8,15 @@
 bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityManager* entityManager_, Engine::TextureManager* textureManager_)
 {
 	ASSERT(entityManager_ != nullptr, "Must pass a valid entity manager");
-#if 0
+#if 1
 	{
-		Engine::Matrix<Engine::TileType> colorMatrix(10000, 200);
+		Engine::Matrix<Engine::ColorA> colorMatrix(16384 / 8, 16384 / 8);
 		
 		for (unsigned x = 0; x < colorMatrix.Rows(); ++x)
 		{
 			for (unsigned y = 0; y < colorMatrix.Cols(); ++y)
 			{
-				colorMatrix.At(x, y) = { x % 256u, x % 256u, x % 256u, 255 };
+				colorMatrix.At(x, y) = Engine::ColorA{ x % 256u, x % 256u, x % 256u, 255u };
 			}
 		}
 

@@ -61,6 +61,11 @@ namespace Engine
     	}
 
 		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer_->GetNativeRenderer(), surface);
+    	if(!texture)
+    	{
+			LOG_ERROR("Failed to create texture {}", SDL_GetError());
+			return nullptr;
+    	}
 		ASSERT(texture != nullptr, "Failed to create texture");
     	
 		auto result = std::make_unique<Texture>();

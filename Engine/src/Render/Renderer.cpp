@@ -37,6 +37,11 @@ namespace Engine
 		SetBackgroundColor(100, 150, 236, SDL_ALPHA_OPAQUE);
 
 		
+		SDL_GetRendererInfo(m_NativeRenderer, &m_RendererInfo);
+
+
+		LOG_INFO("RenderSystem initialized successfully");
+		
 		
 		return true;
 	}
@@ -247,6 +252,16 @@ namespace Engine
 	void Renderer::EndScene() const
 	{
 		SDL_RenderPresent(m_NativeRenderer);
+	}
+
+	int Renderer::MaxTextureWidth() const
+	{
+		return m_RendererInfo.max_texture_width;
+	}
+
+	int Renderer::MaxTextureHeight() const
+	{
+		return m_RendererInfo.max_texture_height;
 	}
 
 	Renderer::~Renderer()
