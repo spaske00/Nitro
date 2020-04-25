@@ -30,6 +30,18 @@ namespace Engine
         return true;
     }
 
+
+    Texture::Dimensions Texture::QueryDimensions() const
+    {
+		Dimensions result;
+		if (!m_Texture && SDL_QueryTexture(m_Texture, NULL, NULL, &result.width, &result.height) != 0)
+		{
+			result.height = -1;
+			result.width = -1;
+		}
+		return result;
+    }
+
 	std::unique_ptr<Texture> Texture::CreateTextureFromColorMatrix(Renderer* renderer_, const Matrix<ColorA>& colorMatrix_, int tileHeight_, int tileWidth_)
     {
 
@@ -48,7 +60,6 @@ namespace Engine
 			LOG_ERROR("Failed to create surface {}", SDL_GetError());
 			return nullptr;
 		}
-		
     	
     	for (int x = 0; x < rows; ++x)
     	{
@@ -74,6 +85,21 @@ namespace Engine
 
 		// TODO: Should the surface be freed here?
 		SDL_FreeSurface(surface);
+		return result;
+    }
+
+	Matrix<std::unique_ptr<Texture>> CreateMatrixOfTexturesFromMatrixOfColors(Renderer* renderer_, const Matrix<ColorA>& colorMatrix, int tileHeight_, int tileWidth_)
+    {
+		int maxTextureHeight = renderer_->MaxTextureHeight();
+		int maxTextureWidth = renderer_->MaxTextureWidth();
+
+		int targetTexutreHeight = colorMatrix.Rows() * tileHeight_;
+		int targetTextureWidth = colorMatrix.Cols() * tileWidth_;
+
+		Matrix<std::unique_ptr<Texture>> result;
+
+
+    	
 		return result;
     }
 

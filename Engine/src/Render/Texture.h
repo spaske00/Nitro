@@ -12,8 +12,15 @@ namespace Engine {
 	
     struct Texture
     {
+    	struct Dimensions
+    	{
+			int width;
+			int height;
+    	};
         SDL_Texture* m_Texture{};
 
+		Dimensions QueryDimensions() const;
+		
 		static std::unique_ptr<Texture>
     	CreateTextureFromColorMatrix(Renderer* renderer_, const Matrix<ColorA>& colorMatrix_, int tileHeight_, int tileWidth_);
         bool LoadTexture(Renderer* renderer_, std::string path_);
