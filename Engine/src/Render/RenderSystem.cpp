@@ -1,11 +1,12 @@
 #include "precomp.h"
+
+#include <SDL.h>
+#include <SDL_image.h>
 #include "RenderSystem.h"
 #include "Render/Renderer.h"
 #include "Render/Window.h"
 #include "ECS/EntityManager.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
 
 namespace Engine
 {
@@ -34,6 +35,7 @@ namespace Engine
         }
 
         m_Renderer->Init(windowData_);
+    	
 
         LOG_INFO("RenderSystem initialized successfully");
         return true;
@@ -57,13 +59,25 @@ namespace Engine
         // TODO: Support multiple cameras and switching between them
         auto cameras = entityManager->GetAllEntitiesWithComponents<CameraComponent, TransformComponent>();
         ASSERT(!cameras.empty(), "Must have at least one camera");
+
+		auto backgrounds = entityManager->GetAllEntitiesWithComponent<BackgroundComponent>();
+		auto renderables = entityManager->GetAllEntitiesWithComponent<DrawableEntity>();
+		
+    	
+		// render backgrounds
+    	for (auto camera : cameras)
+    	{	
+			m_Renderer->DrawBackgrounds(backgrounds, camera);
+    	}
+    	
 		for (auto camera : cameras)
 		{
-			// Find all entities to draw
-			auto renderables = entityManager->GetAllEntitiesWithComponents<TransformComponent, SpriteComponent>();
+			// Find all entities to draw	
 			m_Renderer->DrawEntities(renderables, camera);
 		}   
 
+    	
+    	
         m_Renderer->EndScene();
     }
 

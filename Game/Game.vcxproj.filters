@@ -33,6 +33,9 @@
     <ClCompile Include="PlayerController.cpp">
       <Filter>src\Controllers</Filter>
     </ClCompile>
+    <ClCompile Include="TrackController.cpp">
+      <Filter>src\Controllers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="precomp.h">
@@ -55,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="GameComponents.h">
       <Filter>src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackController.h">
+      <Filter>src\Controllers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -138,6 +138,7 @@
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="precomp.cpp" />
     <ClCompile Include="TextureController.cpp" />
+    <ClCompile Include="TrackController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraController.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="precomp.h" />
     <ClInclude Include="TextureController.h" />
+    <ClInclude Include="TrackController.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

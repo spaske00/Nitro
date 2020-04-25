@@ -2,6 +2,18 @@
 
 namespace Nitro
 {
+
+	enum class TileType
+	{
+		Road,
+		Water,
+		Grass,
+		RoadEdge,
+		Sand,
+	};
+
+	
+	
 	enum class PlayerTag
 	{
 		One = 1,
@@ -40,5 +52,13 @@ namespace Nitro
 		float m_Speed{};
 		
 	};
+
+	struct TextComponent : public Engine::Component
+	{
+		std::string text;
+		vec2 screenPosiiton;
+	};
+
+	
 	
 }

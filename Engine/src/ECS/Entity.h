@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	using TileType = uint8_t;
     class Entity
     {
     public:

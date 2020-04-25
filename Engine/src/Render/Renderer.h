@@ -2,7 +2,7 @@
 #include "Render/WindowData.h"
 
 struct SDL_Renderer;
-
+struct SDL_Texture;
 namespace Engine
 {
     struct WindowData;
@@ -15,7 +15,9 @@ namespace Engine
         bool Init(const WindowData& windowData_ = WindowData());
         bool Shutdown();
 
-        void DrawEntities(const std::vector<Entity*> renderables_, const Entity* camera);
+        void DrawBackgrounds(const std::vector<Entity*>& backgrounds_, const Entity* camera_);
+        void DrawEntities(const std::vector<Entity*>& renderables_, const Entity* camera);
+        void DrawBackground(const Entity* background_, const Entity* camera_);
         void DrawEntity(const Entity* r, const Entity* camera);
         void BeginScene() const;
         void EndScene() const;
@@ -30,5 +32,6 @@ namespace Engine
         std::unique_ptr<Window> m_Window;
         SDL_Renderer* m_NativeRenderer{ };
         Color m_BackgroundColor{ };
+        
     };
 }

@@ -3,6 +3,7 @@
 
 namespace Nitro
 {
+	class TrackController;
 	class PlayerController;
 	class TextureController;
 	class DebugController;
@@ -14,9 +15,11 @@ namespace Nitro
 		bool GameSpecificInit() override;
 		bool GameSpecificShutdown() override;
 		void GameSpecificUpdate(float dt) override;
+		
 		std::unique_ptr<CameraController> m_CameraController;
 		std::unique_ptr<TextureController> m_TextureController;
 		std::unique_ptr<PlayerController> m_PlayerController;
+		std::unique_ptr<TrackController> m_TrackController;
 
 
 		

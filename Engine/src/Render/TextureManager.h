@@ -8,7 +8,9 @@ namespace Engine
     class TextureManager
     {
     public:
+    	
         bool CreateTexture(Renderer* renderer_, std::string name_, std::string path_);
+		bool CreateTextureFromColorTileMatrix(Renderer* renderer_, std::string name_, const Matrix<ColorA>& colorMap_, int tileHeight_, int tileWidth_);
         Texture* GetTexture(std::string name_);
 
         TextureManager() = default;

@@ -10,6 +10,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 	
 	{
 		auto player1 = Engine::Entity::Create();
+		player1->AddComponent<Engine::DrawableEntity>();
 		player1->AddComponent<Engine::TransformComponent>(-40.f, 0.f, 50.f, 50.f);
 		player1->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player1Texture");
 		player1->AddComponent<Engine::CollisionComponent>(50.f, 50.f);
@@ -35,7 +36,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 
 	{
 		auto player2 = Engine::Entity::Create();
-		
+		player2->AddComponent<Engine::DrawableEntity>();
 		player2->AddComponent<Engine::TransformComponent>(40.f, 0.f, 50.f, 50.f);
 		player2->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player2Texture");
 		player2->AddComponent<Engine::CollisionComponent>(50.f, 50.f);
@@ -127,3 +128,10 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 		mover->m_TranslationSpeed = physics->m_Speed * vec2{ (moveRight ? 1.f : 0.f) + (moveLeft ? -1.f : 0.f), physics->m_Speed > 0 ? -1.f : 0.f };
 	}
 }
+/*
+ * CarPhysics: Jumping, collision, 
+ * AI Cars
+ * InfoPrint: KM/h, score, koliko zaostaje za ovim drugim igracem...
+ * Generisanje Nivoa
+ * 
+ */

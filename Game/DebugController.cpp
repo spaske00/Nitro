@@ -9,11 +9,8 @@ bool Nitro::DebugController::Init(Engine::EntityManager* entityManager_, Engine:
 	ASSERT(textureManager_ != nullptr, "Must pass a valid texture Manager");
 	ASSERT(windowData_ != nullptr, "Must pass a valid windowData");
 
-	if (!textureManager_->CreateTexture(renderer_, "background_debug_texture_grid", "Resource/background_debug_texture_grid.png"))
-	{
-		LOG_ERROR("Failed to load bacgkround_Debug_texture_gird");
-		return false;
-	}
+	
+#if 0
 	for(int i = 0; i < 100; ++i)
 	{
 		auto background = Engine::Entity::Create();
@@ -23,6 +20,22 @@ bool Nitro::DebugController::Init(Engine::EntityManager* entityManager_, Engine:
 		background->AddComponent<Engine::TransformComponent>(0.f, -600.f * i, 512.f, 512.f);
 		entityManager_->AddEntity(std::move(background));
 	}
+#endif
+	
+	{
+		auto entity = Engine::Entity::Create();
+		entity->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("blank");
+		entity->AddComponent<Engine::TransformComponent>(0.f, 0.f, 15.f, 15.f);
+		entityManager_->AddEntity(std::move(entity));
+	}
+
+	{
+		auto entity = Engine::Entity::Create();
+		entity->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("blank");
+		entity->AddComponent<Engine::TransformComponent>(20.f, 20.f, 20.f, 20.f);
+		entityManager_->AddEntity(std::move(entity));
+	}
+	
 	
 	return true;
 }
