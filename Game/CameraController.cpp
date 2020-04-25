@@ -54,7 +54,7 @@ void Nitro::CameraController::Update(float dt_, Engine::EntityManager* entityMan
 		auto transform = player1Camera->GetComponent<Engine::TransformComponent>();
 		transform->m_Position.y = player1->GetComponent<Engine::TransformComponent>()->m_Position.y
 		- transform->m_Size.y / 3;
-
+		transform->m_Position.x = player1->GetComponent<Engine::TransformComponent>()->m_Position.x;
 	}
 
 	// snap camera2 to player2
@@ -63,6 +63,8 @@ void Nitro::CameraController::Update(float dt_, Engine::EntityManager* entityMan
 
 		transform->m_Position.y = player2->GetComponent<Engine::TransformComponent>()->m_Position.y
 			- transform->m_Size.y / 3;
+		transform->m_Position.x = player2->GetComponent<Engine::TransformComponent>()->m_Position.x;
+
 
 	}
 	

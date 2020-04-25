@@ -23,6 +23,11 @@ namespace Engine {
 		
 		static std::unique_ptr<Texture>
     	CreateTextureFromColorMatrix(Renderer* renderer_, const Matrix<ColorA>& colorMatrix_, int tileHeight_, int tileWidth_);
+
+		static Matrix<std::unique_ptr<Texture>>
+			CreateMatrixOfTexturesFromMatrixOfColors(Renderer* renderer_, const Matrix<ColorA>& colorMatrix, int tileHeightInPixels_, int tileWidthInPixels_);
+			
+    	
         bool LoadTexture(Renderer* renderer_, std::string path_);
         Texture() = default;
         Texture(Renderer* renderer_, std::string path_);

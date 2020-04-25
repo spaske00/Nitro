@@ -14,6 +14,8 @@
 #include <vector>
 #include <set>
 
+#include <SDL.h>
+
 #include "Logger/Logger.h"
 
 #include <glm/glm.hpp>

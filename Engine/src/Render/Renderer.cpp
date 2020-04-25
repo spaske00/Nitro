@@ -1,5 +1,7 @@
 #include "precomp.h"
+
 #include <SDL.h>
+
 #include "Renderer.h"
 #include "Render/Window.h"
 #include "Render/Texture.h"
@@ -14,7 +16,7 @@ namespace Engine
 	{
 		LOG_INFO("Initializing Renderer");
 
-
+		
 		m_Window = std::make_unique<Window>();
 
 		if (!m_Window->Init(windowData_))
@@ -262,6 +264,7 @@ namespace Engine
 	int Renderer::MaxTextureHeight() const
 	{
 		return m_RendererInfo.max_texture_height;
+		
 	}
 
 	Renderer::~Renderer()

@@ -1,12 +1,14 @@
 #include "precomp.h"
 
+#include <SDL.h>
+#include <SDL_image.h>
+
 #include "Matrix.h"
 #include "Color.h"
 #include "Texture.h"
 #include "Render/Renderer.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
+
 
 
 namespace Engine
@@ -88,17 +90,62 @@ namespace Engine
 		return result;
     }
 
-	Matrix<std::unique_ptr<Texture>> CreateMatrixOfTexturesFromMatrixOfColors(Renderer* renderer_, const Matrix<ColorA>& colorMatrix, int tileHeight_, int tileWidth_)
+	Matrix<std::unique_ptr<Texture>> Texture::CreateMatrixOfTexturesFromMatrixOfColors(Renderer* renderer_, const Matrix<ColorA>& colorMatrix, int tileHeightInPixels_, int tileWidthInPixels_)
     {
-		int maxTextureHeight = renderer_->MaxTextureHeight();
-		int maxTextureWidth = renderer_->MaxTextureWidth();
+    	// NOTE: ALL dimensions are in PIXELS!
+		int maxTextureHeightInPixels = renderer_->MaxTextureHeight(); // 2
+		int maxTextureWidthInPixels = renderer_->MaxTextureWidth(); // 2
 
-		int targetTexutreHeight = colorMatrix.Rows() * tileHeight_;
-		int targetTextureWidth = colorMatrix.Cols() * tileWidth_;
+		int targetTexutreHeightInPixels = (int)colorMatrix.Rows() * tileHeightInPixels_; // 7 
+		int targetTextureWidthInPixels = (int)colorMatrix.Cols() * tileWidthInPixels_; // 5
 
-		Matrix<std::unique_ptr<Texture>> result;
+		
+		int numberOfColsTextures = (targetTextureWidthInPixels / maxTextureWidthInPixels) + (targetTextureWidthInPixels % maxTextureWidthInPixels != 0); // 3
+		int numberOfRowsTextures = (targetTexutreHeightInPixels / maxTextureHeightInPixels) + (targetTexutreHeightInPixels % maxTextureHeightInPixels != 0); // 4
 
+    	
+		Matrix<std::unique_ptr<Texture>> result(numberOfRowsTextures, numberOfColsTextures);
 
+    	
+		
+		
+		for (int textureI = 0, totalPixelsHeightLeft = targetTexutreHeightInPixels, colorMatrixStartRow = 0;
+			textureI < result.Rows();
+			++textureI, totalPixelsHeightLeft -= maxTextureHeightInPixels,
+			colorMatrixStartRow += maxTextureHeightInPixels / tileHeightInPixels_)
+		{	
+			for (int textureJ = 0, totalPixelsWidthLeft = targetTextureWidthInPixels, colorMatrixStartCol = 0;
+				textureJ < result.Cols();
+				++textureJ,totalPixelsWidthLeft -= maxTextureWidthInPixels,
+				colorMatrixStartCol += maxTextureWidthInPixels / tileWidthInPixels_)
+			{
+				int currentTextureHeightInPixels = std::min(maxTextureHeightInPixels, totalPixelsHeightLeft);
+				int currentTextureWidthInPixels = std::min(maxTextureWidthInPixels, totalPixelsWidthLeft);
+
+				int colorMatrixEndRow = colorMatrixStartRow + currentTextureHeightInPixels / tileHeightInPixels_;
+				int colorMatrixEndCol = colorMatrixStartCol + currentTextureWidthInPixels / tileWidthInPixels_;
+
+				SDL_Surface* surface = SDL_CreateRGBSurfaceWithFormat(0, currentTextureWidthInPixels, currentTextureHeightInPixels, 0, SDL_PIXELFORMAT_RGBA32);
+				ASSERT(surface != nullptr, SDL_GetError());
+				for (int i = colorMatrixStartRow; i < colorMatrixEndRow; ++i)
+				{
+					for(int j = colorMatrixStartCol; j < colorMatrixEndCol; ++j)
+					{
+						SDL_Rect dest{(j - colorMatrixStartCol) * tileWidthInPixels_, (i - colorMatrixStartRow) * tileHeightInPixels_,
+						tileWidthInPixels_, tileHeightInPixels_};
+						auto color = colorMatrix.At(i, j);
+						SDL_FillRect(surface, &dest, SDL_MapRGBA(surface->format, color.r, color.g, color.b, color.a));
+						
+					}
+				}
+				SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer_->GetNativeRenderer(), surface);
+				ASSERT(texture != nullptr, SDL_GetError());
+				
+				(result.At(textureI, textureJ) = std::make_unique<Texture>())->m_Texture = texture;
+				
+				SDL_FreeSurface(surface);
+			}
+		}
     	
 		return result;
     }
