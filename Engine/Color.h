@@ -3,6 +3,7 @@
 namespace Engine
 {
 	using ColorType = uint8_t;
+	// TODO: Change to GLM color defined type
 	struct Color
 	{
 		ColorType r;

@@ -1,8 +1,9 @@
 #pragma once
 #include "Render/WindowData.h"
-
+#include <SDL.h>
 struct SDL_Renderer;
 struct SDL_Texture;
+struct SDL_RendererInfo;
 namespace Engine
 {
     struct WindowData;
@@ -22,6 +23,10 @@ namespace Engine
         void BeginScene() const;
         void EndScene() const;
 
+		int MaxTextureWidth() const;
+		int MaxTextureHeight() const;
+    	
+    	
         SDL_Renderer* GetNativeRenderer() const { return m_NativeRenderer; }
 
         void SetBackgroundColor(unsigned char bgR_, unsigned char bgG_, unsigned char bgB_, unsigned char bgA_);
@@ -30,8 +35,9 @@ namespace Engine
 
     private:
         std::unique_ptr<Window> m_Window;
+		SDL_RendererInfo m_RendererInfo;
+
         SDL_Renderer* m_NativeRenderer{ };
         Color m_BackgroundColor{ };
-        
     };
 }

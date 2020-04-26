@@ -36,8 +36,7 @@ namespace Engine
 
         m_Renderer->Init(windowData_);
     	
-
-        LOG_INFO("RenderSystem initialized successfully");
+		
         return true;
     }
 
@@ -60,23 +59,15 @@ namespace Engine
         auto cameras = entityManager->GetAllEntitiesWithComponents<CameraComponent, TransformComponent>();
         ASSERT(!cameras.empty(), "Must have at least one camera");
 
+		auto camera = cameras[0];
+    	
 		auto backgrounds = entityManager->GetAllEntitiesWithComponent<BackgroundComponent>();
 		auto renderables = entityManager->GetAllEntitiesWithComponent<DrawableEntity>();
-		
-    	
-		// render backgrounds
-    	for (auto camera : cameras)
-    	{	
-			m_Renderer->DrawBackgrounds(backgrounds, camera);
-    	}
-    	
-		for (auto camera : cameras)
-		{
-			// Find all entities to draw	
-			m_Renderer->DrawEntities(renderables, camera);
-		}   
 
-    	
+		
+		m_Renderer->DrawEntities(backgrounds, camera);	
+    		
+		m_Renderer->DrawEntities(renderables, camera); 	
     	
         m_Renderer->EndScene();
     }

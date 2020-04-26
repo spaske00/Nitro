@@ -51,4 +51,13 @@ namespace Engine
         return m_Textures.at(name_).get();
     }
 
+    bool TextureManager::AddTexture(std::string name_, std::unique_ptr<Texture> texture_)
+    {
+		if (m_Textures.find(name_) != m_Textures.end()) {
+			LOG_ERROR("Attempting to create a texture twice! name: {}", name_);
+			return false;
+		}
+		m_Textures[name_] = std::move(texture_);
+		return true;
+    }
 }

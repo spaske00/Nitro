@@ -5,19 +5,10 @@ bool Nitro::CameraController::Init(Engine::EntityManager* entityManager_, const 
 {
 	ASSERT(entityManager_ != nullptr, "Must pass a valid entityManager");
 
-	{
-		auto camera = Engine::Entity::Create();
-		camera->AddComponent<Engine::CameraComponent>().m_OnScreenPositionOffset = {0.f, 0.f};
-		camera->AddComponent<Engine::TransformComponent>(0.f, 0.f, static_cast<float>(windowData_->m_Width / 2.f), static_cast<float>(windowData_->m_Height));
-		camera->AddComponent<Engine::MoverComponent>();
-		camera->AddComponent<PlayerTagComponent>(PlayerTag::One);
-		
-		entityManager_->AddEntity(std::move(camera));
-	}
 	{	
 		auto camera = Engine::Entity::Create();
-		camera->AddComponent<Engine::CameraComponent>().m_OnScreenPositionOffset = {windowData_->m_Width / 2.f, 0.f};
-		camera->AddComponent<Engine::TransformComponent>(0.f, 0.f, static_cast<float>(windowData_->m_Width / 2.f), static_cast<float>(windowData_->m_Height));
+		camera->AddComponent<Engine::CameraComponent>();
+		camera->AddComponent<Engine::TransformComponent>(windowData_->m_Width / 2.f, windowData_->m_Height / 4.f, static_cast<float>(windowData_->m_Width), static_cast<float>(windowData_->m_Height));
 		camera->AddComponent<Engine::MoverComponent>();
 		camera->AddComponent<PlayerTagComponent>(PlayerTag::Two);
 		entityManager_->AddEntity(std::move(camera));
@@ -30,40 +21,32 @@ bool Nitro::CameraController::Init(Engine::EntityManager* entityManager_, const 
 void Nitro::CameraController::Update(float dt_, Engine::EntityManager* entityManager_)
 {
 	ASSERT(entityManager_ != nullptr, "must pass a valid entity manager");
-	auto cameras = entityManager_->GetAllEntitiesWithComponents<Engine::CameraComponent>();
-	ASSERT(cameras.size() == 2, "Must be exactly 2 cameras");
+	
 
 	auto players = entityManager_->GetAllEntitiesWithComponents<Engine::PlayerComponent>();
 	ASSERT(players.size() == 2, "Must be exactly 2 players");
 
-	auto player1Camera = cameras[0];
-	auto player2Camera = cameras[1];
-	if (player1Camera->GetComponent<PlayerTagComponent>()->m_PlayerTag == PlayerTag::Two)
-	{
-		std::swap(player1Camera, player2Camera);
-	}
+	auto cameras = entityManager_->GetAllEntitiesWithComponent<Engine::CameraComponent>();
+	ASSERT(cameras.size() == 1, "Only one camera");
 
+	auto camera = cameras[0];
+	
 	auto player1 = players[0];
 	auto player2 = players[1];
 	if (player1->GetComponent<PlayerTagComponent>()->m_PlayerTag == PlayerTag::Two)
 	{
 		std::swap(player1, player2);
 	}
-	// Snap camera1 to player1
-	{
-		auto transform = player1Camera->GetComponent<Engine::TransformComponent>();
-		transform->m_Position.y = player1->GetComponent<Engine::TransformComponent>()->m_Position.y
-		- transform->m_Size.y / 3;
 
+	auto player1Position = player1->GetComponent<Engine::TransformComponent>()->m_Position;
+	auto player2Position = player2->GetComponent<Engine::TransformComponent>()->m_Position;
+	
+	{
+		auto transform = camera->GetComponent<Engine::TransformComponent>();
+		transform->m_Position.y = (player1Position.y + player2Position.y) / 2;
+		transform->m_Position.x = (player1Position.x + player2Position.x) / 2;
 	}
 
-	// snap camera2 to player2
-	{
-		auto transform = player2Camera->GetComponent<Engine::TransformComponent>();
 
-		transform->m_Position.y = player2->GetComponent<Engine::TransformComponent>()->m_Position.y
-			- transform->m_Size.y / 3;
-
-	}
 	
 }
