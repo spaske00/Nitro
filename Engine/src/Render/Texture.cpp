@@ -35,8 +35,8 @@ namespace Engine
 
     Texture::Dimensions Texture::QueryDimensions() const
     {
-		Dimensions result;
-		if (!m_Texture && SDL_QueryTexture(m_Texture, NULL, NULL, &result.width, &result.height) != 0)
+		Dimensions result{-1, -1};
+		if (!m_Texture || SDL_QueryTexture(m_Texture, NULL, NULL, &result.width, &result.height) != 0)
 		{
 			result.height = -1;
 			result.width = -1;

@@ -10,32 +10,38 @@ bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityMan
 	ASSERT(entityManager_ != nullptr, "Must pass a valid entity manager");
 
 	{
-		Engine::Matrix<Engine::ColorA> colorMatrix(100, 1);
+		Engine::Matrix<Engine::ColorA> colorMatrix(64000, 100);
 		
-		for (int i = 0; i + 3 < colorMatrix.Rows(); i += 3)
+		for (int i = 0; i < colorMatrix.Rows(); ++i)
 		{
-			colorMatrix.At(i, 0) = Engine::ColorA{ 255, 0, 0, 255 };
-			colorMatrix.At(i + 1, 0) = Engine::ColorA{ 0, 255, 0, 255 };
-			colorMatrix.At(i + 2, 0) = Engine::ColorA{ 0, 0, 255, 255 };
+			for(int j = 0; j < colorMatrix.Cols(); ++j)
+			{
+				colorMatrix.At(i, j) = Engine::ColorA{ rand() % 256u, rand() % 256u, rand() % 256u, 255 };
+
+			}
+			/*colorMatrix.At(i, 0) = Engine::ColorA{ 0, 255, 0, 255 };
+			colorMatrix.At(i, 1) = Engine::ColorA{ 192, 192, 192, 255 };
+			colorMatrix.At(i, 2) = Engine::ColorA{ 192, 192, 192, 255 };
+			colorMatrix.At(i, 3) = Engine::ColorA{ 192, 192, 192, 255 };
+			colorMatrix.At(i, 4) = Engine::ColorA{ 192, 192, 192, 255 };
+			colorMatrix.At(i, 5) = Engine::ColorA{ 0, 0, 255, 255 };*/
 		}
-		auto result = Engine::Texture::CreateMatrixOfTexturesFromMatrixOfColors(renderer_, colorMatrix, 1280, 200);
+		
+		auto result = Engine::Texture::CreateMatrixOfTexturesFromMatrixOfColors(renderer_, colorMatrix, 8, 8);
 
 		for(int i = 0; i < result.Rows(); ++i)
 		{
 			for (int j = 0; j < result.Cols(); ++j)
 			{
 				auto background = Engine::Entity::Create();
-				background->AddComponent<Engine::TransformComponent>(100 + j * 200.f, -i * 1280.f, 1280.f, 720.f * 7);
+				auto dimensions = result.At(i, j).get()->QueryDimensions();
+				background->AddComponent<Engine::TransformComponent>((float)dimensions.width * j, -(float)dimensions.height * i, (float)dimensions.width, (float)dimensions.height);
 				background->AddComponent<Engine::SpriteComponent>().m_Image = result.At(i, j).get();
 				background->AddComponent<Engine::BackgroundComponent>();
 				textureManager_->AddTexture(fmt::format("background{}{}", i, j), std::move(result.At(i, j)));
 				entityManager_->AddEntity(std::move(background));
 			}
 		}
-
-
-		LOG_INFO("Size of matrix {} {}", result.Rows(), result.Cols());
-		
 	}
 	
 	
