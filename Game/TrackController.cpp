@@ -19,12 +19,12 @@ bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityMan
 			colorMatrix.At(i + 2, 0) = Engine::ColorA{ 0, 0, 255, 255 };
 		}
 		auto result = Engine::Texture::CreateMatrixOfTexturesFromMatrixOfColors(renderer_, colorMatrix, 1280, 200);
-		if (!textureManager_->CreateTexture(renderer_, "grass", "Resource/g1.jpg"))
+		if (!textureManager_->CreateTexture(renderer_, "grass", "Resource/green.png"))
 		{
 			LOG_ERROR("Failed to create backgruondCoordinate");
 			return false;
 		}
-		if (!textureManager_->CreateTexture(renderer_, "road", "Resource/road.png"))
+		if (!textureManager_->CreateTexture(renderer_, "road", "Resource/grey.png"))
 		{
 			LOG_ERROR("Failed to create backgruondCoordinate");
 			return false;
