@@ -47,7 +47,7 @@ namespace Engine
 
 		// Init font for text
 		TTF_Init();
-		m_Font = TTF_OpenFont("FreeSans.ttf", 30);
+		m_Font = TTF_OpenFont("FreeSansBoldOblique.ttf", 30);
 		if (m_Font == NULL) {
 			fprintf(stderr, "error: font not found\n");
 			exit(EXIT_FAILURE);
