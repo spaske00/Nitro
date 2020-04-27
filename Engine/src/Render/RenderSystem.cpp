@@ -63,11 +63,13 @@ namespace Engine
     	
 		auto backgrounds = entityManager->GetAllEntitiesWithComponent<BackgroundComponent>();
 		auto renderables = entityManager->GetAllEntitiesWithComponent<DrawableEntity>();
-
+        auto texts = entityManager->GetAllEntitiesWithComponent<TextComponent>();
 		
 		m_Renderer->DrawEntities(backgrounds, camera);	
     		
 		m_Renderer->DrawEntities(renderables, camera); 	
+
+        m_Renderer->ShowTexts(texts, camera);
     	
         m_Renderer->EndScene();
     }

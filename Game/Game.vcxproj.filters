@@ -36,6 +36,9 @@
     <ClCompile Include="TrackController.cpp">
       <Filter>src\Controllers</Filter>
     </ClCompile>
+    <ClCompile Include="TextController.cpp">
+      <Filter>src\Controllers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="precomp.h">
@@ -60,6 +63,9 @@
       <Filter>src\Components</Filter>
     </ClInclude>
     <ClInclude Include="TrackController.h">
+      <Filter>src\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextController.h">
       <Filter>src\Controllers</Filter>
     </ClInclude>
   </ItemGroup>
