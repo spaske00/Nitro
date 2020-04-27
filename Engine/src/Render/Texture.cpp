@@ -4,7 +4,7 @@
 #include <SDL_image.h>
 
 #include "Matrix.h"
-#include "Color.h"
+
 #include "Texture.h"
 #include "Render/Renderer.h"
 
@@ -44,7 +44,7 @@ namespace Engine
 		return result;
     }
 
-	std::unique_ptr<Texture> Texture::CreateTextureFromColorMatrix(Renderer* renderer_, const Matrix<ColorA>& colorMatrix_, int tileHeight_, int tileWidth_)
+	std::unique_ptr<Texture> Texture::CreateTextureFromColorMatrix(Renderer* renderer_, const Matrix<Color>& colorMatrix_, int tileHeight_, int tileWidth_)
     {
 
 		const int rows = (int)colorMatrix_.Rows();
@@ -68,7 +68,7 @@ namespace Engine
     		for (int y = 0; y < cols; ++y)
     		{
 				SDL_Rect dst{ x * tileWidth_, y * tileHeight_, tileWidth_, tileHeight_ };
-				const ColorA color = colorMatrix_.At(x, y);
+				const Color color = colorMatrix_.At(x, y);
 				SDL_FillRect(surface, &dst, SDL_MapRGBA(surface->format, color.r , color.g, color.b, color.a));
     		}
     	}
@@ -90,7 +90,7 @@ namespace Engine
 		return result;
     }
 
-	Matrix<std::unique_ptr<Texture>> Texture::CreateMatrixOfTexturesFromMatrixOfColors(Renderer* renderer_, const Matrix<ColorA>& colorMatrix, int tileHeightInPixels_, int tileWidthInPixels_)
+	Matrix<std::unique_ptr<Texture>> Texture::CreateMatrixOfTexturesFromMatrixOfColors(Renderer* renderer_, const Matrix<Color>& colorMatrix, int tileHeightInPixels_, int tileWidthInPixels_)
     {
     	// NOTE: ALL dimensions are in PIXELS!
 		int maxTextureHeightInPixels = renderer_->MaxTextureHeight(); // 2
@@ -106,8 +106,7 @@ namespace Engine
     	
 		Matrix<std::unique_ptr<Texture>> result(numberOfRowsTextures, numberOfColsTextures);
 
-    	
-		
+    
 		
 		for (int textureI = 0, totalPixelsHeightLeft = targetTexutreHeightInPixels, colorMatrixStartRow = 0;
 			textureI < result.Rows();

@@ -105,7 +105,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Color.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="precomp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -126,7 +125,6 @@
     <ClCompile Include="src\Render\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Color.h" />
     <ClInclude Include="extern\glm\common.hpp" />
     <ClInclude Include="extern\glm\detail\compute_common.hpp" />
     <ClInclude Include="extern\glm\detail\compute_vector_relational.hpp" />

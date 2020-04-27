@@ -120,5 +120,10 @@ namespace Engine
 		
 	};
 
+	struct ColorTrackComponent : public Component
+	{
+		
+	};
+
 	
 }

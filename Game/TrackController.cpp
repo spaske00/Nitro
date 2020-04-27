@@ -1,7 +1,7 @@
 #include "precomp.h"
 #include "TrackController.h"
 
-#include "Color.h"
+
 
 
 
@@ -10,13 +10,13 @@ bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityMan
 	ASSERT(entityManager_ != nullptr, "Must pass a valid entity manager");
 
 	{
-		Engine::Matrix<Engine::ColorA> colorMatrix(100, 1);
+		Engine::Matrix<Color> colorMatrix(100, 1);
 		
 		for (int i = 0; i + 3 < colorMatrix.Rows(); i += 3)
 		{
-			colorMatrix.At(i, 0) = Engine::ColorA{ 255, 0, 0, 255 };
-			colorMatrix.At(i + 1, 0) = Engine::ColorA{ 0, 255, 0, 255 };
-			colorMatrix.At(i + 2, 0) = Engine::ColorA{ 0, 0, 255, 255 };
+			colorMatrix.At(i, 0) = Color{ 255, 0, 0, 255 };
+			colorMatrix.At(i + 1, 0) = Color{ 0, 255, 0, 255 };
+			colorMatrix.At(i + 2, 0) = Color{ 0, 0, 255, 255 };
 		}
 		auto result = Engine::Texture::CreateMatrixOfTexturesFromMatrixOfColors(renderer_, colorMatrix, 1280, 200);
 
