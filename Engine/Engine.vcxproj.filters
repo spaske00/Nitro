@@ -108,6 +108,7 @@
     <ClCompile Include="Color.cpp">
       <Filter>src\Util</Filter>
     </ClCompile>
+    <ClCompile Include="AudioManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="extern\spdlog\async.h">
@@ -1064,6 +1065,7 @@
     <ClInclude Include="Color.h">
       <Filter>src\Util</Filter>
     </ClInclude>
+    <ClInclude Include="AudioManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="extern\spdlog\LICENSE">
