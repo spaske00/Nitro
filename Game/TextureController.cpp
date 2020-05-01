@@ -18,6 +18,18 @@ bool Nitro::TextureController::Init(Engine::Renderer* renderer_, Engine::Texture
 		return false;
 	}
 
+	if (!textureManager_->CreateTexture(renderer_, "road", texturesRootDir_ + "/road_2048x1500.png"))
+	{
+		LOG_ERROR("Failed to create road texture");
+		return false;
+	}
+
+	if (!textureManager_->CreateTexture(renderer_, "water", texturesRootDir_ + "/water_512x512.png"))
+	{
+		LOG_ERROR("Failed to create water trexture");
+		return false;
+	}
+	
 #if _DEBUG
 	if (!textureManager_->CreateTexture(renderer_, "background_debug_texture_grid", texturesRootDir_ + "/background_debug_texture_grid.png"))
 	{
