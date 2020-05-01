@@ -127,6 +127,9 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 		physics->m_Speed = std::min(480.f, physics->m_Speed);
 		mover->m_TranslationSpeed = physics->m_Speed * vec2{ (moveRight ? 1.f : 0.f) + (moveLeft ? -1.f : 0.f), physics->m_Speed > 0 ? -1.f : 0.f };
 	}
+
+	auto collided = player1->GetComponent<Engine::CollisionComponent>()->m_CollidedWith;
+	
 }
 /*
  * CarPhysics: Jumping, collision, 

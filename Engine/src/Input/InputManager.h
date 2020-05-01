@@ -26,6 +26,7 @@ namespace Engine
 
         std::unordered_map<EInputAction, KeyboardButton> m_InputActions{ };
         std::unordered_map<EInputAction, EInputActionState> m_InputActionStates{ };
+        
 
         InputManager(const InputManager& other) = delete;
         InputManager& operator=(InputManager& other) = delete;

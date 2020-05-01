@@ -1,6 +1,8 @@
 #include "precomp.h"
 #include "TextureController.h"
 
+#include "GameComponents.h"
+
 bool Nitro::TextureController::Init(Engine::Renderer* renderer_, Engine::TextureManager* textureManager_, std::string texturesRootDir_)
 {
 	ASSERT(textureManager_ != nullptr, "Must pass a valid texture manager");
@@ -18,17 +20,22 @@ bool Nitro::TextureController::Init(Engine::Renderer* renderer_, Engine::Texture
 		return false;
 	}
 
-	if (!textureManager_->CreateTexture(renderer_, "road", texturesRootDir_ + "/road_2048x1500.png"))
+	
+
+	for(int i = 0; i < (int)TileType::TileTypeCount; ++i)
 	{
-		LOG_ERROR("Failed to create road texture");
-		return false;
+		auto name = TileTypeToTextureName(static_cast<TileType>(i));
+		if (!textureManager_->CreateTexture(renderer_, name, texturesRootDir_ + "/" + name + ".png"))
+		{
+			LOG_ERROR(fmt::format("Failed to load texture {}", name));
+		}
+		else
+		{
+			LOG_INFO(fmt::format("Loaded texture: {}", name));
+		}
 	}
 
-	if (!textureManager_->CreateTexture(renderer_, "water", texturesRootDir_ + "/water_512x512.png"))
-	{
-		LOG_ERROR("Failed to create water trexture");
-		return false;
-	}
+	
 	
 #if _DEBUG
 	if (!textureManager_->CreateTexture(renderer_, "background_debug_texture_grid", texturesRootDir_ + "/background_debug_texture_grid.png"))
