@@ -96,7 +96,7 @@ namespace Engine
 
 
 		CameraComponent() = default;
-		explicit CameraComponent(float speed, vec2 onScreenPositionOffset_ = { 0.f, 0.f })
+		explicit CameraComponent(float speed)
 			: m_PanSpeed(speed)
 		{}
 
@@ -120,9 +120,13 @@ namespace Engine
 		
 	};
 
-	struct ColorTrackComponent : public Component
+	struct ColorTrackMatrixComponent : public Component
 	{
-		
+		std::shared_ptr<Matrix<Color>> m_ColorMatrix;
+		vec2 m_CenterPosition;
+		vec2 m_ScaleFactor;
+		vec2 m_TileSize;
+		vec2 m_Size;
 	};
 
 	

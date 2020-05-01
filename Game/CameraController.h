@@ -16,5 +16,7 @@ namespace Nitro
 		{
 			return std::make_unique<CameraController>();
 		}
+
+		const Engine::WindowData* m_WindowData;
 	};
 }
