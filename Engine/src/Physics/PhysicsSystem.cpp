@@ -18,9 +18,11 @@ namespace Engine
     void PhysicsSystem::Update(float dt, EntityManager* entityManager)
     {
         // Move
-        auto entitiesToMove = entityManager->GetAllEntitiesWithComponents<TransformComponent, MoverComponent>();
-
-        for (auto& entity : entitiesToMove)
+        //auto m_EntitiesBuffer = entityManager->GetAllEntitiesWithComponents<TransformComponent, MoverComponent>();
+		m_EntitiesBuffer.clear();
+		entityManager->GetAllEntitiesWithComponents<TransformComponent, MoverComponent>(std::back_inserter(m_EntitiesBuffer));
+    	
+        for (auto& entity : m_EntitiesBuffer)
         {
             auto transform = entity->GetComponent<TransformComponent>();
             auto mover = entity->GetComponent<MoverComponent>();
@@ -30,13 +32,13 @@ namespace Engine
         }
 
         // Collide
-        auto entitiesToCollide = entityManager->GetAllEntitiesWithComponents<TransformComponent, CollisionComponent>();
+		m_EntitiesBuffer.clear();
+		entityManager->GetAllEntitiesWithComponent<CollisionComponent>(std::back_inserter(m_EntitiesBuffer));;
+        for (auto& entity : m_EntitiesBuffer) { entity->GetComponent<CollisionComponent>()->m_CollidedWith.clear(); }
 
-        for (auto& entity : entitiesToCollide) { entity->GetComponent<CollisionComponent>()->m_CollidedWith.clear(); }
-
-        for (auto& entity1 : entitiesToCollide)
+        for (auto& entity1 : m_EntitiesBuffer)
         {
-            for (auto& entity2 : entitiesToCollide)
+            for (auto& entity2 : m_EntitiesBuffer)
             {
                 bool collided = CheckForCollision(entity1, entity2);
 

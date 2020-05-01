@@ -29,6 +29,20 @@ namespace Engine
             return returnVec;
         }
 
+		template <typename TComponent, typename OutIt>
+		OutIt GetAllEntitiesWithComponent(OutIt out_)
+		{
+			for (const auto& entity : m_Entities)
+			{
+				if (entity->HasComponent<TComponent>())
+				{
+					*out_++ = entity.get();
+				}
+			}
+			return out_;
+		}
+    	
+    	
         template <typename... TComponent>
         auto GetAllEntitiesWithComponents()
         {
@@ -44,6 +58,21 @@ namespace Engine
 
             return returnVec;
         }
+
+		template <typename... TComponent, typename OutIt>
+		OutIt GetAllEntitiesWithComponents(OutIt out)
+		{
+
+			for (const auto& entity : m_Entities)
+			{
+				if (entity->HasComponents<TComponent...>())
+				{
+					*out++ = (entity.get());
+				}
+			}
+
+			return out;
+		}
 
         template <typename TComponent>
         auto GetAllComponentInstances()
