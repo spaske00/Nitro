@@ -1,5 +1,7 @@
 #pragma once
 
+#include "precomp.h"
+
 #include "Core/Application.h"
 
 #include "Logger/Logger.h"
