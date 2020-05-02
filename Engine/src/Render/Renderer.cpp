@@ -16,13 +16,9 @@ namespace Engine
 	{
 		LOG_INFO("Initializing Renderer");
 
-		m_Audio = std::make_unique<AudioManager>();
+		
 		m_Window = std::make_unique<Window>();
-		if (!m_Audio->Init()) {
-			LOG_CRITICAL("Unable to create a Audio.");
-
-		}
-
+		
 		if (!m_Window->Init(windowData_))
 		{
 			LOG_CRITICAL("Unable to create a Window.");
@@ -48,8 +44,7 @@ namespace Engine
 
 		LOG_INFO("RenderSystem initialized successfully");
 		
-		Music music = m_Audio->LoadMusic("..\\Engine\\Resources\\music.ogg");
-		music.play();
+
 		return true;
 	}
 

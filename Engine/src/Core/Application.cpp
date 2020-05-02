@@ -9,6 +9,7 @@
 #include "Render/WindowData.h"
 #include "Render/TextureManager.h"
 #include "Physics/PhysicsSystem.h"
+#include "AudioManager.h"
 
 #include <SDL.h>
 
@@ -22,7 +23,11 @@ namespace Engine {
         LOG_INFO("Initializing application");
 
         GameSpecificWindowData();
-
+        m_AudioManager = std::make_unique<AudioManager>();
+        if (!m_AudioManager->Init()) {
+            LOG_CRITICAL("Failed to initialize AudioManager");
+            return false;
+        }
         // Render system initialize
         m_RenderSystem = std::make_unique<RenderSystem>();
         if (!m_RenderSystem->Init(m_WindowData))
@@ -86,6 +91,10 @@ namespace Engine {
 
         // Main loop
         SDL_Event event{ };
+
+        Music music = m_AudioManager->LoadMusic("..\\Engine\\Resources\\music.ogg");
+        music.play();
+
         while (m_Running)
         {
             while (SDL_PollEvent(&event) != 0)
