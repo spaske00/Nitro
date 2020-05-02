@@ -20,6 +20,8 @@ void Nitro::GameApp::GameSpecificWindowData()
 
 bool Nitro::GameApp::GameSpecificInit()
 {
+	
+
 	m_TextureController = TextureController::Create();
 	if (!m_TextureController->Init(m_RenderSystem->GetRenderer(), m_TextureManager.get(), "Resource"))
 	{
@@ -51,11 +53,13 @@ bool Nitro::GameApp::GameSpecificInit()
 	}
 
 	m_PlayerController = PlayerController::Create();
-	if (!m_PlayerController->Init(m_EntityManager.get(), m_TextureManager.get()))
+	if (!m_PlayerController->Init(m_EntityManager.get(), m_TextureManager.get(), m_AudioManager.get()))
 	{
 		LOG_ERROR("Failed to initialize PlayerController");
 		return false;
 	}
+
+	
 	return true;
 }
 
@@ -69,6 +73,6 @@ void Nitro::GameApp::GameSpecificUpdate(float dt)
 #if _DEBUG
 	m_DebugController->Update(dt, m_EntityManager.get());
 #endif
-	m_PlayerController->Update(dt, m_EntityManager.get());
+	m_PlayerController->Update(dt, m_EntityManager.get(), m_AudioManager.get());
 	m_CameraController->Update(dt, m_EntityManager.get());
 }

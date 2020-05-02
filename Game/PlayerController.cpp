@@ -2,7 +2,7 @@
 #include "PlayerController.h"
 #include "GameComponents.h"
 
-bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine::TextureManager* textureManager_)
+bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine::TextureManager* textureManager_, Engine::AudioManager* audioManager_)
 {
 	ASSERT(entityManager_ != nullptr, "Must pass a valid entity manager");
 	ASSERT(textureManager_ != nullptr, "Must pass a vliad texture manager");
@@ -33,6 +33,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		physics.m_Speed = 0.f;
 		
 		entityManager_->AddEntity(std::move(player1));
+
 	}
 
 	{
@@ -61,15 +62,17 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		physics.m_Speed = 0.f;
 
 		entityManager_->AddEntity(std::move(player2));
+
 	}
-	
+
+	audioManager_->LoadSoundEffect("..\\Engine\\Resource\\tump.ogg");
 
 	return true;
 }
 
 
 
-void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityManager_)
+void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityManager_, Engine::AudioManager* audioManager_)
 {
 	auto players = entityManager_->GetAllEntitiesWithComponents<Engine::PlayerComponent>();
 	ASSERT(players.size() == 2, "Must be excatly two players");
