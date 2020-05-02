@@ -11,7 +11,7 @@ namespace Engine {
     }
 
     void Music::play() {
-    
+
         if (-1 == Mix_PlayMusic(m_music, -1)) {
             LOG_WARNING("Play Music failed! " + std::string(Mix_GetError()));
 
@@ -21,10 +21,10 @@ namespace Engine {
     void Music::pause() {
 
         Mix_PausedMusic();
-    
+
     }
     void Music::stop() {
-    
+
         Mix_HaltMusic();
     }
     void Music::resume() {
@@ -34,7 +34,7 @@ namespace Engine {
     }
 
     AudioManager::AudioManager() {
-    
+
     }
 
     AudioManager::~AudioManager() {
@@ -63,10 +63,10 @@ namespace Engine {
     }
 
     SoundEffect AudioManager::LoadSoundEffect(const std::string& filePath) {
-        auto it= m_SoundEffectMap.find(filePath);
+        auto it = m_SoundEffectMap.find(filePath);
         SoundEffect effect;
         if (m_SoundEffectMap.end() == it) {
-        //failed
+            //failed
             Mix_Chunk* chunk = Mix_LoadWAV(filePath.c_str());
             if (nullptr == chunk)
             {
@@ -100,7 +100,7 @@ namespace Engine {
             music.m_music = it->second;
         }
         return music;
-    
+
     }
 
 
