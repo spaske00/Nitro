@@ -93,7 +93,7 @@ namespace Engine
         EntityManager() = default;
     private:
         using EntityList = std::vector<std::unique_ptr<Entity>>;
-
+        // TODO(Marko): Segregate entities by their components
         EntityList m_Entities;
 
         EntityManager(const EntityManager& other) = delete;
