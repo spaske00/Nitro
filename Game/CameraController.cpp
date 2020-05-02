@@ -24,7 +24,6 @@ void Nitro::CameraController::Update(float dt_, Engine::EntityManager* entityMan
 {
 	ASSERT(entityManager_ != nullptr, "must pass a valid entity manager");
 	
-
 	auto players = entityManager_->GetAllEntitiesWithComponents<Engine::PlayerComponent>();
 	ASSERT(players.size() == 2, "Must be exactly 2 players");
 
@@ -52,6 +51,4 @@ void Nitro::CameraController::Update(float dt_, Engine::EntityManager* entityMan
 	/*	transform->m_Size.x = m_WindowData->m_Width * abs(2 * sin(totalDt) + 1.f);
 		transform->m_Size.y = m_WindowData->m_Height * abs(2 * sin(totalDt) + 1.f);*/
 	}
-	
-	
 }

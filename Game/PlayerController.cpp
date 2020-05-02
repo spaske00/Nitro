@@ -2,16 +2,42 @@
 #include "PlayerController.h"
 #include "GameComponents.h"
 
+namespace Nitro
+{
+	Engine::Entity* FindRoadTileAtLayer(Engine::Matrix<Engine::Entity*>& tileMatrix, int layer)
+	{
+		for (int j = 0; j < tileMatrix.Cols(); ++j)
+		{
+			if (tileMatrix.At(layer, j)->GetComponent<TileInfoComponent>()->m_TileType == TileType::road)
+			{
+				return tileMatrix.At(layer, j);
+			}
+		}
+		return nullptr;
+	}
+}
+
+
 bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine::TextureManager* textureManager_)
 {
 	ASSERT(entityManager_ != nullptr, "Must pass a valid entity manager");
 	ASSERT(textureManager_ != nullptr, "Must pass a vliad texture manager");
 
+	auto track = entityManager_->GetEntityWithComponent<TrackComponent>();
+	ASSERT(track != nullptr, "Track must exists");
 	
+	auto trackComponent = track->GetComponent<TrackComponent>();
+	int lowestLayer = trackComponent->m_LowestLayerIndex;
+	auto firstRoadTile = FindRoadTileAtLayer(trackComponent->m_TracksMatrix, lowestLayer);
+	auto firstRoadTilePosition = firstRoadTile->GetComponent<Engine::TransformComponent>()->m_Position;
+	auto firstRoadTileSize = firstRoadTile->GetComponent<Engine::TransformComponent>()->m_Size;
 	{
 		auto player1 = Engine::Entity::Create();
 		player1->AddComponent<Engine::DrawableEntity>();
-		player1->AddComponent<Engine::TransformComponent>(100.f, 0.f, 50.f, 50.f);
+		
+		
+		player1->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x - firstRoadTileSize.x / 4, 
+			firstRoadTilePosition.y - firstRoadTileSize.y / 4, 50.f, 50.f);
 		player1->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player1Texture");
 		player1->AddComponent<Engine::CollisionComponent>(50.f, 50.f);
 		player1->AddComponent<Engine::CollidedWithComponent>();
@@ -27,6 +53,8 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 
 		player1->AddComponent<PlayerTagComponent>(PlayerTag::One);
 		
+		
+
 		auto& physics = player1->AddComponent<CarPhysicsComponent>();
 		physics.m_Mass = 300.f;
 		physics.m_Acceleration = 1.f;
@@ -38,7 +66,8 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 	{
 		auto player2 = Engine::Entity::Create();
 		player2->AddComponent<Engine::DrawableEntity>();
-		player2->AddComponent<Engine::TransformComponent>(200.f, 0.f, 50.f, 50.f);
+		player2->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x + firstRoadTileSize.x / 4,
+			firstRoadTilePosition.y - firstRoadTileSize.y / 4, 50.f, 50.f);
 		player2->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player2Texture");
 		player2->AddComponent<Engine::CollisionComponent>(50.f, 50.f);
 		player2->AddComponent<Engine::CollidedWithComponent>();

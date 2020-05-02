@@ -90,6 +90,19 @@ namespace Engine
             return returnVec;
         }
 
+        template<typename TComponent>
+        Entity* GetEntityWithComponent()
+        {
+            for (const auto& entity : m_Entities)
+            {
+                if (TComponent* component = entity->GetComponent<TComponent>())
+                {
+                    return entity.get();
+                }
+            }
+            return nullptr;
+        }
+
         EntityManager() = default;
     private:
         using EntityList = std::vector<std::unique_ptr<Entity>>;
