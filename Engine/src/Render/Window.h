@@ -15,6 +15,7 @@ namespace Engine {
         SDL_Window* GetNativeWindowHandle() const { return m_NativeWindowHandle; }
         ~Window();
         Window() = default;
+		const WindowData& GetWindowData() const { return m_WindowData;  }
     private:
         WindowData m_WindowData{};
         SDL_Window* m_NativeWindowHandle{ };

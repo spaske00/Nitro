@@ -18,9 +18,11 @@ namespace Engine
     void PhysicsSystem::Update(float dt, EntityManager* entityManager)
     {
         // Move
-        auto entitiesToMove = entityManager->GetAllEntitiesWithComponents<TransformComponent, MoverComponent>();
-
-        for (auto& entity : entitiesToMove)
+        //auto m_EntitiesBuffer = entityManager->GetAllEntitiesWithComponents<TransformComponent, MoverComponent>();
+		m_EntitiesBuffer.clear();
+		entityManager->GetAllEntitiesWithComponents<TransformComponent, MoverComponent>(std::back_inserter(m_EntitiesBuffer));
+    	
+        for (auto& entity : m_EntitiesBuffer)
         {
             auto transform = entity->GetComponent<TransformComponent>();
             auto mover = entity->GetComponent<MoverComponent>();
@@ -30,22 +32,70 @@ namespace Engine
         }
 
         // Collide
-        auto entitiesToCollide = entityManager->GetAllEntitiesWithComponents<TransformComponent, CollisionComponent>();
+        m_EntitiesBuffer.clear();
 
-        for (auto& entity : entitiesToCollide) { entity->GetComponent<CollisionComponent>()->m_CollidedWith.clear(); }
+#if 1
+        entityManager->GetAllEntitiesWithComponents<CollidedWithComponent>(std::back_inserter(m_EntitiesBuffer));
+        auto passiveCollisionEntities = entityManager->GetAllEntitiesWithComponent<CollisionComponent>();
+        for (auto& entity : m_EntitiesBuffer) { entity->GetComponent<CollidedWithComponent>()->m_CollidedWith.clear(); }
 
-        for (auto& entity1 : entitiesToCollide)
+        for (size_t i = 0; i < m_EntitiesBuffer.size(); ++i)
         {
-            for (auto& entity2 : entitiesToCollide)
+            for (size_t j = i + 1; j < m_EntitiesBuffer.size(); ++j)
+            {
+                Entity* entity1 = m_EntitiesBuffer[i];
+                Entity* entity2 = m_EntitiesBuffer[j];
+                bool collided = CheckForCollision(entity1, entity2);
+                if (collided)
+                {
+                    entity1->GetComponent<CollidedWithComponent>()->m_CollidedWith.insert(entity2);
+                    entity2->GetComponent<CollidedWithComponent>()->m_CollidedWith.insert(entity1);
+                }
+            }
+        }
+
+        for (size_t i = 0; i < m_EntitiesBuffer.size(); ++i)
+        {
+            for (size_t j = 0; j < passiveCollisionEntities.size(); ++j)
+            {
+                Entity* entity1 = m_EntitiesBuffer[i];
+                Entity* entity2 = passiveCollisionEntities[j];
+                bool collided = CheckForCollision(entity1, entity2);
+                if (collided)
+                {
+                    entity1->GetComponent<CollidedWithComponent>()->m_CollidedWith.insert(entity2);
+                }
+            }
+        }
+
+        
+#else
+        
+		entityManager->GetAllEntitiesWithComponent<CollisionComponent>(std::back_inserter(m_EntitiesBuffer));
+        for (auto& entity : m_EntitiesBuffer) 
+        { 
+            if (auto c = entity->GetComponent<CollidedWithComponent>())
+            {
+                c->m_CollidedWith.clear();
+            }
+        }
+
+        for (auto& entity1 : m_EntitiesBuffer)
+        {
+            for (auto& entity2 : m_EntitiesBuffer)
             {
                 bool collided = CheckForCollision(entity1, entity2);
 
                 if (collided)
                 {
-                    entity1->GetComponent<CollisionComponent>()->m_CollidedWith.insert(entity2);
+                    if (auto c = entity1->GetComponent<CollidedWithComponent>())
+                    {
+                        c->m_CollidedWith.insert(entity2);
+                    }
                 }
             }
         }
+#endif
     }
 
     bool CheckForCollision(Entity* entity1, Entity* entity2)

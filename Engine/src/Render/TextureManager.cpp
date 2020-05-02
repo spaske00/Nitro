@@ -1,5 +1,5 @@
 #include "precomp.h"
-#include "Color.h"
+
 #include "Matrix.h"
 #include "TextureManager.h"
 
@@ -25,7 +25,7 @@ namespace Engine
 
 
 	
-	bool TextureManager::CreateTextureFromColorTileMatrix(Renderer* renderer_, std::string name_, const Matrix<ColorA>& colorMap_,
+	bool TextureManager::CreateTextureFromColorTileMatrix(Renderer* renderer_, std::string name_, const Matrix<Color>& colorMap_,
 		int tileHeight_, int tileWidth_)
     {
 		auto result = Texture::CreateTextureFromColorMatrix(renderer_, colorMap_, tileHeight_, tileWidth_);

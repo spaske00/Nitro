@@ -16,8 +16,12 @@ namespace Engine
 	{
 		LOG_INFO("Initializing Renderer");
 
-		
+		m_Audio = std::make_unique<AudioManager>();
 		m_Window = std::make_unique<Window>();
+		if (!m_Audio->Init()) {
+			LOG_CRITICAL("Unable to create a Audio.");
+
+		}
 
 		if (!m_Window->Init(windowData_))
 		{
@@ -44,7 +48,8 @@ namespace Engine
 
 		LOG_INFO("RenderSystem initialized successfully");
 		
-		
+		Music music = m_Audio->LoadMusic("..\\Engine\\Resources\\music.ogg");
+		music.play();
 		return true;
 	}
 
@@ -60,7 +65,8 @@ namespace Engine
 		m_NativeRenderer = nullptr;
 
 		m_Window.reset();
-
+		
+		m_Audio->Destroy();
 		return true;
 	}
 
@@ -103,7 +109,10 @@ namespace Engine
 		if (IsInsideScreen(transform->m_Position, vec2(size.x, size.y), camera))
 		{
 			vec2 screenPosition = GetScreenPosition(transform->m_Position, camera);
-			SDL_Rect dst{ (int)(screenPosition.x - size.x / 2), (int)(screenPosition.y - size.y / 2), (int)size.x, (int)size.y };
+			auto cameraSize = camera->GetComponent<Engine::TransformComponent>()->m_Size;
+			float scaleX = (float)m_Window->GetWindowData().m_Width / (float)cameraSize.x;
+			float scaleY = (float)m_Window->GetWindowData().m_Height / (float)cameraSize.y;
+;			SDL_Rect dst{ (int)((screenPosition.x - size.x / 2) * scaleX), (int)((screenPosition.y - size.y / 2)*scaleY), (int)(size.x * scaleX), (int)(size.y*scaleY) };
 			SDL_RendererFlip flip = static_cast<SDL_RendererFlip>((sprite->m_FlipHorizontal ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE) | (sprite->m_FlipVertical ? SDL_FLIP_VERTICAL : SDL_FLIP_NONE));
 
 			SDL_RenderCopyEx(
@@ -124,7 +133,7 @@ namespace Engine
 			if (auto collider = r->GetComponent<CollisionComponent>())
 			{
 				SDL_SetRenderDrawColor(m_NativeRenderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-				dst = { (int)(screenPosition.x - collider->m_Size.x / 2), (int)(screenPosition.y - collider->m_Size.y / 2), (int)collider->m_Size.x, (int)collider->m_Size.y };
+				dst = { (int)((screenPosition.x - collider->m_Size.x / 2)*scaleX), (int)((screenPosition.y - collider->m_Size.y / 2)*scaleY), (int)(collider->m_Size.x*scaleX), (int)(collider->m_Size.y*scaleY) };
 				SDL_RenderDrawRect(m_NativeRenderer, &dst);
 
 			}
@@ -154,6 +163,8 @@ namespace Engine
 
 	void Renderer::BeginScene() const
 	{
+
+
 		SDL_RenderClear(m_NativeRenderer);
 	}
 

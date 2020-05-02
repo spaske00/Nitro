@@ -2,7 +2,6 @@
 
 #include "Render/WindowData.h"
 
-#include <AudioManager.h>
 namespace Engine {
 
     class RenderSystem;
@@ -10,7 +9,6 @@ namespace Engine {
     class InputManager;
     class EntityManager;
     class TextureManager;
-    class AudioManager;
 
     class Application
     {
@@ -28,7 +26,6 @@ namespace Engine {
         bool m_Running{ false };
 
         WindowData m_WindowData{};
-        std::unique_ptr<AudioManager> m_AudioManager{};
         std::unique_ptr<RenderSystem> m_RenderSystem{};
         std::unique_ptr<PhysicsSystem> m_PhysicsSystem{};
         std::unique_ptr<InputManager> m_InputManager{};
