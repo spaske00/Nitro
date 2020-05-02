@@ -62,7 +62,7 @@ namespace Engine {
         }
     }
 
-    SoundEffect AudioManager::LoadSoundEffect(const std::string& filePath) {
+    void AudioManager::LoadSoundEffect(const std::string& filePath) {
         auto it = m_SoundEffectMap.find(filePath);
         SoundEffect effect;
         if (m_SoundEffectMap.end() == it) {
@@ -73,14 +73,18 @@ namespace Engine {
                 LOG_WARNING("Mix_LoadSoundEffect failed! " + std::string(Mix_GetError()));
 
             }
-            m_SoundEffectMap[filePath] = chunk;
             effect.m_chunk = chunk;
+            m_SoundEffectMap[filePath] = effect;
+        }
+        
+    }
 
+    void AudioManager::playSoundEffect(const std::string& filePath) {
+        auto it = m_SoundEffectMap.find(filePath);
+        if (m_SoundEffectMap.end() == it) {
+            LOG_WARNING("SoundEffect wasn't loaded");
         }
-        else {
-            effect.m_chunk = it->second;
-        }
-        return effect;
+        it->second.play(1);
     }
     Music AudioManager::LoadMusic(const std::string& filePath) {
         auto it = m_MusicMap.find(filePath);
@@ -102,6 +106,5 @@ namespace Engine {
         return music;
 
     }
-
 
 };

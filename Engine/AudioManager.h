@@ -34,11 +34,12 @@ namespace Engine {
 		bool Init();
 		void Destroy();
 
-		SoundEffect LoadSoundEffect(const std::string& filePath);
+		void LoadSoundEffect(const std::string& filePath);
+		void playSoundEffect(const std::string& filePath);
 		Music LoadMusic(const std::string& filePath);
 
 	private:
-		std::map<std::string, Mix_Chunk*> m_SoundEffectMap;
+		std::map<std::string, SoundEffect> m_SoundEffectMap;
 		std::map<std::string, Mix_Music*> m_MusicMap;
 		bool m_IsInitialized = false;
 	};
