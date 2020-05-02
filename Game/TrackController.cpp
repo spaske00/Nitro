@@ -179,8 +179,8 @@ bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityMan
 
 	vec2 tileSize{ 256.f, 2048.f };
 	PlaceTrack(track, entityManager_, textureManager_, tileSize);
-	
-	
+
+
 	return true;
 }
 

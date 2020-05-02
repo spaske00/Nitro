@@ -32,8 +32,28 @@ namespace Engine
         }
 
         // Collide
-		m_EntitiesBuffer.clear();
-		entityManager->GetAllEntitiesWithComponent<CollisionComponent>(std::back_inserter(m_EntitiesBuffer));;
+        m_EntitiesBuffer.clear();
+
+#if 1
+        entityManager->GetAllEntitiesWithComponents<CollisionComponent, MoverComponent>(std::back_inserter(m_EntitiesBuffer));
+        auto collidesWith = entityManager->GetAllEntitiesWithComponent<CollisionComponent>();
+        for (auto& entity : collidesWith) { entity->GetComponent<CollisionComponent>()->m_CollidedWith.clear(); }
+
+        for (auto& entity1 : m_EntitiesBuffer)
+        {
+            for (auto& entity2 : collidesWith)
+            {
+                bool collided = CheckForCollision(entity1, entity2);
+
+                if (collided)
+                {
+                    entity1->GetComponent<CollisionComponent>()->m_CollidedWith.insert(entity2);
+                }
+            }
+        }
+#else
+        
+		entityManager->GetAllEntitiesWithComponent<CollisionComponent>(std::back_inserter(m_EntitiesBuffer));
         for (auto& entity : m_EntitiesBuffer) { entity->GetComponent<CollisionComponent>()->m_CollidedWith.clear(); }
 
         for (auto& entity1 : m_EntitiesBuffer)
@@ -48,6 +68,7 @@ namespace Engine
                 }
             }
         }
+#endif
     }
 
     bool CheckForCollision(Entity* entity1, Entity* entity2)

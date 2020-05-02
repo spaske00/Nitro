@@ -71,6 +71,9 @@ namespace Engine
 		CollisionComponent(float x, float y) : m_Size(x, y), m_Shape(ECollisionShape::AABox) {}
 	};
 
+
+	
+
 	struct SpriteComponent : public Component
 	{
 		Texture* m_Image{};
