@@ -152,7 +152,7 @@ bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityMan
 {
 	ASSERT(entityManager_ != nullptr, "Must pass a valid entity manager");
 
-	Engine::Matrix<TileType> track(10, 12);
+	Engine::Matrix<TileType> track(20, 12);
 	
 	for (int i = 0; i < track.Rows(); ++i)
 	{

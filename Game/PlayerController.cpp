@@ -14,6 +14,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		player1->AddComponent<Engine::TransformComponent>(100.f, 0.f, 50.f, 50.f);
 		player1->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player1Texture");
 		player1->AddComponent<Engine::CollisionComponent>(50.f, 50.f);
+		player1->AddComponent<Engine::CollidedWithComponent>();
 		player1->AddComponent<Engine::MoverComponent>();
 		player1->AddComponent<Engine::PlayerComponent>();
 		auto& input = player1->AddComponent<Engine::InputComponent>();
@@ -40,6 +41,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		player2->AddComponent<Engine::TransformComponent>(200.f, 0.f, 50.f, 50.f);
 		player2->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player2Texture");
 		player2->AddComponent<Engine::CollisionComponent>(50.f, 50.f);
+		player2->AddComponent<Engine::CollidedWithComponent>();
 		player2->AddComponent<Engine::MoverComponent>();
 		player2->AddComponent<Engine::PlayerComponent>();
 		
@@ -128,7 +130,7 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 		mover->m_TranslationSpeed = physics->m_Speed * vec2{ (moveRight ? 1.f : 0.f) + (moveLeft ? -1.f : 0.f), physics->m_Speed > 0 ? -1.f : 0.f };
 	}
 
-	auto collided = player1->GetComponent<Engine::CollisionComponent>()->m_CollidedWith;
+	auto collided = player1->GetComponent<Engine::CollidedWithComponent>()->m_CollidedWith;
 	
 }
 /*

@@ -35,26 +35,50 @@ namespace Engine
         m_EntitiesBuffer.clear();
 
 #if 1
-        entityManager->GetAllEntitiesWithComponents<CollisionComponent, MoverComponent>(std::back_inserter(m_EntitiesBuffer));
-        auto collidesWith = entityManager->GetAllEntitiesWithComponent<CollisionComponent>();
-        for (auto& entity : collidesWith) { entity->GetComponent<CollisionComponent>()->m_CollidedWith.clear(); }
+        entityManager->GetAllEntitiesWithComponents<CollidedWithComponent>(std::back_inserter(m_EntitiesBuffer));
+        auto passiveCollisionEntities = entityManager->GetAllEntitiesWithComponent<CollisionComponent>();
+        for (auto& entity : m_EntitiesBuffer) { entity->GetComponent<CollidedWithComponent>()->m_CollidedWith.clear(); }
 
-        for (auto& entity1 : m_EntitiesBuffer)
+        for (size_t i = 0; i < m_EntitiesBuffer.size(); ++i)
         {
-            for (auto& entity2 : collidesWith)
+            for (size_t j = i + 1; j < m_EntitiesBuffer.size(); ++j)
             {
+                Entity* entity1 = m_EntitiesBuffer[i];
+                Entity* entity2 = m_EntitiesBuffer[j];
                 bool collided = CheckForCollision(entity1, entity2);
-
                 if (collided)
                 {
-                    entity1->GetComponent<CollisionComponent>()->m_CollidedWith.insert(entity2);
+                    entity1->GetComponent<CollidedWithComponent>()->m_CollidedWith.insert(entity2);
+                    entity2->GetComponent<CollidedWithComponent>()->m_CollidedWith.insert(entity1);
                 }
             }
         }
+
+        for (size_t i = 0; i < m_EntitiesBuffer.size(); ++i)
+        {
+            for (size_t j = 0; j < passiveCollisionEntities.size(); ++j)
+            {
+                Entity* entity1 = m_EntitiesBuffer[i];
+                Entity* entity2 = passiveCollisionEntities[j];
+                bool collided = CheckForCollision(entity1, entity2);
+                if (collided)
+                {
+                    entity1->GetComponent<CollidedWithComponent>()->m_CollidedWith.insert(entity2);
+                }
+            }
+        }
+
+        
 #else
         
 		entityManager->GetAllEntitiesWithComponent<CollisionComponent>(std::back_inserter(m_EntitiesBuffer));
-        for (auto& entity : m_EntitiesBuffer) { entity->GetComponent<CollisionComponent>()->m_CollidedWith.clear(); }
+        for (auto& entity : m_EntitiesBuffer) 
+        { 
+            if (auto c = entity->GetComponent<CollidedWithComponent>())
+            {
+                c->m_CollidedWith.clear();
+            }
+        }
 
         for (auto& entity1 : m_EntitiesBuffer)
         {
@@ -64,7 +88,10 @@ namespace Engine
 
                 if (collided)
                 {
-                    entity1->GetComponent<CollisionComponent>()->m_CollidedWith.insert(entity2);
+                    if (auto c = entity1->GetComponent<CollidedWithComponent>())
+                    {
+                        c->m_CollidedWith.insert(entity2);
+                    }
                 }
             }
         }

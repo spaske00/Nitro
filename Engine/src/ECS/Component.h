@@ -64,11 +64,15 @@ namespace Engine
 	{
 		vec2 m_Size{}; // only using first element for circle
 		ECollisionShape m_Shape{ ECollisionShape::Circle };
-		std::set<Entity*> m_CollidedWith{};
-
+		
 		CollisionComponent() = default;
 		CollisionComponent(float radius) : m_Size(radius) {}
 		CollisionComponent(float x, float y) : m_Size(x, y), m_Shape(ECollisionShape::AABox) {}
+	};
+
+	struct CollidedWithComponent : public Component
+	{
+		std::set<Entity*> m_CollidedWith{};
 	};
 
 
