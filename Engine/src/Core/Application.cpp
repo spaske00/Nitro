@@ -58,11 +58,15 @@ namespace Engine {
             return false;
         }
 
+        
+
         if (GameSpecificInit() != true)
         {
             LOG_CRITICAL("Error initializing game specific systems!");
             return false;
         }
+
+
 
         return true;
     }

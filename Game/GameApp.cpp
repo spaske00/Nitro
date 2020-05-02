@@ -71,4 +71,5 @@ void Nitro::GameApp::GameSpecificUpdate(float dt)
 #endif
 	m_PlayerController->Update(dt, m_EntityManager.get());
 	m_CameraController->Update(dt, m_EntityManager.get());
+	m_TrackController->Update(dt, m_EntityManager.get(), m_TextureManager.get());
 }

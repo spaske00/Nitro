@@ -36,7 +36,7 @@ namespace Engine
 
 #if 1
         entityManager->GetAllEntitiesWithComponents<CollidedWithComponent>(std::back_inserter(m_EntitiesBuffer));
-        auto passiveCollisionEntities = entityManager->GetAllEntitiesWithComponent<CollisionComponent>();
+        
         for (auto& entity : m_EntitiesBuffer) { entity->GetComponent<CollidedWithComponent>()->m_CollidedWith.clear(); }
 
         for (size_t i = 0; i < m_EntitiesBuffer.size(); ++i)
@@ -54,6 +54,7 @@ namespace Engine
             }
         }
 
+        auto passiveCollisionEntities = entityManager->GetAllEntitiesWithComponent<CollisionComponent>();
         for (size_t i = 0; i < m_EntitiesBuffer.size(); ++i)
         {
             for (size_t j = 0; j < passiveCollisionEntities.size(); ++j)
