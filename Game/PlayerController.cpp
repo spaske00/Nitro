@@ -65,7 +65,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 
 	}
 
-	audioManager_->LoadSoundEffect("..\\Engine\\Resource\\tump.oga");
+	audioManager_->LoadSoundEffect("..\\Engine\\Resource\\tump.wav");
 
 	return true;
 }
