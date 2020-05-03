@@ -38,6 +38,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		
 		player1->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x - firstRoadTileSize.x / 4, 
 			firstRoadTilePosition.y - firstRoadTileSize.y / 4, 50.f, 50.f);
+
 		player1->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player1Texture");
 		player1->AddComponent<Engine::CollisionComponent>(50.f, 50.f);
 		player1->AddComponent<Engine::CollidedWithComponent>();
@@ -52,8 +53,6 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		// input.inputActions.emplace_back("Player1Jump");
 
 		player1->AddComponent<PlayerTagComponent>(PlayerTag::One);
-		
-		
 
 		auto& physics = player1->AddComponent<CarPhysicsComponent>();
 		physics.m_Mass = 300.f;
@@ -160,6 +159,7 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 	}
 
 	auto collided = player1->GetComponent<Engine::CollidedWithComponent>()->m_CollidedWith;
+	
 	
 }
 /*

@@ -6,6 +6,7 @@
 
 
 
+
 namespace Nitro {
 
 
@@ -33,10 +34,26 @@ namespace Nitro {
 		return (a + 1) % modulo;
 	}
 
+	int ModuloSub(int a, int b, int modulo)
+	{
+		a -= b;
+		if (a < 0)
+		{
+			a += modulo;
+		}
+		return a;
+	}
+
+	int ModuloAdd(int a, int b, int modulo)
+	{
+		a += b;
+		return a % modulo;
+	}
+
 	Engine::Matrix<TileType> TileMatrixLeftL(int rows, int cols)
 	{
 		Engine::Matrix<TileType> result(rows, cols);
-		std::fill(std::begin(result), std::end(result), TileType::water);
+		std::fill(std::begin(result), std::end(result), TileType::water_deep);
 
 		for (int i = 0; i < rows; ++i)
 		{
@@ -52,7 +69,7 @@ namespace Nitro {
 	Engine::Matrix<TileType> TileMatrixRightL(int rows, int cols)
 	{
 		Engine::Matrix<TileType> result(rows, cols);
-		std::fill(std::begin(result), std::end(result), TileType::water);
+		std::fill(std::begin(result), std::end(result), TileType::water_deep);
 
 		for (int i = 0; i < rows; ++i)
 		{
@@ -68,7 +85,7 @@ namespace Nitro {
 	Engine::Matrix<TileType> TileMatrixI(int rows, int cols)
 	{
 		Engine::Matrix<TileType> result(rows, cols);
-		std::fill(std::begin(result), std::end(result), TileType::water);
+		std::fill(std::begin(result), std::end(result), TileType::water_deep);
 
 		for (int i = 0; i < cols; ++i)
 		{
@@ -120,6 +137,11 @@ void PlaceTrack(const Engine::Matrix<Nitro::TileType>& tileMatrix, Engine::Entit
 	trackComponent.m_TileSize = tileSize;
 	trackComponent.m_UpperLeftCornerWorldPosition = { 0.f, -tileSize.y * tileMatrix.Rows() };
 	trackComponent.m_LowestLayerIndex = tileMatrix.Rows() - 1;
+
+	// TODO(Marko): HARDCODED!
+	trackComponent.m_TrackLeftColumnBoundaryBegin = 4;
+	trackComponent.m_TrackRightColumnBoundaryEnd = 8;
+	//
 	entityManager_->AddEntity(std::move(tracksEntity));
 }
 
@@ -129,7 +151,7 @@ bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityMan
 {
 	ASSERT(entityManager_ != nullptr, "Must pass a valid entity manager");
 
-	Engine::Matrix<TileType> track(24, 12);
+	Engine::Matrix<TileType> track(12, 12);
 	
 	for (int i = 0; i < track.Rows(); ++i)
 	{
@@ -166,8 +188,8 @@ void Nitro::TrackController::Update(float dt_, Engine::EntityManager* entityMana
 	ASSERT(entityManager_ != nullptr, "Must pass a valid entityManager");
 	
 	auto tileMatrixEntities = entityManager_->GetAllEntitiesWithComponent<Nitro::TrackComponent>();
-	ASSERT(tileMatrixEntities.size() == 1, "Must be excatly one tileMatrix");
-	auto tileMatrix = tileMatrixEntities[0];
+	ASSERT(tileMatrixEntities.size() == 1, "Must be excatly one trackEntity");
+	auto trackEntity = tileMatrixEntities[0];
 
 	auto playerEntities = entityManager_->GetAllEntitiesWithComponent<Engine::PlayerComponent>();
 	ASSERT(playerEntities.size() >= 1, "Must be at least one player");
@@ -178,14 +200,22 @@ void Nitro::TrackController::Update(float dt_, Engine::EntityManager* entityMana
 		std::swap(player1, player2);
 	}
 
-	if (ShouldGenerateNextTileLayer(tileMatrix, player1, player2))
+	static bool next = true;
+	if (ShouldGenerateNextTileLayer(trackEntity, player1, player2))
 	{
 		LOG_INFO("NEW LAYER GENERATED");
 		//GenerateNextTileLayer(tileMatrix, textureManager_);
-		MoveTrackLayersFromDownToTheTop(tileMatrix, 4);
+		MoveTrackLayersFromDownToTheTop(trackEntity, 4);
+		if (next)
+		{
+			PasteTileMatrixChunkOnTheTrack(trackEntity, textureManager_, TileMatrixLeftL(4, 4));
+		}
+		else
+		{
+			PasteTileMatrixChunkOnTheTrack(trackEntity, textureManager_, TileMatrixRightL(4, 4));
+		}
+		next = !next;
 	}
-
-	
 }
 
 
@@ -205,7 +235,7 @@ bool Nitro::TrackController::ShouldGenerateNextTileLayer(Engine::Entity* trackEn
 	//LOG_INFO(fmt::format("LowestLayer {}", lowestLayer));
 	//LOG_INFO(fmt::format("Player1 {} {} Player2 {} {}", player1IndexLocation, player1LayerDistanceFromLowestLayer, player2IndexLocation, player2LayerDistanceFromLowestLayer));
 
-	return std::min(player1LayerDistanceFromLowestLayer, player2LayerDistanceFromLowestLayer) > 6;
+	return std::min(player1LayerDistanceFromLowestLayer, player2LayerDistanceFromLowestLayer) > 4;
 }
 
 
@@ -215,9 +245,10 @@ void Nitro::TrackController::MoveTrackLayersFromDownToTheTop(Engine::Entity* tra
 	auto& trackMatrix = trackComponent->m_TracksMatrix;
 	int lowestLayer = trackComponent->m_LowestLayerIndex;
 	
+	
 	for (int i = 0; i < n; ++i)
 	{
-		int highestLayer = (lowestLayer + 1) % trackMatrix.Rows();
+		int highestLayer = ModuloIncrement(lowestLayer, trackMatrix.Rows());
 		float y = trackMatrix.At(highestLayer, 0)->GetComponent<Engine::TransformComponent>()->m_Position.y - trackComponent->m_TileSize.y;
 
 		for (int j = 0; j < trackMatrix.Cols(); ++j)
@@ -227,6 +258,41 @@ void Nitro::TrackController::MoveTrackLayersFromDownToTheTop(Engine::Entity* tra
 		lowestLayer = ModuloDecrement(lowestLayer, trackMatrix.Rows());
 	}
 	trackComponent->m_LowestLayerIndex = lowestLayer;
+
+}
+
+
+
+
+
+
+void Nitro::TrackController::PasteTileMatrixChunkOnTheTrack(Engine::Entity* trackEntity_, Engine::TextureManager* textureManager_,
+	const Engine::Matrix<TileType>& tileMatrix)
+{
+	auto trackComponent = trackEntity_->GetComponent<TrackComponent>();
+	int cols = (int)trackComponent->m_TracksMatrix.Cols();
+	int rows = (int)trackComponent->m_TracksMatrix.Rows();
+	int lowestLayer = trackComponent->m_LowestLayerIndex;
+
+	
+	auto& tracksMatrix = trackComponent->m_TracksMatrix;
+	int highestLayer = ModuloIncrement(lowestLayer, tracksMatrix.Rows());
+	int columnBegin = trackComponent->m_TrackLeftColumnBoundaryBegin;
+	int columnEnd = trackComponent->m_TrackRightColumnBoundaryEnd;
+	for (int i = 0;
+		i < (int)tileMatrix.Rows();
+		++i)
+	{
+		for (int j = 0, trackJ = columnBegin;
+			j < (int)tileMatrix.Cols();
+			++j, ++trackJ)
+		{
+			tracksMatrix.At(highestLayer, trackJ)->GetComponent<TileInfoComponent>()->m_TileType = tileMatrix.At(i, j);
+			tracksMatrix.At(highestLayer, trackJ)->GetComponent<Engine::SpriteComponent>()->m_Image = textureManager_->GetTexture(TileTypeToTextureName(tileMatrix.At(i, j)));
+			ASSERT(tracksMatrix.At(highestLayer, trackJ)->GetComponent<Engine::SpriteComponent>()->m_Image != nullptr, "Must find a texture");
+		}
+		highestLayer = ModuloIncrement(highestLayer, tracksMatrix.Rows());
+	}
 
 }
 
@@ -254,57 +320,4 @@ std::pair<int, int> Nitro::TrackController::FindPlayersLayerIndexLocations(Engin
 	}
 
 	return result;
-}
-
-
-
-void Nitro::TrackController::PlaceNextTileChunkOnTheTrack(Engine::Entity* trackEntity_, Engine::TextureManager* textureManager_,
-	const Engine::Matrix<TileType>& tileMatrix)
-{
-	auto trackComponent = trackEntity_->GetComponent<TrackComponent>();
-	int cols = (int)trackComponent->m_TracksMatrix.Cols();
-	int rows = (int)trackComponent->m_TracksMatrix.Rows();
-	int lowestLayer = trackComponent->m_LowestLayerIndex;
-	int highestLayer = (lowestLayer + 1) % rows;
-	int layerCount = tileMatrix.Rows();
-
-
-	auto& tracksMatrix = trackComponent->m_TracksMatrix;
-	int columnBegin = trackComponent->m_TrackLeftColumnBoundaryBegin;
-	int columnEnd = trackComponent->m_TrackRightColumnBoundaryEnd;
-	for (int i = 0;
-		(int)tileMatrix.Rows();
-		++i)
-	{
-		for (int j = 0, trackJ = columnBegin;
-			j < (int)tileMatrix.Cols();
-			++j, ++trackJ)
-		{
-			auto highestLayerYCoordCenter = tracksMatrix.At(highestLayer, 0)->GetComponent<Engine::TransformComponent>()->m_Position.y;
-		}
-		highestLayer = ModuloDecrement(highestLayer, tracksMatrix.Rows());
-		lowestLayer = ModuloDecrement(lowestLayer, tracksMatrix.Rows());
-	}
-
-}
-
-/// OLD
-
-void Nitro::TrackController::GenerateNextTileLayer(Engine::Entity* trackEntity_, Engine::TextureManager* textureManager_)
-{
-	auto trackComponent = trackEntity_->GetComponent<TrackComponent>();
-	int cols = (int)trackComponent->m_TracksMatrix.Cols();
-	int rows = (int)trackComponent->m_TracksMatrix.Rows();
-	int lowestLayer = trackComponent->m_LowestLayerIndex;
-	int highestLayer = (lowestLayer + 1) % rows; // NOTE(Marko) + 1 because layers go from 0 to Rows from upperLeftCorner in the world. Meaning players traverse layers 19, 18, 17... when going forward
-	auto& matrix = trackComponent->m_TracksMatrix;
-	float highestRowYCenterPosition = matrix.At(highestLayer, 0)->GetComponent<Engine::TransformComponent>()->m_Position.y;
-
-	for (int i = 0; i < cols; ++i)
-	{
-		auto& e = matrix.At(lowestLayer, i);
-		auto transform = e->GetComponent<Engine::TransformComponent>();
-		transform->m_Position.y = (highestRowYCenterPosition - trackComponent->m_TileSize.y);
-	}
-	trackComponent->m_LowestLayerIndex = lowestLayer == 0 ? rows - 1 : lowestLayer - 1;
 }
