@@ -60,11 +60,11 @@ bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityMan
 			}
 			else if(j == 3)
 			{
-				track.At(i, j) = TileType::water_beach;
+				track.At(i, j) = TileType::water_water_beach;
 			}
 			else if(j == 8)
 			{
-				track.At(i, j) = TileType::beach_water;
+				track.At(i, j) = TileType::beach_water_water;
 			}
 			else
 			{
