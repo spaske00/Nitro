@@ -55,49 +55,30 @@ namespace Engine
         m_Renderer->BeginScene();
 
         // Get the main camera from the entity manager
-        
-		m_EntitiesBuffer.clear();
+
+        m_EntitiesBuffer.clear();
         entityManager->GetAllEntitiesWithComponents<CameraComponent, TransformComponent>(std::back_inserter(m_EntitiesBuffer));
         ASSERT(!m_EntitiesBuffer.empty(), "Must have at least one camera");
 
-/*<<<<<<< HEAD
-		auto camera = cameras[0];
-    	
-		auto backgrounds = entityManager->GetAllEntitiesWithComponent<BackgroundComponent>();
-		auto renderables = entityManager->GetAllEntitiesWithComponent<DrawableEntity>();
-        auto texts = entityManager->GetAllEntitiesWithComponent<TextComponent>();
-		
-		m_Renderer->DrawEntities(backgrounds, camera);	
-    		
-		m_Renderer->DrawEntities(renderables, camera); 	
+        auto camera = m_EntitiesBuffer[0];
 
-        m_Renderer->ShowTexts(texts, camera);
-=======
-		auto camera = m_EntitiesBuffer[0];
-
-    	// draw background
+        // draw background
         {
-			m_EntitiesBuffer.clear();
-			entityManager->GetAllEntitiesWithComponent<BackgroundComponent>(std::back_inserter(m_EntitiesBuffer));
-			m_Renderer->DrawEntities(m_EntitiesBuffer, camera);
+            m_EntitiesBuffer.clear();
+            entityManager->GetAllEntitiesWithComponent<BackgroundComponent>(std::back_inserter(m_EntitiesBuffer));
+            m_Renderer->DrawEntities(m_EntitiesBuffer, camera);
         }
 
-    	// draw entities
+        // draw entities
         {
-			m_EntitiesBuffer.clear();
-			entityManager->GetAllEntitiesWithComponent<DrawableEntity>(std::back_inserter(m_EntitiesBuffer));
-			m_Renderer->DrawEntities(m_EntitiesBuffer, camera);
-        	
+            m_EntitiesBuffer.clear();
+            entityManager->GetAllEntitiesWithComponent<DrawableEntity>(std::back_inserter(m_EntitiesBuffer));
+            m_Renderer->DrawEntities(m_EntitiesBuffer, camera);
+
         }
-  
->>>>>>> 461c3798e05501235443fb1fe315af2f1e937079*/
-    	
+
+
         m_Renderer->EndScene();
-    }
-
-    Renderer* RenderSystem::GetRenderer()
-    {
-        return m_Renderer.get();
     }
 
     void RenderSystem::SetBackgroundColor(unsigned char bgR_, unsigned char bgG_, unsigned char bgB_, unsigned char bgA_)
