@@ -72,7 +72,7 @@ void PlaceTrack(const Engine::Matrix<Nitro::TileType>& tileMatrix, Engine::Entit
 			auto entity = Engine::Entity::Create();
 			entity->AddComponent<Engine::TransformComponent>(upperLeftCorner.x + tileSize.x / 2, upperLeftCorner.y + tileSize.y / 2, tileSize.x, tileSize.y);
 			entity->AddComponent<Engine::BackgroundComponent>();
-
+			// entity->AddComponent<Engine::CollisionComponent>(tileSize.x, tileSize.y);
 			entity->AddComponent<Nitro::TileInfoComponent>(tileType);
 
 			auto texture = textureManager_->GetTexture(Nitro::TileTypeToTextureName(tileType));
@@ -108,10 +108,10 @@ bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityMan
 		return false;
 	}
 
-	Engine::Matrix<TileType> track(36, 17);
+	Engine::Matrix<TileType> track(36, 16);
 	std::fill(std::begin(track), std::end(track), TileType::water);
 
-	vec2 tileSize{ 256.f, 256.f };
+	vec2 tileSize{ 256.f, 512.f };
 	PlaceTrack(track, entityManager_, textureManager_, tileSize);
 
 	for (int i = 0; i < 3; ++i)
@@ -188,6 +188,7 @@ void Nitro::TrackController::MoveTrackLayersFromDownToTheTop(Engine::Entity* tra
 		for (int j = 0; j < trackMatrix.Cols(); ++j)
 		{
 			trackMatrix.At(lowestLayer, j)->GetComponent<Engine::TransformComponent>()->m_Position.y = y;
+			trackMatrix.At(lowestLayer, j)->RemoveComponent<Engine::CollisionComponent>();
 		}
 		lowestLayer = ModuloDecrement(lowestLayer, trackMatrix.Rows());
 	}
@@ -221,6 +222,12 @@ void Nitro::TrackController::PasteTileMatrixChunkOnTheTrackToLayer(Engine::Entit
 			tracksMatrix.At(highestLayer, trackJ)->GetComponent<TileInfoComponent>()->m_TileType = tileMatrix.At(i, j);
 			tracksMatrix.At(highestLayer, trackJ)->GetComponent<Engine::SpriteComponent>()->m_Image = textureManager_->GetTexture(TileTypeToTextureName(tileMatrix.At(i, j)));
 			// TODO(Marko): SOlve collision component
+			if (tileMatrix.At(i, j) == TileType::road)
+			{
+				auto size = tracksMatrix.At(highestLayer, trackJ)->GetComponent<Engine::TransformComponent>()->m_Size;
+				tracksMatrix.At(highestLayer, trackJ)->AddComponent<Engine::CollisionComponent>(size.x, size.y);
+			}
+
 			ASSERT(tracksMatrix.At(highestLayer, trackJ)->GetComponent<Engine::SpriteComponent>()->m_Image != nullptr, "Must find a texture");
 		}
 		highestLayer = ModuloIncrement(highestLayer, tracksMatrix.Rows());
@@ -254,6 +261,11 @@ void Nitro::TrackController::PasteTileMatrixChunkOnTheTrack(Engine::Entity* trac
 			tracksMatrix.At(highestLayer, trackJ)->GetComponent<TileInfoComponent>()->m_TileType = tileMatrix.At(i, j);
 			tracksMatrix.At(highestLayer, trackJ)->GetComponent<Engine::SpriteComponent>()->m_Image = textureManager_->GetTexture(TileTypeToTextureName(tileMatrix.At(i, j)));
 			// TODO(Marko): SOlve collision component
+			if (tileMatrix.At(i, j) == TileType::road)
+			{
+				auto size = tracksMatrix.At(highestLayer, trackJ)->GetComponent<Engine::TransformComponent>()->m_Size;
+				tracksMatrix.At(highestLayer, trackJ)->AddComponent<Engine::CollisionComponent>(size.x, size.y);
+			}
 			ASSERT(tracksMatrix.At(highestLayer, trackJ)->GetComponent<Engine::SpriteComponent>()->m_Image != nullptr, "Must find a texture");
 		}
 		highestLayer = ModuloIncrement(highestLayer, tracksMatrix.Rows());

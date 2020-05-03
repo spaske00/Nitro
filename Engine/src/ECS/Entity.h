@@ -14,8 +14,15 @@ namespace Engine
         unsigned int m_Id;
         std::vector<std::unique_ptr<Component>> m_Components;
 
+        template<typename TComponent>
+        std::vector<std::unique_ptr<Component>>::iterator GetComponentIterator()
+        {
+            
+        }
+
     public:
         Entity() { m_Id = m_CurrentId++; }
+
 
     	static std::unique_ptr<Entity> Create()
         {
@@ -84,11 +91,12 @@ namespace Engine
             if (!HasComponent<TComponent>())
             {
                 LOG_WARNING("Attempting to remove a component that does not exist! Entity ID : {}, ComponentType : {}", m_Id, Component::GetComponentTypeID<TComponent>());
+                return;
             }
 
             m_Components.erase(std::remove_if(begin(m_Components),
                                                 end(m_Components),
-                                                [](const Component* component) { return component->GetType() == Component::GetComponentTypeID<TComponent>(); }));
+                                                [](const auto& component) { return component->m_TypeId == Component::GetComponentTypeID<TComponent>(); }));
         }
     };
 }
