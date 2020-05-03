@@ -3,6 +3,8 @@
 
 #include <Core/EntryPoint.h>
 
+#include "GameComponents.h"
+#include "TrackPatternGenerator.h"
 #include "CameraController.h"
 #include "DebugController.h"
 #include "PlayerController.h"
@@ -12,16 +14,16 @@
 void Nitro::GameApp::GameSpecificWindowData()
 {
 	Engine::WindowData windowData;
-	windowData.m_Height = 600;
-	windowData.m_Width = 800;
+	windowData.m_Height = 720;
+	windowData.m_Width = 1280;
 	windowData.m_Title = "Nitro";
 	SetWindowData(windowData);
 }
 
 bool Nitro::GameApp::GameSpecificInit()
 {
-
 	GameLoadSpecificSoundtrack();
+
 
 	m_TextureController = TextureController::Create();
 	if (!m_TextureController->Init(m_RenderSystem->GetRenderer(), m_TextureManager.get(), "Resource"))
@@ -40,6 +42,7 @@ bool Nitro::GameApp::GameSpecificInit()
 	}
 #endif
 
+	m_TrackController = TrackController::Create();
 	if (!m_TrackController->Init(m_RenderSystem->GetRenderer(), m_EntityManager.get(), m_TextureManager.get()))
 	{
 		LOG_ERROR("Failed to initialize track controller");

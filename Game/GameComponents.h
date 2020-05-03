@@ -11,14 +11,11 @@ namespace Nitro
 
 		water_deep,
 		
-		grass_beach,
-		beach_grass,
+		grass_grass_beach,
+		beach_beach_grass,
 		
-		water_beach,
-		beach_water,
-		
-		grass_water,
-		water_grass,
+		water_water_beach,
+		beach_water_water,
 
 		TileTypeCount
 	};
@@ -31,14 +28,11 @@ namespace Nitro
 		case TileType::grass: return "grass";
 		case TileType::water: return "water";
 			
-		case TileType::grass_beach: return "grass_beach";
-		case TileType::beach_grass: return "beach_grass";
+		case TileType::grass_grass_beach: return "grass_grass_beach";
+		case TileType::beach_beach_grass: return "beach_beach_grass";
 			
-		case TileType::water_beach: return "water_beach";
-		case TileType::beach_water: return "beach_water";
-			
-		case TileType::grass_water: return "grass_water";
-		case TileType::water_grass: return "water_grass";
+		case TileType::water_water_beach: return "water_water_beach";
+		case TileType::beach_water_water: return "beach_water_water";
 			
 		case TileType::water_deep: return "water_deep";
 
@@ -104,6 +98,9 @@ namespace Nitro
 		vec2 m_TileSize{};
 		vec2 m_UpperLeftCornerWorldPosition{};
 		int m_LowestLayerIndex{};
+		int m_TrackLeftColumnBoundaryBegin{};
+		int m_TrackRightColumnBoundaryEnd{};
+		
 	};
 	
 	
