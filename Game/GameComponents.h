@@ -96,6 +96,15 @@ namespace Nitro
 		{
 		}
 	};
+
+	struct TrackComponent : public Engine::Component
+	{
+		// TODO(Marko): Switch to shared_ptr if necessary
+		Engine::Matrix<Engine::Entity*> m_TracksMatrix;
+		vec2 m_TileSize{};
+		vec2 m_UpperLeftCornerWorldPosition{};
+		int m_LowestLayerIndex{};
+	};
 	
 	
 }

@@ -22,6 +22,7 @@ namespace Nitro
 		std::unique_ptr<PlayerController> m_PlayerController;
 		std::unique_ptr<TrackController> m_TrackController;
 
+
 		
 #if _DEBUG
 		std::unique_ptr<DebugController> m_DebugController;

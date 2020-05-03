@@ -20,8 +20,7 @@ void Nitro::GameApp::GameSpecificWindowData()
 
 bool Nitro::GameApp::GameSpecificInit()
 {
-	
-	//m_AudioManager->PlayMusic("..\\Engine\\Resources\\music.ogg");
+
 	GameLoadSpecificSoundtrack();
 
 	m_TextureController = TextureController::Create();
@@ -60,8 +59,6 @@ bool Nitro::GameApp::GameSpecificInit()
 		LOG_ERROR("Failed to initialize PlayerController");
 		return false;
 	}
-
-	
 	return true;
 }
 
@@ -77,12 +74,12 @@ void Nitro::GameApp::GameSpecificUpdate(float dt)
 #endif
 	m_PlayerController->Update(dt, m_EntityManager.get(), m_AudioManager.get());
 	m_CameraController->Update(dt, m_EntityManager.get());
+	m_TrackController->Update(dt, m_EntityManager.get(), m_TextureManager.get());
 }
 
 void Nitro::GameApp::GameLoadSpecificSoundtrack() {
 
 	m_AudioManager->LoadMusic("..\\Engine\\Resources\\music.ogg", "backgroundMusic");
-	m_AudioManager->LoadSoundEffect("..\\Engine\\Resources\\tump.wav","playerBump");
+	m_AudioManager->LoadSoundEffect("..\\Engine\\Resources\\tump.wav", "playerBump");
 
 }
-
