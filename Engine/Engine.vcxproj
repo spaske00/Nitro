@@ -105,14 +105,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Matrix.cpp" />
-    <ClCompile Include="Music.cpp" />
     <ClCompile Include="precomp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="SoundEffect.cpp" />
     <ClCompile Include="src\Core\Application.cpp" />
     <ClCompile Include="src\Core\EntryPoint.h" />
     <ClCompile Include="src\ECS\Component.cpp" />
@@ -120,6 +117,9 @@
     <ClCompile Include="src\ECS\EntityManager.cpp" />
     <ClCompile Include="src\Input\InputManager.cpp" />
     <ClCompile Include="src\Logger\Logger.cpp" />
+    <ClCompile Include="src\Music\AudioManager.cpp" />
+    <ClCompile Include="src\Music\Music.cpp" />
+    <ClCompile Include="src\Music\SoundEffect.cpp" />
     <ClCompile Include="src\Physics\PhysicsSystem.cpp" />
     <ClCompile Include="src\Render\Renderer.cpp" />
     <ClCompile Include="src\Render\RenderSystem.cpp" />
@@ -128,7 +128,6 @@
     <ClCompile Include="src\Render\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AudioManager.h" />
     <ClInclude Include="extern\glm\common.hpp" />
     <ClInclude Include="extern\glm\detail\compute_common.hpp" />
     <ClInclude Include="extern\glm\detail\compute_vector_relational.hpp" />
@@ -430,9 +429,7 @@
     <ClInclude Include="extern\spdlog\tweakme.h" />
     <ClInclude Include="extern\spdlog\version.h" />
     <ClInclude Include="Matrix.h" />
-    <ClInclude Include="Music.h" />
     <ClInclude Include="precomp.h" />
-    <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="src\Core\Application.h" />
     <ClInclude Include="src\ECS\Component.h" />
     <ClInclude Include="src\ECS\Entity.h" />
@@ -441,6 +438,9 @@
     <ClInclude Include="src\Input\InputAction.h" />
     <ClInclude Include="src\Input\InputManager.h" />
     <ClInclude Include="src\Logger\Logger.h" />
+    <ClInclude Include="src\Music\AudioManager.h" />
+    <ClInclude Include="src\Music\Music.h" />
+    <ClInclude Include="src\Music\SoundEffect.h" />
     <ClInclude Include="src\Physics\PhysicsSystem.h" />
     <ClInclude Include="src\Render\Renderer.h" />
     <ClInclude Include="src\Render\RenderSystem.h" />
@@ -572,30 +572,26 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\sdl2.nuget.redist.2.0.10\build\native\sdl2.nuget.redist.targets" Condition="Exists('..\packages\sdl2.nuget.redist.2.0.10\build\native\sdl2.nuget.redist.targets')" />
+    <Import Project="..\packages\sdl2.nuget.2.0.10\build\native\sdl2.nuget.targets" Condition="Exists('..\packages\sdl2.nuget.2.0.10\build\native\sdl2.nuget.targets')" />
     <Import Project="..\packages\sdl2_image.nuget.redist.2.0.5\build\native\sdl2_image.nuget.redist.targets" Condition="Exists('..\packages\sdl2_image.nuget.redist.2.0.5\build\native\sdl2_image.nuget.redist.targets')" />
     <Import Project="..\packages\sdl2_image.nuget.2.0.5\build\native\sdl2_image.nuget.targets" Condition="Exists('..\packages\sdl2_image.nuget.2.0.5\build\native\sdl2_image.nuget.targets')" />
     <Import Project="..\packages\sdl2.new.redist.2.0.8\build\native\sdl2.new.redist.targets" Condition="Exists('..\packages\sdl2.new.redist.2.0.8\build\native\sdl2.new.redist.targets')" />
     <Import Project="..\packages\sdl2.new.2.0.8\build\native\sdl2.new.targets" Condition="Exists('..\packages\sdl2.new.2.0.8\build\native\sdl2.new.targets')" />
     <Import Project="..\packages\vii.SDL2_mixer.redist.2.0.2\build\native\vii.SDL2_mixer.redist.targets" Condition="Exists('..\packages\vii.SDL2_mixer.redist.2.0.2\build\native\vii.SDL2_mixer.redist.targets')" />
     <Import Project="..\packages\vii.SDL2_mixer.2.0.2\build\native\vii.SDL2_mixer.targets" Condition="Exists('..\packages\vii.SDL2_mixer.2.0.2\build\native\vii.SDL2_mixer.targets')" />
-    <Import Project="..\packages\sdl2.nuget.redist.2.0.12\build\native\sdl2.nuget.redist.targets" Condition="Exists('..\packages\sdl2.nuget.redist.2.0.12\build\native\sdl2.nuget.redist.targets')" />
-    <Import Project="..\packages\sdl2.nuget.2.0.12\build\native\sdl2.nuget.targets" Condition="Exists('..\packages\sdl2.nuget.2.0.12\build\native\sdl2.nuget.targets')" />
-    <Import Project="..\packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets" Condition="Exists('..\packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets')" />
-    <Import Project="..\packages\sdl2.2.0.5\build\native\sdl2.targets" Condition="Exists('..\packages\sdl2.2.0.5\build\native\sdl2.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
+    <Error Condition="!Exists('..\packages\sdl2.nuget.redist.2.0.10\build\native\sdl2.nuget.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sdl2.nuget.redist.2.0.10\build\native\sdl2.nuget.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\sdl2.nuget.2.0.10\build\native\sdl2.nuget.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sdl2.nuget.2.0.10\build\native\sdl2.nuget.targets'))" />
     <Error Condition="!Exists('..\packages\sdl2_image.nuget.redist.2.0.5\build\native\sdl2_image.nuget.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sdl2_image.nuget.redist.2.0.5\build\native\sdl2_image.nuget.redist.targets'))" />
     <Error Condition="!Exists('..\packages\sdl2_image.nuget.2.0.5\build\native\sdl2_image.nuget.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sdl2_image.nuget.2.0.5\build\native\sdl2_image.nuget.targets'))" />
     <Error Condition="!Exists('..\packages\sdl2.new.redist.2.0.8\build\native\sdl2.new.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sdl2.new.redist.2.0.8\build\native\sdl2.new.redist.targets'))" />
     <Error Condition="!Exists('..\packages\sdl2.new.2.0.8\build\native\sdl2.new.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sdl2.new.2.0.8\build\native\sdl2.new.targets'))" />
     <Error Condition="!Exists('..\packages\vii.SDL2_mixer.redist.2.0.2\build\native\vii.SDL2_mixer.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vii.SDL2_mixer.redist.2.0.2\build\native\vii.SDL2_mixer.redist.targets'))" />
     <Error Condition="!Exists('..\packages\vii.SDL2_mixer.2.0.2\build\native\vii.SDL2_mixer.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vii.SDL2_mixer.2.0.2\build\native\vii.SDL2_mixer.targets'))" />
-    <Error Condition="!Exists('..\packages\sdl2.nuget.redist.2.0.12\build\native\sdl2.nuget.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sdl2.nuget.redist.2.0.12\build\native\sdl2.nuget.redist.targets'))" />
-    <Error Condition="!Exists('..\packages\sdl2.nuget.2.0.12\build\native\sdl2.nuget.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sdl2.nuget.2.0.12\build\native\sdl2.nuget.targets'))" />
-    <Error Condition="!Exists('..\packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets'))" />
-    <Error Condition="!Exists('..\packages\sdl2.2.0.5\build\native\sdl2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sdl2.2.0.5\build\native\sdl2.targets'))" />
   </Target>
 </Project>

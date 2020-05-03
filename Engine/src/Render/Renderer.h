@@ -1,7 +1,6 @@
 #pragma once
 #include "Render/WindowData.h"
 #include <SDL.h>
-#include <AudioManager.h>
 struct SDL_Renderer;
 struct SDL_Texture;
 struct SDL_RendererInfo;
@@ -35,7 +34,6 @@ namespace Engine
         ~Renderer();
 
     private:
-        std::unique_ptr<AudioManager> m_Audio;
         std::unique_ptr<Window> m_Window;
 		SDL_RendererInfo m_RendererInfo;
 

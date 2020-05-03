@@ -55,7 +55,7 @@ namespace Engine
         m_Renderer->BeginScene();
 
         // Get the main camera from the entity manager
-        // TODO: Support multiple cameras and switching between them
+        
 		m_EntitiesBuffer.clear();
         entityManager->GetAllEntitiesWithComponents<CameraComponent, TransformComponent>(std::back_inserter(m_EntitiesBuffer));
         ASSERT(!m_EntitiesBuffer.empty(), "Must have at least one camera");

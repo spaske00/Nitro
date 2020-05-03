@@ -18,7 +18,7 @@ namespace Engine
 
 		
 		m_Window = std::make_unique<Window>();
-		
+
 		if (!m_Window->Init(windowData_))
 		{
 			LOG_CRITICAL("Unable to create a Window.");
@@ -44,7 +44,7 @@ namespace Engine
 
 		LOG_INFO("RenderSystem initialized successfully");
 		
-
+		
 		return true;
 	}
 
@@ -60,8 +60,7 @@ namespace Engine
 		m_NativeRenderer = nullptr;
 
 		m_Window.reset();
-		
-		m_Audio->Destroy();
+
 		return true;
 	}
 
@@ -158,8 +157,6 @@ namespace Engine
 
 	void Renderer::BeginScene() const
 	{
-
-
 		SDL_RenderClear(m_NativeRenderer);
 	}
 

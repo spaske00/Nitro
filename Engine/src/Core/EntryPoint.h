@@ -2,7 +2,7 @@
 #include "Core/Application.h"
 #include "Render/RenderSystem.h"
 #include "Render/Renderer.h"
-
+#include "Music/AudioManager.h"
 int main(int argc, char* args[])
 {
     Engine::Logger::Init();

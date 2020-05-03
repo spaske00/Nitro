@@ -9,7 +9,7 @@
 #include "Render/WindowData.h"
 #include "Render/TextureManager.h"
 #include "Physics/PhysicsSystem.h"
-#include "AudioManager.h"
+#include "Music/AudioManager.h"
 
 #include <SDL.h>
 
@@ -65,11 +65,14 @@ namespace Engine {
             return false;
         }
 
+        
+
         if (GameSpecificInit() != true)
         {
             LOG_CRITICAL("Error initializing game specific systems!");
             return false;
         }
+
 
         return true;
     }
@@ -83,7 +86,8 @@ namespace Engine {
         m_RenderSystem->Shutdown();
         m_RenderSystem.reset();
         m_AudioManager->Destroy();
-        
+
+
         return true;
     }
 
@@ -97,7 +101,7 @@ namespace Engine {
 
         m_AudioManager->PlayMusic("backgroundMusic");
 
-        
+
         while (m_Running)
         {
             while (SDL_PollEvent(&event) != 0)
