@@ -116,9 +116,9 @@ namespace Nitro
 	{
 		PlayerTag m_PlayerTag;
 		//Pointer to player
-		Engine::Entity* m_Player;
+		Engine::Entity* m_PlayerEntity;
 		TextInfoType m_Type;
-		TextInfoComponent(PlayerTag PlayerTag, Engine::Entity* Player, TextInfoType Type) : m_PlayerTag(PlayerTag), m_Player(Player), m_Type(Type){}
+		TextInfoComponent(PlayerTag PlayerTag, Engine::Entity* Player, TextInfoType Type) : m_PlayerTag(PlayerTag), m_PlayerEntity(Player), m_Type(Type){}
 	};
 	
 	
