@@ -87,6 +87,11 @@ namespace Engine
         m_Renderer->EndScene();
     }
 
+    Renderer* RenderSystem::GetRenderer()
+    {
+        return m_Renderer.get();
+    }
+
     void RenderSystem::SetBackgroundColor(unsigned char bgR_, unsigned char bgG_, unsigned char bgB_, unsigned char bgA_)
     {
         m_Renderer->SetBackgroundColor(bgR_, bgG_, bgB_, bgA_);
