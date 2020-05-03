@@ -10,7 +10,7 @@ bool Nitro::CameraController::Init(Engine::EntityManager* entityManager_, const 
 	{	
 		auto camera = Engine::Entity::Create();
 		camera->AddComponent<Engine::CameraComponent>();
-		camera->AddComponent<Engine::TransformComponent>(windowData_->m_Width / 2.f, windowData_->m_Height / 4.f, static_cast<float>(windowData_->m_Width)*8, static_cast<float>(windowData_->m_Height)*8);
+		camera->AddComponent<Engine::TransformComponent>(windowData_->m_Width / 2.f, windowData_->m_Height / 4.f, static_cast<float>(windowData_->m_Width)*12, static_cast<float>(windowData_->m_Height)*12);
 		camera->AddComponent<Engine::MoverComponent>();
 		camera->AddComponent<PlayerTagComponent>(PlayerTag::Two);
 		entityManager_->AddEntity(std::move(camera));

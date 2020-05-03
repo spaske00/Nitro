@@ -3,6 +3,8 @@
 
 #include <Core/EntryPoint.h>
 
+#include "GameComponents.h"
+#include "TrackPatternGenerator.h"
 #include "CameraController.h"
 #include "DebugController.h"
 #include "PlayerController.h"
@@ -37,6 +39,7 @@ bool Nitro::GameApp::GameSpecificInit()
 	}
 #endif
 
+	m_TrackController = TrackController::Create();
 	if (!m_TrackController->Init(m_RenderSystem->GetRenderer(), m_EntityManager.get(), m_TextureManager.get()))
 	{
 		LOG_ERROR("Failed to initialize track controller");

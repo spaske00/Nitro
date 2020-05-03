@@ -13,6 +13,9 @@
     <Filter Include="src\Components">
       <UniqueIdentifier>{1e24d4b8-75fd-4880-8e40-c75ce426bf5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Generators">
+      <UniqueIdentifier>{483f157d-37e4-400f-adcb-b11ce2ab7793}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="precomp.cpp">
@@ -35,6 +38,9 @@
     </ClCompile>
     <ClCompile Include="TrackController.cpp">
       <Filter>src\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackPatternGenerator.cpp">
+      <Filter>src\Generators</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +67,9 @@
     </ClInclude>
     <ClInclude Include="TrackController.h">
       <Filter>src\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackPatternGenerator.h">
+      <Filter>src\Generators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
