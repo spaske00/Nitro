@@ -118,9 +118,7 @@ namespace Engine
 	struct TextComponent : public Component
 	{
 		std::string m_text;
-		int m_player;
-		int m_mile;
-		TextComponent(std::string text, int player, int mile) : m_text(text), m_player(player), m_mile(mile) {}
+		TextComponent(std::string text) : m_text(text) {}
 	};
 
 

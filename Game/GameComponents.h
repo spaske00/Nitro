@@ -105,6 +105,21 @@ namespace Nitro
 		vec2 m_UpperLeftCornerWorldPosition{};
 		int m_LowestLayerIndex{};
 	};
+
+	enum class TextInfoType {
+		Kmh,
+		Speed,
+		Distance
+	};
+
+	struct TextInfoComponent : public Engine::Component
+	{
+		PlayerTag m_PlayerTag;
+		//Pointer to player
+		Engine::Entity* m_Player;
+		TextInfoType m_Type;
+		TextInfoComponent(PlayerTag PlayerTag, Engine::Entity* Player, TextInfoType Type) : m_PlayerTag(PlayerTag), m_Player(Player), m_Type(Type){}
+	};
 	
 	
 }

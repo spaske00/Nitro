@@ -76,7 +76,13 @@ namespace Engine
             m_Renderer->DrawEntities(m_EntitiesBuffer, camera);
 
         }
+        // show text
+        {
+            m_EntitiesBuffer.clear();
+            entityManager->GetAllEntitiesWithComponent<TextComponent>(std::back_inserter(m_EntitiesBuffer));
+            m_Renderer->ShowTexts(m_EntitiesBuffer, camera);
 
+        }
 
         m_Renderer->EndScene();
     }
