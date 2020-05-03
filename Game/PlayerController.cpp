@@ -65,8 +65,6 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 
 	}
 
-	audioManager_->LoadSoundEffect("..\\Engine\\Resource\\tump.wav");
-
 	return true;
 }
 
@@ -134,7 +132,7 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 	}
 
 	auto collided = player1->GetComponent<Engine::CollidedWithComponent>()->m_CollidedWith;
-	
+
 }
 /*
  * CarPhysics: Jumping, collision, 

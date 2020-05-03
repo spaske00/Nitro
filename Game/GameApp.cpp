@@ -12,8 +12,8 @@
 void Nitro::GameApp::GameSpecificWindowData()
 {
 	Engine::WindowData windowData;
-	windowData.m_Height = 720;
-	windowData.m_Width = 1280;
+	windowData.m_Height = 600;
+	windowData.m_Width = 800;
 	windowData.m_Title = "Nitro";
 	SetWindowData(windowData);
 }
@@ -21,6 +21,8 @@ void Nitro::GameApp::GameSpecificWindowData()
 bool Nitro::GameApp::GameSpecificInit()
 {
 	
+	//m_AudioManager->PlayMusic("..\\Engine\\Resources\\music.ogg");
+	GameLoadSpecificSoundtrack();
 
 	m_TextureController = TextureController::Create();
 	if (!m_TextureController->Init(m_RenderSystem->GetRenderer(), m_TextureManager.get(), "Resource"))
@@ -76,3 +78,11 @@ void Nitro::GameApp::GameSpecificUpdate(float dt)
 	m_PlayerController->Update(dt, m_EntityManager.get(), m_AudioManager.get());
 	m_CameraController->Update(dt, m_EntityManager.get());
 }
+
+void Nitro::GameApp::GameLoadSpecificSoundtrack() {
+
+	m_AudioManager->LoadMusic("..\\Engine\\Resources\\music.ogg", "backgroundMusic");
+	m_AudioManager->LoadSoundEffect("..\\Engine\\Resources\\tump.wav","playerBump");
+
+}
+
