@@ -98,6 +98,9 @@ namespace Nitro
 		vec2 m_TileSize{};
 		vec2 m_UpperLeftCornerWorldPosition{};
 		int m_LowestLayerIndex{};
+		int m_TrackLeftColumnBoundaryBegin{};
+		int m_TrackRightColumnBoundaryEnd{};
+		
 	};
 	
 	
