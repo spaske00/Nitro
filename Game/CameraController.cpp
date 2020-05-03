@@ -5,10 +5,12 @@ bool Nitro::CameraController::Init(Engine::EntityManager* entityManager_, const 
 {
 	ASSERT(entityManager_ != nullptr, "Must pass a valid entityManager");
 
+	m_WindowData = windowData_;
+	
 	{	
 		auto camera = Engine::Entity::Create();
 		camera->AddComponent<Engine::CameraComponent>();
-		camera->AddComponent<Engine::TransformComponent>(windowData_->m_Width / 2.f, windowData_->m_Height / 4.f, static_cast<float>(windowData_->m_Width), static_cast<float>(windowData_->m_Height));
+		camera->AddComponent<Engine::TransformComponent>(windowData_->m_Width / 2.f, windowData_->m_Height / 4.f, static_cast<float>(windowData_->m_Width)*2, static_cast<float>(windowData_->m_Height)*2);
 		camera->AddComponent<Engine::MoverComponent>();
 		camera->AddComponent<PlayerTagComponent>(PlayerTag::Two);
 		entityManager_->AddEntity(std::move(camera));
@@ -22,7 +24,6 @@ void Nitro::CameraController::Update(float dt_, Engine::EntityManager* entityMan
 {
 	ASSERT(entityManager_ != nullptr, "must pass a valid entity manager");
 	
-
 	auto players = entityManager_->GetAllEntitiesWithComponents<Engine::PlayerComponent>();
 	ASSERT(players.size() == 2, "Must be exactly 2 players");
 
@@ -45,8 +46,9 @@ void Nitro::CameraController::Update(float dt_, Engine::EntityManager* entityMan
 		auto transform = camera->GetComponent<Engine::TransformComponent>();
 		transform->m_Position.y = (player1Position.y + player2Position.y) / 2;
 		transform->m_Position.x = (player1Position.x + player2Position.x) / 2;
+		static float totalDt = 0;
+		totalDt += dt_;
+	/*	transform->m_Size.x = m_WindowData->m_Width * abs(2 * sin(totalDt) + 1.f);
+		transform->m_Size.y = m_WindowData->m_Height * abs(2 * sin(totalDt) + 1.f);*/
 	}
-
-
-	
 }

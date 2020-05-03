@@ -55,10 +55,12 @@ namespace Engine
         m_Renderer->BeginScene();
 
         // Get the main camera from the entity manager
-        // TODO: Support multiple cameras and switching between them
-        auto cameras = entityManager->GetAllEntitiesWithComponents<CameraComponent, TransformComponent>();
-        ASSERT(!cameras.empty(), "Must have at least one camera");
+        
+		m_EntitiesBuffer.clear();
+        entityManager->GetAllEntitiesWithComponents<CameraComponent, TransformComponent>(std::back_inserter(m_EntitiesBuffer));
+        ASSERT(!m_EntitiesBuffer.empty(), "Must have at least one camera");
 
+/*<<<<<<< HEAD
 		auto camera = cameras[0];
     	
 		auto backgrounds = entityManager->GetAllEntitiesWithComponent<BackgroundComponent>();
@@ -70,6 +72,25 @@ namespace Engine
 		m_Renderer->DrawEntities(renderables, camera); 	
 
         m_Renderer->ShowTexts(texts, camera);
+=======
+		auto camera = m_EntitiesBuffer[0];
+
+    	// draw background
+        {
+			m_EntitiesBuffer.clear();
+			entityManager->GetAllEntitiesWithComponent<BackgroundComponent>(std::back_inserter(m_EntitiesBuffer));
+			m_Renderer->DrawEntities(m_EntitiesBuffer, camera);
+        }
+
+    	// draw entities
+        {
+			m_EntitiesBuffer.clear();
+			entityManager->GetAllEntitiesWithComponent<DrawableEntity>(std::back_inserter(m_EntitiesBuffer));
+			m_Renderer->DrawEntities(m_EntitiesBuffer, camera);
+        	
+        }
+  
+>>>>>>> 461c3798e05501235443fb1fe315af2f1e937079*/
     	
         m_Renderer->EndScene();
     }

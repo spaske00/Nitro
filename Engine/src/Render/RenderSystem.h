@@ -27,6 +27,7 @@ namespace Engine
         RenderSystem(const RenderSystem& other) = delete;
         RenderSystem& operator=(RenderSystem& other) = delete;
 
+		std::vector<Entity*> m_EntitiesBuffer;
 		
     };
 }
