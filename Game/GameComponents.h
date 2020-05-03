@@ -87,21 +87,6 @@ namespace Nitro
 		float m_Speed{};
 	};
 
-/*<<<<<<< HEAD
-	enum class TextInfoType {
-		Kmh,
-		Speed,
-		Distance
-	};
-
-	struct TextInfoComponent : public Engine::Component
-	{
-		PlayerTag m_PlayerTag;
-		TextInfoType m_Type;
-		//pokazivac na igraca
-		Engine::Entity* m_PlayerEntity;
-		TextInfoComponent(Nitro::PlayerTag player, TextInfoType type, Engine::Entity* playerEntity) : m_PlayerTag(player), m_Type(type), m_PlayerEntity(playerEntity) {}
-=======*/
 	struct TileInfoComponent : public Engine::Component
 	{
 		TileType m_TileType;
@@ -119,7 +104,6 @@ namespace Nitro
 		vec2 m_TileSize{};
 		vec2 m_UpperLeftCornerWorldPosition{};
 		int m_LowestLayerIndex{};
-//>>>>>>> spaske00-master
 	};
 
 	enum class TextInfoType {

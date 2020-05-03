@@ -133,8 +133,6 @@ namespace Engine
 		
 	};
 
-//<<<<<<< HEAD
-//=======
 	struct ColorTrackMatrixComponent : public Component
 	{
 		std::shared_ptr<Matrix<Color>> m_ColorMatrix;
@@ -144,6 +142,4 @@ namespace Engine
 		vec2 m_Size;
 	};
 
-	
-//>>>>>>> spaske00-master
 }
