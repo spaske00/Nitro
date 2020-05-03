@@ -17,5 +17,7 @@ namespace Nitro
 
 			return std::make_unique<TextController>();
 		}
+		int oldPosition1=-348, oldPosition2= -348;
+		int Distance1 = 0, Distance2 = 0;
 	};
 }

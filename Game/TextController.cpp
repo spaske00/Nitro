@@ -73,12 +73,26 @@ void Nitro::TextController::Update(float dt_, Engine::EntityManager* entityManag
 		}
 		case TextInfoType::Kmh: { break;}
 		case TextInfoType::Distance: {
-
-			std::string s = std::to_string(56);
-			tekst->m_text = s;
-			break;
+			auto transform = info->m_PlayerEntity->GetComponent<Engine::TransformComponent>();
+			auto newPosition = transform->m_Position.y;
+			if (info->m_PlayerTag == PlayerTag::One) {
+				if (oldPosition1 - 10 > (int)newPosition) {
+					Distance1 += 10;
+					std::string s = std::to_string(Distance1);
+					tekst->m_text = s;
+					oldPosition1 = (int)newPosition;
+					break;
+				}
+			} else {
+				if (oldPosition2 - 10 > (int)newPosition) {
+					Distance2 += 10;
+					std::string s = std::to_string(Distance2);
+					tekst->m_text = s;
+					oldPosition2 = (int)newPosition;
+					break;
+				}
+			}
 		}
-
 		default: {
 			LOG_CRITICAL("Enum for text type does not exist.");
 		}
