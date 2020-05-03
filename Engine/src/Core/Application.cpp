@@ -74,6 +74,7 @@ namespace Engine {
         }
 
 
+
         return true;
     }
 
@@ -86,7 +87,6 @@ namespace Engine {
         m_RenderSystem->Shutdown();
         m_RenderSystem.reset();
         m_AudioManager->Destroy();
-
 
         return true;
     }

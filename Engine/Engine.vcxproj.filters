@@ -59,7 +59,7 @@
       <UniqueIdentifier>{2f8d73b5-2acc-49cd-b8d1-9e69764f8131}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Music">
-      <UniqueIdentifier>{8dd3df2a-eac3-4e69-b6f6-a7615bd9047c}</UniqueIdentifier>
+      <UniqueIdentifier>{98330129-d679-42a2-a532-365ffa2fbd85}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -108,13 +108,13 @@
     <ClCompile Include="Matrix.cpp">
       <Filter>src\Util</Filter>
     </ClCompile>
-    <ClCompile Include="src\Music\AudioManager.cpp">
-      <Filter>src\Music</Filter>
-    </ClCompile>
     <ClCompile Include="src\Music\SoundEffect.cpp">
       <Filter>src\Music</Filter>
     </ClCompile>
     <ClCompile Include="src\Music\Music.cpp">
+      <Filter>src\Music</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Music\AudioManager.cpp">
       <Filter>src\Music</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1070,13 +1070,13 @@
     <ClInclude Include="Matrix.h">
       <Filter>src\Util</Filter>
     </ClInclude>
-    <ClInclude Include="src\Music\AudioManager.h">
-      <Filter>src\Music</Filter>
-    </ClInclude>
     <ClInclude Include="src\Music\SoundEffect.h">
       <Filter>src\Music</Filter>
     </ClInclude>
     <ClInclude Include="src\Music\Music.h">
+      <Filter>src\Music</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Music\AudioManager.h">
       <Filter>src\Music</Filter>
     </ClInclude>
   </ItemGroup>

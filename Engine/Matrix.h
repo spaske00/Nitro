@@ -7,8 +7,12 @@ namespace Engine
 	class Matrix
 	{
 	public:
+		using storage_type = std::vector<T>;
 		using value_type = T;
 		using size_type = size_t;
+		using iterator = typename storage_type::iterator;
+		using const_iterator = typename storage_type::const_iterator;
+
 		struct Coords
 		{
 			size_type r{};
@@ -54,6 +58,27 @@ namespace Engine
 			ASSERT(coords.r < m_Rows && coords.c < m_Cols, "Invalid row column index");
 			return m_Data[m_Cols * coords.r + coords.c];
 		}
+		
+		iterator begin()
+		{
+			return m_Data.begin();
+		}
+
+		iterator end()
+		{
+			return m_Data.end();
+		}
+
+		const_iterator begin() const
+		{
+			return m_Data.cbegin();
+		}
+
+		const_iterator end() const
+		{
+			return m_Data.cend();
+		}
+
 	};
 
 }
