@@ -108,14 +108,12 @@ namespace Engine
 		std::vector<InputAction> inputActions;
 	};
 
+
 	struct TextComponent : public Component
 	{
 		std::string m_text;
-		int m_player;
-		int m_mile;
-		TextComponent(std::string text, int player, int mile) : m_text(text), m_player(player), m_mile(mile) {}
+		TextComponent(std::string text) : m_text(text) {}
 	};
-
 
 	
 	struct BackgroundComponent : public Component
@@ -128,5 +126,4 @@ namespace Engine
 		
 	};
 
-	
 }
