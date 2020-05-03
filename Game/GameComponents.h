@@ -5,13 +5,48 @@ namespace Nitro
 
 	enum class TileType
 	{
-		Road,
-		Water,
-		Grass,
-		RoadEdge,
-		Sand,
+		road = 0,
+		grass,
+		water,
+
+		water_deep,
+		
+		grass_beach,
+		beach_grass,
+		
+		water_beach,
+		beach_water,
+		
+		grass_water,
+		water_grass,
+
+		TileTypeCount
 	};
 
+	inline const char* TileTypeToTextureName(TileType t)
+	{
+		switch(t)
+		{
+		case TileType::road: return "road";
+		case TileType::grass: return "grass";
+		case TileType::water: return "water";
+			
+		case TileType::grass_beach: return "grass_beach";
+		case TileType::beach_grass: return "beach_grass";
+			
+		case TileType::water_beach: return "water_beach";
+		case TileType::beach_water: return "beach_water";
+			
+		case TileType::grass_water: return "grass_water";
+		case TileType::water_grass: return "water_grass";
+			
+		case TileType::water_deep: return "water_deep";
+
+		default:
+			ASSERT(false, "Unkonwn tile type");
+			return "";
+		}
+	}
 	
 	
 	enum class PlayerTag
@@ -50,9 +85,9 @@ namespace Nitro
 		float m_Acceleration{};
 		float m_Mass{};
 		float m_Speed{};
-		
 	};
 
+/*<<<<<<< HEAD
 	enum class TextInfoType {
 		Kmh,
 		Speed,
@@ -66,8 +101,41 @@ namespace Nitro
 		//pokazivac na igraca
 		Engine::Entity* m_PlayerEntity;
 		TextInfoComponent(Nitro::PlayerTag player, TextInfoType type, Engine::Entity* playerEntity) : m_PlayerTag(player), m_Type(type), m_PlayerEntity(playerEntity) {}
+=======*/
+	struct TileInfoComponent : public Engine::Component
+	{
+		TileType m_TileType;
+
+		explicit TileInfoComponent(TileType tileType_)
+			: m_TileType(tileType_)
+		{
+		}
 	};
 
+	struct TrackComponent : public Engine::Component
+	{
+		// TODO(Marko): Switch to shared_ptr if necessary
+		Engine::Matrix<Engine::Entity*> m_TracksMatrix;
+		vec2 m_TileSize{};
+		vec2 m_UpperLeftCornerWorldPosition{};
+		int m_LowestLayerIndex{};
+//>>>>>>> spaske00-master
+	};
+
+	enum class TextInfoType {
+		Kmh,
+		Speed,
+		Distance
+	};
+
+	struct TextInfoComponent : public Engine::Component
+	{
+		PlayerTag m_PlayerTag;
+		//Pointer to player
+		Engine::Entity* m_PlayerEntity;
+		TextInfoType m_Type;
+		TextInfoComponent(PlayerTag PlayerTag, TextInfoType Type, Engine::Entity* Player ) : m_PlayerTag(PlayerTag), m_Type(Type),m_PlayerEntity(Player) {}
+	};
 	
 	
 }

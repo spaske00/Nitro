@@ -2,7 +2,8 @@
 
 namespace Engine
 {
-    class EntityManager;
+	class Entity;
+	class EntityManager;
 
     class PhysicsSystem
     {
@@ -11,5 +12,6 @@ namespace Engine
         void Update(float dt, EntityManager* entityManager);
 
     private:
+		std::vector<Entity*> m_EntitiesBuffer;
     };
 }

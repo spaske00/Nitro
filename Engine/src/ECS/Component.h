@@ -64,12 +64,19 @@ namespace Engine
 	{
 		vec2 m_Size{}; // only using first element for circle
 		ECollisionShape m_Shape{ ECollisionShape::Circle };
-		std::set<Entity*> m_CollidedWith{};
-
+		
 		CollisionComponent() = default;
 		CollisionComponent(float radius) : m_Size(radius) {}
 		CollisionComponent(float x, float y) : m_Size(x, y), m_Shape(ECollisionShape::AABox) {}
 	};
+
+	struct CollidedWithComponent : public Component
+	{
+		std::set<Entity*> m_CollidedWith{};
+	};
+
+
+	
 
 	struct SpriteComponent : public Component
 	{
@@ -96,7 +103,7 @@ namespace Engine
 
 
 		CameraComponent() = default;
-		explicit CameraComponent(float speed, vec2 onScreenPositionOffset_ = { 0.f, 0.f })
+		explicit CameraComponent(float speed)
 			: m_PanSpeed(speed)
 		{}
 
@@ -126,4 +133,17 @@ namespace Engine
 		
 	};
 
+//<<<<<<< HEAD
+//=======
+	struct ColorTrackMatrixComponent : public Component
+	{
+		std::shared_ptr<Matrix<Color>> m_ColorMatrix;
+		vec2 m_CenterPosition;
+		vec2 m_ScaleFactor;
+		vec2 m_TileSize;
+		vec2 m_Size;
+	};
+
+	
+//>>>>>>> spaske00-master
 }

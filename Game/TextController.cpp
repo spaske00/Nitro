@@ -64,6 +64,7 @@ void Nitro::TextController::Update(float dt_, Engine::EntityManager* entityManag
 	for (auto text : texts) {
 		auto tekst = text->GetComponent<Engine::TextComponent>();
 		auto info = text->GetComponent<TextInfoComponent>();
+/*<<<<<<< HEAD
 
 		switch (info->m_Type) {
 		case TextInfoType::Speed: {
@@ -79,6 +80,23 @@ void Nitro::TextController::Update(float dt_, Engine::EntityManager* entityManag
 				break;
 				}
 
+=======*/
+
+		switch (info->m_Type) {
+		case TextInfoType::Speed: {
+			auto speed = info->m_PlayerEntity->GetComponent<CarPhysicsComponent>();
+			tekst->m_text = std::to_string((int)speed->m_Speed);
+			break;
+		}
+		case TextInfoType::Kmh: { break;}
+		case TextInfoType::Distance: {
+
+			std::string s = std::to_string(56);
+			tekst->m_text = s;
+			break;
+		}
+
+//>>>>>>> spaske00-master
 		default: {
 			LOG_CRITICAL("Enum for text type does not exist.");
 		}
