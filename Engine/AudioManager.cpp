@@ -1,37 +1,9 @@
 #include "precomp.h"
 #include "AudioManager.h"
 #include "Logger/Logger.h"
-#include <map>
+#include "SoundEffect.h"
+#include "Music.h"
 namespace Engine {
-
-    void SoundEffect::play(int loops) {
-        if (-1 == Mix_PlayChannel(-1, m_chunk, loops)) {
-            LOG_WARNING("Play SoundEffect failed! " + std::string(Mix_GetError()));
-        }
-    }
-
-    void Music::play() {
-
-        if (-1 == Mix_PlayMusic(m_music, -1)) {
-            LOG_WARNING("Play Music failed! " + std::string(Mix_GetError()));
-
-        }
-    }
-
-    void Music::pause() {
-
-        Mix_PausedMusic();
-
-    }
-    void Music::stop() {
-
-        Mix_HaltMusic();
-    }
-    void Music::resume() {
-
-        Mix_ResumeMusic();
-
-    }
 
     AudioManager::AudioManager() {
 
@@ -58,12 +30,19 @@ namespace Engine {
     void AudioManager::Destroy() {
         if (m_IsInitialized) {
             m_IsInitialized = false;
+
+            for (auto it = m_MusicMap.begin(); it != m_MusicMap.end(); it++)
+                (*it).second->Destroy();
+
+            for (auto it = m_SoundEffectMap.begin(); it != m_SoundEffectMap.end(); it++)
+                (*it).second->Destroy();
+            
             Mix_Quit();
         }
     }
 
-    void AudioManager::LoadSoundEffect(const std::string& filePath) {
-        auto it = m_SoundEffectMap.find(filePath);
+    void AudioManager::LoadSoundEffect(const std::string& filePath, const std::string& name) {
+        auto it = m_SoundEffectMap.find(name);
         SoundEffect effect;
         if (m_SoundEffectMap.end() == it) {
             //failed
@@ -74,20 +53,24 @@ namespace Engine {
 
             }
             effect.m_chunk = chunk;
-            m_SoundEffectMap[filePath] = effect;
+            m_SoundEffectMap.emplace(name, std::make_unique<SoundEffect>(effect));
         }
         
     }
 
-    void AudioManager::playSoundEffect(const std::string& filePath) {
-        auto it = m_SoundEffectMap.find(filePath);
+    void AudioManager::PlaySoundEffect(const std::string& name) {
+        auto it = m_SoundEffectMap.find(name);
         if (m_SoundEffectMap.end() == it) {
             LOG_WARNING("SoundEffect wasn't loaded");
         }
-        it->second.play(1);
+        else {
+
+            it->second->play(1);
+        }
     }
-    Music AudioManager::LoadMusic(const std::string& filePath) {
-        auto it = m_MusicMap.find(filePath);
+
+    void  AudioManager::LoadMusic(const std::string& filePath, const std::string& name) {
+        auto it = m_MusicMap.find(name);
         Music music;
         if (m_MusicMap.end() == it) {
             //failed
@@ -96,15 +79,21 @@ namespace Engine {
             {
                 LOG_WARNING("Mix_LoadMusic failed! " + std::string(Mix_GetError()));
             }
-            m_MusicMap[filePath] = mus;
             music.m_music = mus;
+            m_MusicMap.emplace(name, std::make_unique<Music> (music));
 
+        }
+
+    }
+    void AudioManager::PlayMusic(const std::string& name) {
+        auto it = m_MusicMap.find(name);
+        if (m_MusicMap.end() == it) {
+            LOG_WARNING("Music wasn't loaded");
         }
         else {
-            music.m_music = it->second;
-        }
-        return music;
 
+            it->second->play();
+        }
     }
 
 };

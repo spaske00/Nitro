@@ -4,26 +4,8 @@
 #include <map>
 namespace Engine {
 
-	class SoundEffect {
-	public:
-		friend class AudioManager;
-		void play(int loops = 0);
-	private:
-		Mix_Chunk* m_chunk = nullptr;
-	};
-
-	class Music {
-	public:
-		friend class AudioManager;
-
-		void play();
-		static void pause();
-		static void stop();
-		static void resume();
-
-	private:
-		Mix_Music* m_music = nullptr;
-	};
+	class SoundEffect;
+	class Music;
 
 	class AudioManager
 	{
@@ -34,13 +16,14 @@ namespace Engine {
 		bool Init();
 		void Destroy();
 
-		void LoadSoundEffect(const std::string& filePath);
-		void playSoundEffect(const std::string& filePath);
-		Music LoadMusic(const std::string& filePath);
+		void LoadSoundEffect(const std::string& filePath, const std::string& name);
+		void PlaySoundEffect(const std::string& name);
+	    void LoadMusic(const std::string& filePath, const std::string& name);
+		void PlayMusic(const std::string& name);
 
 	private:
-		std::map<std::string, SoundEffect> m_SoundEffectMap;
-		std::map<std::string, Mix_Music*> m_MusicMap;
+		std::map<std::string, std::unique_ptr<SoundEffect>> m_SoundEffectMap;
+		std::map<std::string, std::unique_ptr<Music>> m_MusicMap;
 		bool m_IsInitialized = false;
 	};
 

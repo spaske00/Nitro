@@ -106,6 +106,8 @@
       <Filter>src\Util</Filter>
     </ClCompile>
     <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="SoundEffect.cpp" />
+    <ClCompile Include="Music.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="extern\spdlog\async.h">
@@ -1060,6 +1062,8 @@
       <Filter>src\Util</Filter>
     </ClInclude>
     <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="SoundEffect.h" />
+    <ClInclude Include="Music.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="extern\spdlog\LICENSE">
