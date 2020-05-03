@@ -8,7 +8,7 @@ namespace Nitro
 	Engine::Matrix<TileType> TileMatrixLeftL(int rows, int cols)
 	{
 		Engine::Matrix<TileType> result(rows, cols);
-		std::fill(std::begin(result), std::end(result), TileType::water_deep);
+		std::fill(std::begin(result), std::end(result), TileType::water);
 
 		for (int i = 0; i < rows; ++i)
 		{
@@ -26,7 +26,7 @@ namespace Nitro
 	Engine::Matrix<TileType> TileMatrixRightL(int rows, int cols)
 	{
 		Engine::Matrix<TileType> result(rows, cols);
-		std::fill(std::begin(result), std::end(result), TileType::water_deep);
+		std::fill(std::begin(result), std::end(result), TileType::water);
 
 		for (int i = 0; i < rows; ++i)
 		{
@@ -44,7 +44,7 @@ namespace Nitro
 	Engine::Matrix<TileType> TileMatrixI(int rows, int cols)
 	{
 		Engine::Matrix<TileType> result(rows, cols);
-		std::fill(std::begin(result), std::end(result), TileType::water_deep);
+		std::fill(std::begin(result), std::end(result), TileType::water);
 
 		for (int i = 0; i < cols; ++i)
 		{
@@ -67,7 +67,7 @@ namespace Nitro
 	Engine::Matrix<TileType> TileMatrixH(int rows, int cols)
 	{
 		Engine::Matrix<TileType> result(rows, cols);
-		std::fill(std::begin(result), std::end(result), TileType::water_deep);
+		std::fill(std::begin(result), std::end(result), TileType::water);
 
 		for (int i = 0; i < cols; ++i)
 		{

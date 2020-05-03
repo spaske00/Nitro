@@ -102,13 +102,13 @@ bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityMan
 {
 	ASSERT(entityManager_ != nullptr, "Must pass a valid entity manager");
 
-	if (!m_TrackPatternGenerator.Init(12, 9))
+	if (!m_TrackPatternGenerator.Init(12, 7))
 	{
 		LOG_INFO("Track pattern generator failed to init");
 		return false;
 	}
 
-	Engine::Matrix<TileType> track(36, 16);
+	Engine::Matrix<TileType> track(36, 12);
 	std::fill(std::begin(track), std::end(track), TileType::water);
 
 	vec2 tileSize{ 256.f, 512.f };
