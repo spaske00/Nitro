@@ -116,7 +116,7 @@ namespace Engine {
 
             float deltaTime = (frameTime - previousFrameTime) / static_cast<float>(SDL_GetPerformanceFrequency());
 
-            LOG_INFO("Current FPS: {}", 1.f / deltaTime);
+            //LOG_INFO("Current FPS: {}", 1.f / deltaTime);
             Update(deltaTime);
 
             previousFrameTime = frameTime;
