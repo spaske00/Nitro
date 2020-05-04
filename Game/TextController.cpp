@@ -95,6 +95,7 @@ void Nitro::TextController::Update(float dt_, Engine::EntityManager* entityManag
 		}
 		default: {
 			LOG_CRITICAL("Enum for text type does not exist.");
+
 		}
 		}
 
