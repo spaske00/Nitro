@@ -59,7 +59,7 @@ namespace Nitro {
 
 // TODO(Marko): convert all of these to int, no need for floating point operations
 void PlaceTrack(const Engine::Matrix<Nitro::TileType>& tileMatrix, Engine::EntityManager* entityManager_, Engine::TextureManager* textureManager_,
-	vec2 tileSize = {256.f, 512.f})
+	vec2 tileSize, int mainTrackColumnBegin, int mainTrackColumnEnd)
 {
 	vec2 upperLeftCorner = { 0.f, -tileSize.y * tileMatrix.Rows() };
 	Engine::Matrix<Engine::Entity*> tracksMatrix(tileMatrix.Rows(), tileMatrix.Cols());
@@ -90,9 +90,8 @@ void PlaceTrack(const Engine::Matrix<Nitro::TileType>& tileMatrix, Engine::Entit
 	trackComponent.m_LowestLayerIndex = tileMatrix.Rows() - 1;
 
 	// TODO(Marko): HARDCODED!
-	trackComponent.m_TrackLeftColumnBoundaryBegin = 3;
-	trackComponent.m_TrackRightColumnBoundaryEnd = 4 + 9;
-	//
+	trackComponent.m_TrackLeftColumnBoundaryBegin = mainTrackColumnBegin;
+	trackComponent.m_TrackRightColumnBoundaryEnd = mainTrackColumnEnd;
 	entityManager_->AddEntity(std::move(tracksEntity));
 }
 
@@ -112,7 +111,9 @@ bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityMan
 	std::fill(std::begin(track), std::end(track), TileType::water);
 
 	vec2 tileSize{ 256.f, 512.f };
-	PlaceTrack(track, entityManager_, textureManager_, tileSize);
+	int mainTrackColumnBegin = 3;
+	int mainTrackColumnEnd = mainTrackColumnBegin + m_TrackPatternGenerator.Cols();
+	PlaceTrack(track, entityManager_, textureManager_, tileSize, mainTrackColumnBegin, mainTrackColumnEnd);
 
 	for (int i = 0; i < 3; ++i)
 	{
@@ -166,9 +167,11 @@ bool Nitro::TrackController::ShouldGenerateNextTileLayer(Engine::Entity* trackEn
 
 	int player1LayerDistanceFromLowestLayer = ModuloDist(player1IndexLocation, lowestLayer, totalRows);
 	int player2LayerDistanceFromLowestLayer = ModuloDist(player2IndexLocation, lowestLayer, totalRows);
+	
 	//LOG_INFO(fmt::format("LowestLayer {}", lowestLayer));
 	//LOG_INFO(fmt::format("Player1 {} {} Player2 {} {}", player1IndexLocation, player1LayerDistanceFromLowestLayer, player2IndexLocation, player2LayerDistanceFromLowestLayer));
 
+	// TODO(Marko) :Hardcoded > 14!
 	return std::min(player1LayerDistanceFromLowestLayer, player2LayerDistanceFromLowestLayer) > 14;
 }
 
