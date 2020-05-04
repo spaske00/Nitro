@@ -49,7 +49,7 @@ namespace Engine
 		TTF_Init();
 		m_Font = TTF_OpenFont("FreeSansBoldOblique.ttf", 30);
 		if (m_Font == NULL) {
-			LOG_CRITICAL("Unable to open font. SDL error: {}", SDL_GetError());
+			LOG_ERROR("Unable to open font. SDL error: {}");
 			return false;
 		}
 		// Init color for text
