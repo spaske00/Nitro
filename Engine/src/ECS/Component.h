@@ -17,11 +17,13 @@ namespace Engine
 		ComponentTypeID m_TypeId{ 0 };
 		bool m_Active{ false };
 		virtual ~Component() = default;
-
+		
+		
 	private:
 		inline static ComponentTypeID m_MaxComponentTypeId = 0;
 
 	public:
+		
 		template <typename T>
 		static ComponentTypeID GetComponentTypeID()
 		{
@@ -29,6 +31,7 @@ namespace Engine
 			static ComponentTypeID typeID = Component::m_MaxComponentTypeId++;
 			return typeID;
 		}
+		
 	};
 
 	struct TransformComponent : public Component
@@ -66,8 +69,12 @@ namespace Engine
 		ECollisionShape m_Shape{ ECollisionShape::Circle };
 		
 		CollisionComponent() = default;
-		CollisionComponent(float radius) : m_Size(radius) {}
-		CollisionComponent(float x, float y) : m_Size(x, y), m_Shape(ECollisionShape::AABox) {}
+		CollisionComponent(float radius) : m_Size(radius) {
+			
+		}
+		CollisionComponent(float x, float y) : m_Size(x, y), m_Shape(ECollisionShape::AABox) {
+			
+		}
 	};
 
 	struct CollidedWithComponent : public Component
