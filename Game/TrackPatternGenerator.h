@@ -18,11 +18,11 @@ namespace Nitro
 
 			H = 0,
 
+			I,
+
 			LeftL,
 
 			RightL,
-
-			I,
 
 			LeftBackSlash,
 
@@ -59,6 +59,12 @@ namespace Nitro
 		int m_Rows;
 
 		int m_Cols;
+
+
+
+
+
+		void InitProbabilities();
 
 	};
 
