@@ -8,9 +8,9 @@ namespace Nitro
 		enum Type
 		{
 			H = 0,
+			I,
 			LeftL,
 			RightL,
-			I,
 			LeftBackSlash,
 			RightBackSlash,
 			TypeCount
@@ -29,6 +29,9 @@ namespace Nitro
 		int m_Probabilites[TypeCount][TypeCount] = { 0 };
 		int m_Rows;
 		int m_Cols;
+
+
+		void InitProbabilities();
 	};
 
 }
