@@ -11,10 +11,12 @@ namespace Nitro
 			LeftL,
 			RightL,
 			I,
+			LeftBackSlash,
+			RightBackSlash,
 			TypeCount
 		};
 
-		bool Init(int rows = 12, int cols = 9);
+		bool Init(int rows = 12, int cols = 7);
 
 		const Engine::Matrix<TileType>& GetNext();
 		

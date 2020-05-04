@@ -9,7 +9,7 @@ namespace Engine
 	public:
 		using storage_type = std::vector<T>;
 		using value_type = T;
-		using size_type = size_t;
+		using size_type = int32_t;
 		using iterator = typename storage_type::iterator;
 		using const_iterator = typename storage_type::const_iterator;
 

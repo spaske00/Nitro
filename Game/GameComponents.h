@@ -11,7 +11,7 @@ namespace Nitro
 
 		water_deep,
 		
-		grass_grass_beach,
+		grass_beach_beach,
 		beach_beach_grass,
 		
 		water_water_beach,
@@ -28,7 +28,7 @@ namespace Nitro
 		case TileType::grass: return "grass";
 		case TileType::water: return "water";
 			
-		case TileType::grass_grass_beach: return "grass_grass_beach";
+		case TileType::grass_beach_beach: return "grass_beach_beach";
 		case TileType::beach_beach_grass: return "beach_beach_grass";
 			
 		case TileType::water_water_beach: return "water_water_beach";

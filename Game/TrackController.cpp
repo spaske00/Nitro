@@ -78,6 +78,9 @@ void PlaceTrack(const Engine::Matrix<Nitro::TileType>& tileMatrix, Engine::Entit
 			auto texture = textureManager_->GetTexture(Nitro::TileTypeToTextureName(tileType));
 			ASSERT(texture != nullptr, fmt::format("Couldnt load {}", Nitro::TileTypeToTextureName(tileType)));
 			entity->AddComponent <Engine::SpriteComponent>().m_Image = texture;
+
+
+
 			tracksMatrix.At(i, j) = entity.get();
 			entityManager_->AddEntity(std::move(entity));
 		}	
@@ -110,9 +113,18 @@ bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityMan
 	Engine::Matrix<TileType> track(36, 12);
 	std::fill(std::begin(track), std::end(track), TileType::water);
 
+	
+
 	vec2 tileSize{ 256.f, 512.f };
 	int mainTrackColumnBegin = 3;
 	int mainTrackColumnEnd = mainTrackColumnBegin + m_TrackPatternGenerator.Cols();
+	for (int i = 0; i < track.Rows(); ++i)
+	{
+		track.At(i, mainTrackColumnBegin - 2) = TileType::water_water_beach;
+		track.At(i, mainTrackColumnBegin - 1) = TileType::beach_beach_grass;
+		track.At(i, mainTrackColumnEnd) = TileType::grass_beach_beach;
+		track.At(i, mainTrackColumnEnd+1) = TileType::beach_water_water;
+	}
 	PlaceTrack(track, entityManager_, textureManager_, tileSize, mainTrackColumnBegin, mainTrackColumnEnd);
 
 	for (int i = 0; i < 3; ++i)

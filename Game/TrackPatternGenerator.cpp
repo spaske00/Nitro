@@ -5,11 +5,22 @@
 namespace Nitro
 {
 
+	void PlaceBeachOnTheSides(Engine::Matrix<TileType>& result)
+	{
+		for (int i = 0; i < result.Rows(); ++i)
+		{
+			result.At(i, 0) = TileType::beach_beach_grass;
+			result.At(i, result.Cols() - 1) = TileType::grass_beach_beach;
+		}
+	}
+
+	
 	Engine::Matrix<TileType> TileMatrixLeftL(int rows, int cols)
 	{
 		Engine::Matrix<TileType> result(rows, cols);
-		std::fill(std::begin(result), std::end(result), TileType::water);
-
+		std::fill(std::begin(result), std::end(result), TileType::grass);
+		//PlaceBeachOnTheSides(result);
+		//std::replace(std::begin(result), std::end(result), TileType::water, TileType::grass);
 		for (int i = 0; i < rows; ++i)
 		{
 			result.At(i, 0) = TileType::road;
@@ -26,7 +37,9 @@ namespace Nitro
 	Engine::Matrix<TileType> TileMatrixRightL(int rows, int cols)
 	{
 		Engine::Matrix<TileType> result(rows, cols);
-		std::fill(std::begin(result), std::end(result), TileType::water);
+		std::fill(std::begin(result), std::end(result), TileType::grass);
+		//PlaceBeachOnTheSides(result);
+		//std::replace(std::begin(result), std::end(result), TileType::water, TileType::grass);
 
 		for (int i = 0; i < rows; ++i)
 		{
@@ -44,7 +57,9 @@ namespace Nitro
 	Engine::Matrix<TileType> TileMatrixI(int rows, int cols)
 	{
 		Engine::Matrix<TileType> result(rows, cols);
-		std::fill(std::begin(result), std::end(result), TileType::water);
+		std::fill(std::begin(result), std::end(result), TileType::grass);
+		//PlaceBeachOnTheSides(result);
+		//std::replace(std::begin(result), std::end(result), TileType::water, TileType::grass);
 
 		for (int i = 0; i < cols; ++i)
 		{
@@ -67,7 +82,9 @@ namespace Nitro
 	Engine::Matrix<TileType> TileMatrixH(int rows, int cols)
 	{
 		Engine::Matrix<TileType> result(rows, cols);
-		std::fill(std::begin(result), std::end(result), TileType::water);
+		std::fill(std::begin(result), std::end(result), TileType::grass);
+		//PlaceBeachOnTheSides(result);
+		//std::replace(std::begin(result), std::end(result), TileType::water, TileType::grass);
 
 		for (int i = 0; i < cols; ++i)
 		{
@@ -86,6 +103,42 @@ namespace Nitro
 		return result;
 	}
 
+	Engine::Matrix<TileType> TileMatrixLeftBackSlash(int rows, int cols)
+	{
+		Engine::Matrix<TileType> result(rows, cols);
+		std::fill(std::begin(result), std::end(result), TileType::grass);
+		//PlaceBeachOnTheSides(result);
+		//std::replace(std::begin(result), std::end(result), TileType::water, TileType::grass);
+
+		for (int i = 0; i < result.Cols(); ++i)
+		{
+			result.At(std::min(2*i, result.Rows()-1), i) = TileType::road;
+			result.At(std::min(2*i+1, result.Rows() - 1), i) = TileType::road;
+			result.At(std::min(2*i+2, result.Rows() - 1), i) = TileType::road;
+			result.At(std::min(2*i+3, result.Rows() - 1), i) = TileType::road;
+
+		}
+		return result;
+	}
+
+	Engine::Matrix<TileType> TileMatrixRightBackSlash(int rows, int cols)
+	{
+		Engine::Matrix<TileType> result(rows, cols);
+		std::fill(std::begin(result), std::end(result), TileType::grass);
+		//PlaceBeachOnTheSides(result);
+		//std::replace(std::begin(result), std::end(result), TileType::water, TileType::grass);
+
+		for (int i = 0; i < result.Cols(); ++i)
+		{
+			int col = result.Cols() - i - 1;
+			result.At(std::min(2 * i, result.Rows() - 1), col) = TileType::road;
+			result.At(std::min(2 * i + 1, result.Rows() - 1), col) = TileType::road;
+			result.At(std::min(2 * i + 2, result.Rows() - 1), col) = TileType::road;
+			result.At(std::min(2 * i + 3, result.Rows() - 1), col) = TileType::road;
+
+		}
+		return result;
+	}
 
 	bool TrackPatternGenerator::Init(int rows, int cols)
 	{
@@ -95,8 +148,8 @@ namespace Nitro
 		m_Patterns[Type::I] = TileMatrixI(rows, cols);
 		m_Patterns[Type::LeftL] = TileMatrixLeftL(rows, cols);
 		m_Patterns[Type::RightL] = TileMatrixRightL(rows, cols);
-
-
+		m_Patterns[Type::LeftBackSlash] = TileMatrixLeftBackSlash(rows, cols);
+		m_Patterns[Type::RightBackSlash] = TileMatrixRightBackSlash(rows, cols);
 		// TODO(Marko) :Implement probabilities with Markov Chains
 
 		return true;
