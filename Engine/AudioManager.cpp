@@ -72,10 +72,12 @@ namespace Engine {
         }
     }
 
-    bool  AudioManager::LoadMusic(const std::string& filePath, const std::string& name) {
+    bool  AudioManager::LoadMusic(const std::string& filePath, const std::string& name)
+    {
         auto it = m_MusicMap.find(name);
         Music music;
-        if (m_MusicMap.end() == it) {
+        if (m_MusicMap.end() == it) 
+        {
             //failed
             Mix_Music* mus = Mix_LoadMUS(filePath.c_str());
             if (nullptr == mus)
@@ -89,14 +91,15 @@ namespace Engine {
         return true;
 
     }
-    void AudioManager::PlayMusic(const std::string& name) {
+    void AudioManager::PlayMusic(const std::string& name) 
+    {
         auto it = m_MusicMap.find(name);
-        if (m_MusicMap.end() == it) {
+        if (m_MusicMap.end() == it) 
+        {
             LOG_WARNING("Music wasn't loaded");
-
         }
-        else {
-
+        else 
+        {
             it->second->play();
         }
     }
