@@ -13,9 +13,10 @@
 #include <array>
 #include <vector>
 #include <set>
+#include <map>
 
 #include <SDL.h>
-
+#include <SDL_mixer.h>
 #include "Logger/Logger.h"
 
 #include <glm/glm.hpp>

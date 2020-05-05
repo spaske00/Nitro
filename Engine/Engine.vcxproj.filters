@@ -58,6 +58,9 @@
     <Filter Include="src\Util">
       <UniqueIdentifier>{2f8d73b5-2acc-49cd-b8d1-9e69764f8131}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Audio">
+      <UniqueIdentifier>{3ce34d55-8fef-4d27-8637-ee4cde7b9dba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Logger\Logger.cpp">
@@ -104,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="Matrix.cpp">
       <Filter>src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>src\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1057,6 +1063,9 @@
     </ClInclude>
     <ClInclude Include="Matrix.h">
       <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>src\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
