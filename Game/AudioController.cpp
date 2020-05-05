@@ -4,7 +4,7 @@
 bool Nitro::AudioController::Init(Engine::AudioManager* audioManager_)
 {
 	ASSERT(audioManager_ != nullptr, "Must pass a valid audioManager");
-	if (!audioManager_->LoadMusic("E:\\Nitro\\Game\\Resource\\Sound\\music.ogg", "background_music"))
+	if (!audioManager_->LoadMusic("Resource/Sound/music.ogg", "background_music"))
 	{
 		LOG_WARNING("Failed to load music.ogg");
 		return false;
