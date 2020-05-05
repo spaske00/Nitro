@@ -15,27 +15,25 @@ namespace Engine {
 
     bool AudioManager::Init() {
         // Parameters are format of music
+        m_IsInitialized = true;
+        
         if (-1 == Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG)) {
             LOG_WARNING("Mix_Init failed! " + std::string(Mix_GetError()));
+            m_IsInitialized=false;
         }
 
         if (-1 == Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096)) {
             LOG_WARNING("Mix_Init failed! " + std::string(Mix_GetError()));
+            m_IsInitialized=false;
         }
 
-        m_IsInitialized = true;
+        
 
         return m_IsInitialized;
     }
     void AudioManager::Destroy() {
         if (m_IsInitialized) {
             m_IsInitialized = false;
-
-            for (auto it = m_MusicMap.begin(); it != m_MusicMap.end(); it++)
-                (*it).second->Destroy();
-
-            for (auto it = m_SoundEffectMap.begin(); it != m_SoundEffectMap.end(); it++)
-                (*it).second->Destroy();
 
             Mix_Quit();
         }
