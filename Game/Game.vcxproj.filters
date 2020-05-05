@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{6ed8950b-2bb9-4879-acfd-17e483d90013}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Core">
+      <UniqueIdentifier>{d0a01a3f-1882-4d26-8a4f-f68919ab8110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Controllers">
+      <UniqueIdentifier>{ad1347f9-c752-4eb3-a31e-7d86d29aaf6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Components">
+      <UniqueIdentifier>{1e24d4b8-75fd-4880-8e40-c75ce426bf5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Generators">
+      <UniqueIdentifier>{483f157d-37e4-400f-adcb-b11ce2ab7793}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="precomp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="GameApp.cpp">
+      <Filter>src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraController.cpp">
+      <Filter>src\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugController.cpp">
+      <Filter>src\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureController.cpp">
+      <Filter>src\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>src\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackController.cpp">
+      <Filter>src\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="TextController.cpp">
+      <Filter>src\Controllers</Filter>
+	</ClCompile>
+    <ClCompile Include="TrackPatternGenerator.cpp">
+      <Filter>src\Generators</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="precomp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="GameApp.h">
+      <Filter>src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraController.h">
+      <Filter>src\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugController.h">
+      <Filter>src\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureController.h">
+      <Filter>src\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerController.h">
+      <Filter>src\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameComponents.h">
+      <Filter>src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackController.h">
+      <Filter>src\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextController.h">
+      <Filter>src\Controllers</Filter>
+	</ClInclude>
+    <ClInclude Include="TrackPatternGenerator.h">
+      <Filter>src\Generators</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
