@@ -8,7 +8,7 @@ namespace Engine {
 		friend class AudioManager;
 
 		void play(int loops = 0);
-		void Destroy();
+		~SoundEffect();
 	private:
 		Mix_Chunk* m_chunk = nullptr;
 	};
