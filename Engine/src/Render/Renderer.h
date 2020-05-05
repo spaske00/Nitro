@@ -45,6 +45,7 @@ namespace Engine
 
         // Font and color for text;
         TTF_Font* m_Font;
+        SDL_Texture *m_TextDisplayTexture;
         SDL_Color m_textColor;
     };
 }

@@ -16,7 +16,9 @@ namespace Nitro
 		
 		water_water_beach,
 		beach_water_water,
-
+		park1,
+		park2,
+		beach_trees_grass,
 		TileTypeCount
 	};
 
@@ -33,7 +35,11 @@ namespace Nitro
 			
 		case TileType::water_water_beach: return "water_water_beach";
 		case TileType::beach_water_water: return "beach_water_water";
-			
+		case TileType::park1: return "park1";
+		case TileType::park2: return "park2";
+		case TileType::beach_trees_grass: return "beach_trees_grass";
+
+
 		case TileType::water_deep: return "water_deep";
 
 		default:

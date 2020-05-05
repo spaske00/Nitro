@@ -6,12 +6,13 @@
 namespace Nitro
 {
 
-	void PlaceBeachOnTheSides(Engine::Matrix<TileType>& result)
+	void PlaceBeachWithTreesOnTheSides(Engine::Matrix<TileType>& result)
 	{
 		for (int i = 0; i < result.Rows(); ++i)
 		{
-			result.At(i, 0) = TileType::beach_beach_grass;
-			result.At(i, result.Cols() - 1) = TileType::grass_beach_beach;
+			result.At(i, 0) = TileType::beach_trees_grass;
+			result.At(i, result.Cols() - 1) = TileType::beach_trees_grass;
+
 		}
 	}
 
@@ -20,7 +21,6 @@ namespace Nitro
 	{
 		Engine::Matrix<TileType> result(rows, cols);
 		std::fill(std::begin(result), std::end(result), TileType::grass);
-		//PlaceBeachOnTheSides(result);
 		//std::replace(std::begin(result), std::end(result), TileType::water, TileType::grass);
 		for (int i = 0; i < rows; ++i)
 		{
@@ -32,6 +32,8 @@ namespace Nitro
 			result.At(rows - 2, j) = TileType::road;
 			result.At(rows - 1, j) = TileType::road;
 		}
+		std::replace(std::begin(result), std::end(result), TileType::grass, TileType::park2);
+
 		return result;
 	}
 
@@ -39,6 +41,7 @@ namespace Nitro
 	{
 		Engine::Matrix<TileType> result(rows, cols);
 		std::fill(std::begin(result), std::end(result), TileType::grass);
+
 		//PlaceBeachOnTheSides(result);
 		//std::replace(std::begin(result), std::end(result), TileType::water, TileType::grass);
 
@@ -52,6 +55,7 @@ namespace Nitro
 			result.At(rows - 2, j) = TileType::road;
 			result.At(rows - 1, j) = TileType::road;
 		}
+		std::replace(std::begin(result), std::end(result), TileType::grass, TileType::park2);
 		return result;
 	}
 
@@ -101,6 +105,9 @@ namespace Nitro
 			result.At(i, cols - 1) = TileType::road;
 			result.At(i, cols - 2) = TileType::road;
 		}
+		
+		std::replace(std::begin(result), std::end(result), TileType::grass, TileType::park1);
+
 		return result;
 	}
 
