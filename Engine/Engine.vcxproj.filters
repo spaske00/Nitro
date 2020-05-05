@@ -111,6 +111,12 @@
     <ClCompile Include="AudioManager.cpp">
       <Filter>src\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="Music.cpp">
+      <Filter>src\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEffect.cpp">
+      <Filter>src\Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="extern\spdlog\async.h">
@@ -1065,6 +1071,12 @@
       <Filter>src\Util</Filter>
     </ClInclude>
     <ClInclude Include="AudioManager.h">
+      <Filter>src\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Music.h">
+      <Filter>src\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEffect.h">
       <Filter>src\Audio</Filter>
     </ClInclude>
   </ItemGroup>
