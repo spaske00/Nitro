@@ -10,7 +10,7 @@ namespace Engine {
 		static void pause();
 		static void stop();
 		static void resume();
-		void Destroy();
+		~Music();
 	private:
 		Mix_Music* m_music = nullptr;
 	};
