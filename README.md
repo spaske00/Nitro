@@ -1,2 +1,0 @@
-# Nitro
-Ubisoft course project
