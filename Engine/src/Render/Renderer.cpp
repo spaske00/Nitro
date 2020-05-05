@@ -1,6 +1,7 @@
 #include "precomp.h"
 
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 #include "Renderer.h"
 #include "Render/Window.h"
@@ -43,6 +44,16 @@ namespace Engine
 
 
 		LOG_INFO("RenderSystem initialized successfully");
+
+		// Init font for text
+		TTF_Init();
+		m_Font = TTF_OpenFont("FreeSansBoldOblique.ttf", 30);
+		if (m_Font == NULL) {
+			LOG_ERROR("Unable to open font. SDL error: {}");
+			return false;
+		}
+		// Init color for text
+		m_textColor = { 255, 255, 255 };
 		
 		
 		return true;
@@ -138,6 +149,41 @@ namespace Engine
 		}
 
 
+	}
+
+	void Renderer::ShowTexts(const std::vector<Entity*>& texts_, const Entity* camera) {
+
+		for (const auto r : texts_)
+		{
+			ShowText(r, camera);
+		}
+
+	}
+	void Renderer::ShowText(const Entity* text_, const Entity* camera) {
+
+		auto transform = text_->GetComponent<TransformComponent>();
+		auto text = text_->GetComponent<TextComponent>();
+
+		SDL_Rect rect;
+
+		int text_width;
+		int text_height;
+		SDL_Surface* surface;
+
+		surface = TTF_RenderText_Solid(m_Font, text->m_text.c_str(), m_textColor);
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(m_NativeRenderer, surface);
+		text_width = surface->w;
+		text_height = surface->h;
+
+		SDL_FreeSurface(surface);
+
+		rect.x = (int)transform->m_Position.x;
+		rect.y = (int)transform->m_Position.y;
+		rect.w = (int)text_width;
+		rect.h = (int)text_height;
+
+		SDL_RenderCopy(m_NativeRenderer, texture, NULL, &rect);
+		SDL_DestroyTexture(texture);
 	}
 
 	void Renderer::SetBackgroundColor(unsigned char bgR_, unsigned char bgG_, unsigned char bgB_, unsigned char bgA_)

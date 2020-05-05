@@ -10,6 +10,7 @@
 #include "PlayerController.h"
 #include "TextureController.h"
 #include "TrackController.h"
+#include "TextController.h"
 
 void Nitro::GameApp::GameSpecificWindowData()
 {
@@ -59,6 +60,14 @@ bool Nitro::GameApp::GameSpecificInit()
 		LOG_ERROR("Failed to initialize PlayerController");
 		return false;
 	}
+
+	m_TextController = TextController::Create();
+	if (!m_TextController->Init(m_EntityManager.get()))
+	{
+		LOG_ERROR("Failed to initialize TextController");
+		return false;
+	}
+
 	return true;
 }
 
@@ -73,6 +82,7 @@ void Nitro::GameApp::GameSpecificUpdate(float dt)
 	m_DebugController->Update(dt, m_EntityManager.get());
 #endif
 	m_PlayerController->Update(dt, m_EntityManager.get());
+	m_TextController->Update(dt, m_EntityManager.get());
 	m_CameraController->Update(dt, m_EntityManager.get());
 	m_TrackController->Update(dt, m_EntityManager.get(), m_TextureManager.get());
 }

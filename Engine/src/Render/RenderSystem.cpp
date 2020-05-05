@@ -55,29 +55,35 @@ namespace Engine
         m_Renderer->BeginScene();
 
         // Get the main camera from the entity manager
-        
-		m_EntitiesBuffer.clear();
+
+        m_EntitiesBuffer.clear();
         entityManager->GetAllEntitiesWithComponents<CameraComponent, TransformComponent>(std::back_inserter(m_EntitiesBuffer));
         ASSERT(!m_EntitiesBuffer.empty(), "Must have at least one camera");
 
-		auto camera = m_EntitiesBuffer[0];
+        auto camera = m_EntitiesBuffer[0];
 
-    	// draw background
+        // draw background
         {
-			m_EntitiesBuffer.clear();
-			entityManager->GetAllEntitiesWithComponent<BackgroundComponent>(std::back_inserter(m_EntitiesBuffer));
-			m_Renderer->DrawEntities(m_EntitiesBuffer, camera);
+            m_EntitiesBuffer.clear();
+            entityManager->GetAllEntitiesWithComponent<BackgroundComponent>(std::back_inserter(m_EntitiesBuffer));
+            m_Renderer->DrawEntities(m_EntitiesBuffer, camera);
         }
 
-    	// draw entities
+        // draw entities
         {
-			m_EntitiesBuffer.clear();
-			entityManager->GetAllEntitiesWithComponent<DrawableEntity>(std::back_inserter(m_EntitiesBuffer));
-			m_Renderer->DrawEntities(m_EntitiesBuffer, camera);
-        	
+            m_EntitiesBuffer.clear();
+            entityManager->GetAllEntitiesWithComponent<DrawableEntity>(std::back_inserter(m_EntitiesBuffer));
+            m_Renderer->DrawEntities(m_EntitiesBuffer, camera);
+
         }
-  
-    	
+        // show text
+        {
+            m_EntitiesBuffer.clear();
+            entityManager->GetAllEntitiesWithComponent<TextComponent>(std::back_inserter(m_EntitiesBuffer));
+            m_Renderer->ShowTexts(m_EntitiesBuffer, camera);
+
+        }
+
         m_Renderer->EndScene();
     }
 

@@ -123,6 +123,12 @@ namespace Engine
 	};
 
 
+	struct TextComponent : public Component
+	{
+		std::string m_text;
+		TextComponent(std::string text) : m_text(text) {}
+	};
+
 	
 	struct BackgroundComponent : public Component
 	{
@@ -143,5 +149,4 @@ namespace Engine
 		vec2 m_Size;
 	};
 
-	
 }

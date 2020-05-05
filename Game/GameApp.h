@@ -8,6 +8,7 @@ namespace Nitro
 	class TextureController;
 	class DebugController;
 	class CameraController;
+	class TextController;
 
 	class GameApp : public Engine::Application
 	{
@@ -20,7 +21,7 @@ namespace Nitro
 		std::unique_ptr<TextureController> m_TextureController;
 		std::unique_ptr<PlayerController> m_PlayerController;
 		std::unique_ptr<TrackController> m_TrackController;
-
+		std::unique_ptr<TextController> m_TextController;
 
 		
 #if _DEBUG

@@ -39,6 +39,9 @@
     <ClCompile Include="TrackController.cpp">
       <Filter>src\Controllers</Filter>
     </ClCompile>
+    <ClCompile Include="TextController.cpp">
+      <Filter>src\Controllers</Filter>
+	</ClCompile>
     <ClCompile Include="TrackPatternGenerator.cpp">
       <Filter>src\Generators</Filter>
     </ClCompile>
@@ -68,6 +71,9 @@
     <ClInclude Include="TrackController.h">
       <Filter>src\Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="TextController.h">
+      <Filter>src\Controllers</Filter>
+	</ClInclude>
     <ClInclude Include="TrackPatternGenerator.h">
       <Filter>src\Generators</Filter>
     </ClInclude>

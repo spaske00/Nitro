@@ -102,6 +102,21 @@ namespace Nitro
 		int m_TrackRightColumnBoundaryEnd{};
 		
 	};
+
+	enum class TextInfoType {
+		Kmh,
+		Speed,
+		Distance
+	};
+
+	struct TextInfoComponent : public Engine::Component
+	{
+		PlayerTag m_PlayerTag;
+		//Pointer to player
+		Engine::Entity* m_PlayerEntity;
+		TextInfoType m_Type;
+		TextInfoComponent(PlayerTag PlayerTag, TextInfoType Type, Engine::Entity* Player ) : m_PlayerTag(PlayerTag), m_Type(Type),m_PlayerEntity(Player) {}
+	};
 	
 	
 }
