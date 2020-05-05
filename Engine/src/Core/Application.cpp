@@ -1,5 +1,5 @@
 #include "precomp.h"
-#include "Application.h"
+#include <SDL.h>
 #include "ECS/EntityManager.h"
 #include "Input/InputManager.h"
 #include "Render/RenderSystem.h"
@@ -9,8 +9,10 @@
 #include "Render/WindowData.h"
 #include "Render/TextureManager.h"
 #include "Physics/PhysicsSystem.h"
+#include "Audio/AudioManager.h"
 
-#include <SDL.h>
+#include "Application.h"
+
 
 namespace Engine {
 
@@ -28,6 +30,13 @@ namespace Engine {
         if (!m_RenderSystem->Init(m_WindowData))
         {
             LOG_CRITICAL("Failed to initialize RenderSystem");
+            return false;
+        }
+
+        m_AudioManager = std::make_unique<AudioManager>();
+        if (!m_AudioManager->Init())
+        {
+            LOG_CRITICAL("Failed to initialize AudioManager");
             return false;
         }
 
