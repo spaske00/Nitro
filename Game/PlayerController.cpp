@@ -18,7 +18,7 @@ namespace Nitro
 }
 
 
-bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine::TextureManager* textureManager_)
+bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine::TextureManager* textureManager_, Engine::AudioManager* audioManager_)
 {
 	ASSERT(entityManager_ != nullptr, "Must pass a valid entity manager");
 	ASSERT(textureManager_ != nullptr, "Must pass a vliad texture manager");
@@ -97,7 +97,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 
 
 
-void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityManager_)
+void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityManager_, Engine::AudioManager* audioManager_)
 {
 	auto players = entityManager_->GetAllEntitiesWithComponents<Engine::PlayerComponent>();
 	ASSERT(players.size() == 2, "Must be excatly two players");
