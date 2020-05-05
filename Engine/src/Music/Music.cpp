@@ -27,7 +27,7 @@ namespace Engine {
 
     }
 
-    void Music::Destroy() {
+    Music::~Music() {
         if (nullptr != m_music)
             Mix_FreeMusic(m_music);
     }
