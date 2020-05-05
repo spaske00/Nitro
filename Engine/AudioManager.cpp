@@ -15,11 +15,13 @@ namespace Engine {
     bool AudioManager::Init() {
         // Parameters are format of music
         if (-1 == Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG)) {
-            LOG_WARNING("Mix_Init failed! " + std::string(Mix_GetError()));
+            LOG_WARNING(fmt::format("Mix_Init failed {}", Mix_GetError()));
+            return false;
         }
 
         if (-1 == Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096)) {
-            LOG_WARNING("Mix_Init failed! " + std::string(Mix_GetError()));
+            LOG_WARNING(fmt::format("Mix_Init failed! {}", Mix_GetError()));
+            return false;
         }
 
         m_IsInitialized = true;
@@ -27,7 +29,8 @@ namespace Engine {
         return m_IsInitialized;
     }
     void AudioManager::Destroy() {
-        if (m_IsInitialized) {
+        if (m_IsInitialized) 
+        {
             m_IsInitialized = false;
 
             for (auto it = m_MusicMap.begin(); it != m_MusicMap.end(); it++)
@@ -40,7 +43,7 @@ namespace Engine {
         }
     }
 
-    void AudioManager::LoadSoundEffect(const std::string& filePath, const std::string& name) {
+    bool AudioManager::LoadSoundEffect(const std::string& filePath, const std::string& name) {
         auto it = m_SoundEffectMap.find(name);
         SoundEffect effect;
         if (m_SoundEffectMap.end() == it) {
@@ -48,12 +51,13 @@ namespace Engine {
             Mix_Chunk* chunk = Mix_LoadWAV(filePath.c_str());
             if (nullptr == chunk)
             {
-                LOG_WARNING("Mix_LoadSoundEffect failed! " + std::string(Mix_GetError()));
-
+                LOG_WARNING(fmt::format("Mix_LoadSoundEffect failed! ", Mix_GetError()));
+                return false;
             }
             effect.m_chunk = chunk;
             m_SoundEffectMap.emplace(name, std::make_unique<SoundEffect>(effect));
         }
+        return true;
 
     }
 
@@ -68,7 +72,7 @@ namespace Engine {
         }
     }
 
-    void  AudioManager::LoadMusic(const std::string& filePath, const std::string& name) {
+    bool  AudioManager::LoadMusic(const std::string& filePath, const std::string& name) {
         auto it = m_MusicMap.find(name);
         Music music;
         if (m_MusicMap.end() == it) {
@@ -76,18 +80,20 @@ namespace Engine {
             Mix_Music* mus = Mix_LoadMUS(filePath.c_str());
             if (nullptr == mus)
             {
-                LOG_WARNING("Mix_LoadMusic failed! " + std::string(Mix_GetError()));
+                LOG_WARNING(fmt::format("Mix_LoadMusic failed! ", Mix_GetError()));
+                return false;
             }
             music.m_music = mus;
             m_MusicMap.emplace(name, std::make_unique<Music>(music));
-
         }
+        return true;
 
     }
     void AudioManager::PlayMusic(const std::string& name) {
         auto it = m_MusicMap.find(name);
         if (m_MusicMap.end() == it) {
             LOG_WARNING("Music wasn't loaded");
+
         }
         else {
 

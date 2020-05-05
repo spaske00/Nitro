@@ -9,6 +9,7 @@ namespace Nitro
 	class DebugController;
 	class CameraController;
 	class TextController;
+	class AudioController;
 
 	class GameApp : public Engine::Application
 	{
@@ -22,7 +23,7 @@ namespace Nitro
 		std::unique_ptr<PlayerController> m_PlayerController;
 		std::unique_ptr<TrackController> m_TrackController;
 		std::unique_ptr<TextController> m_TextController;
-
+		std::unique_ptr<AudioController> m_AudioController;
 		
 #if _DEBUG
 		std::unique_ptr<DebugController> m_DebugController;

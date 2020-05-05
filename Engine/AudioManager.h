@@ -15,9 +15,9 @@ namespace Engine {
 		bool Init();
 		void Destroy();
 
-		void LoadSoundEffect(const std::string& filePath, const std::string& name);
+		bool LoadSoundEffect(const std::string& filePath, const std::string& name);
 		void PlaySoundEffect(const std::string& name);
-		void LoadMusic(const std::string& filePath, const std::string& name);
+		bool LoadMusic(const std::string& filePath, const std::string& name);
 		void PlayMusic(const std::string& name);
 
 	private:

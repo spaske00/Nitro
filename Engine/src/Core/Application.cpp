@@ -9,7 +9,7 @@
 #include "Render/WindowData.h"
 #include "Render/TextureManager.h"
 #include "Physics/PhysicsSystem.h"
-#include "Audio/AudioManager.h"
+#include "AudioManager.h"
 
 #include "Application.h"
 
@@ -113,7 +113,7 @@ namespace Engine {
 
             float deltaTime = (frameTime - previousFrameTime) / static_cast<float>(SDL_GetPerformanceFrequency());
 
-            LOG_INFO("Current FPS: {}", 1.f / deltaTime);
+            //LOG_INFO("Current FPS: {}", 1.f / deltaTime);
             Update(deltaTime);
 
             previousFrameTime = frameTime;

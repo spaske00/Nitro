@@ -11,7 +11,7 @@
 #include "TextureController.h"
 #include "TrackController.h"
 #include "TextController.h"
-
+#include "AudioController.h"
 void Nitro::GameApp::GameSpecificWindowData()
 {
 	Engine::WindowData windowData;
@@ -67,6 +67,14 @@ bool Nitro::GameApp::GameSpecificInit()
 		LOG_ERROR("Failed to initialize TextController");
 		return false;
 	}
+
+	m_AudioController = AudioController::Create();
+	if (!m_AudioController->Init(m_AudioManager.get()))
+	{
+		LOG_ERROR("Failed to initilize AUdioController");
+		return false;
+	}
+
 
 	return true;
 }

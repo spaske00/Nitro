@@ -132,6 +132,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AudioController.cpp" />
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="DebugController.cpp" />
     <ClCompile Include="GameApp.cpp" />
@@ -143,6 +144,7 @@
     <ClCompile Include="TrackPatternGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AudioController.h" />
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="DebugController.h" />
     <ClInclude Include="GameApp.h" />
