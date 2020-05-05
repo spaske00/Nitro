@@ -110,13 +110,13 @@ bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityMan
 		return false;
 	}
 
-	Engine::Matrix<TileType> track(36, 12);
+	Engine::Matrix<TileType> track(36, 18);
 	std::fill(std::begin(track), std::end(track), TileType::water);
 
 	
 
 	vec2 tileSize{ 256.f, 512.f };
-	int mainTrackColumnBegin = 3;
+	int mainTrackColumnBegin = 7;
 	int mainTrackColumnEnd = mainTrackColumnBegin + m_TrackPatternGenerator.Cols();
 	for (int i = 0; i < track.Rows(); ++i)
 	{
