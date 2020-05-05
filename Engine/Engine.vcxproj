@@ -105,14 +105,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Matrix.cpp" />
-    <ClCompile Include="Music.cpp" />
     <ClCompile Include="precomp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="SoundEffect.cpp" />
+    <ClCompile Include="src\Audio\AudioManager.cpp" />
+    <ClCompile Include="src\Audio\Music.cpp" />
+    <ClCompile Include="src\Audio\SoundEffect.cpp" />
     <ClCompile Include="src\Core\Application.cpp" />
     <ClCompile Include="src\Core\EntryPoint.h" />
     <ClCompile Include="src\ECS\Component.cpp" />
@@ -128,7 +128,6 @@
     <ClCompile Include="src\Render\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AudioManager.h" />
     <ClInclude Include="extern\glm\common.hpp" />
     <ClInclude Include="extern\glm\detail\compute_common.hpp" />
     <ClInclude Include="extern\glm\detail\compute_vector_relational.hpp" />
@@ -430,9 +429,10 @@
     <ClInclude Include="extern\spdlog\tweakme.h" />
     <ClInclude Include="extern\spdlog\version.h" />
     <ClInclude Include="Matrix.h" />
-    <ClInclude Include="Music.h" />
     <ClInclude Include="precomp.h" />
-    <ClInclude Include="SoundEffect.h" />
+    <ClInclude Include="src\Audio\AudioManager.h" />
+    <ClInclude Include="src\Audio\Music.h" />
+    <ClInclude Include="src\Audio\SoundEffect.h" />
     <ClInclude Include="src\Core\Application.h" />
     <ClInclude Include="src\ECS\Component.h" />
     <ClInclude Include="src\ECS\Entity.h" />
