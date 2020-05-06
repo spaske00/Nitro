@@ -33,12 +33,13 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 	auto firstRoadTile = FindRoadTileAtLayer(trackComponent->m_TracksMatrix, lowestLayer);
 	auto firstRoadTilePosition = firstRoadTile->GetComponent<Engine::TransformComponent>()->m_Position;
 	auto firstRoadTileSize = firstRoadTile->GetComponent<Engine::TransformComponent>()->m_Size;
+	
 	{
 		auto player1 = Engine::Entity::Create();
 		player1->AddComponent<Engine::DrawableEntity>();
 		
 		
-		player1->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x - firstRoadTileSize.x / 4, 
+		auto& transform = player1->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x - firstRoadTileSize.x / 4, 
 			firstRoadTilePosition.y - firstRoadTileSize.y / 4, 50.f, 50.f);
 
 		player1->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player1Texture");
@@ -59,16 +60,16 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 
 		auto& physics = player1->AddComponent<CarPhysicsComponent>();
 		
-		physics.m_Acceleration = 40.f;
+		physics.m_Acceleration = 120.f;
 		physics.m_CarSpeed = 0.f;
 		physics.m_CarHeading = -M_PI / 2;
 		physics.m_SteerAngle = 0.f;
-		physics.m_WheelBase = 50.f;
-		physics.m_BreakSpeed = 15.f;
-		physics.m_Drag = 3.f;
+		physics.m_WheelBase = transform.m_Size.y;
+		physics.m_BreakSpeed = 25.f;
+		physics.m_Drag = 10.f;
 		physics.m_MaxSpeed = 800.f;
 		physics.m_MinSpeed = 0.f;
-		physics.m_SteerSpeed = 1.f;
+		physics.m_SteerSpeed = 800.f;
 
 		entityManager_->AddEntity(std::move(player1));
 	}
@@ -76,7 +77,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 	{
 		auto player2 = Engine::Entity::Create();
 		player2->AddComponent<Engine::DrawableEntity>();
-		player2->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x + firstRoadTileSize.x / 4,
+		auto& transform = player2->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x + firstRoadTileSize.x / 4,
 			firstRoadTilePosition.y - firstRoadTileSize.y / 4, 50.f, 50.f);
 		player2->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player2Texture");
 		player2->AddComponent<Engine::CollisionComponent>(50.f);
@@ -95,16 +96,16 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		player2->AddComponent<PlayerTagComponent>(PlayerTag::Two);
 
 		auto& physics = player2->AddComponent<CarPhysicsComponent>();
-		physics.m_Acceleration = 40.f;
+		physics.m_Acceleration = 120.f;
 		physics.m_CarSpeed = 0.f;
 		physics.m_CarHeading = -M_PI/2;
 		physics.m_SteerAngle = 0.f;
-		physics.m_WheelBase = 50.f;
-		physics.m_BreakSpeed = 15.f;
-		physics.m_Drag = 3.f;
+		physics.m_WheelBase = transform.m_Size.y;
+		physics.m_BreakSpeed = 25.f;
+		physics.m_Drag = 10.f;
 		physics.m_MaxSpeed = 800.f;
 		physics.m_MinSpeed = 0.f;
-		physics.m_SteerSpeed = 1.f;
+		physics.m_SteerSpeed = 800.f;
 		entityManager_->AddEntity(std::move(player2));
 	}
 	
@@ -152,54 +153,25 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 		physics->m_SteerAngle = 0;
 		if (wheelTurnintDirection < 0)
 		{
-			physics->m_SteerAngle = std::min(-45.f, physics->m_SteerAngle - physics->m_SteerSpeed);
+			physics->m_SteerAngle = std::max(-45.f, physics->m_SteerAngle - physics->m_SteerSpeed * dt_);
 		}
 		else if (wheelTurnintDirection > 0)
 		{
-			physics->m_SteerAngle = std::max(45.f, physics->m_SteerAngle + physics->m_SteerSpeed);
+			physics->m_SteerAngle = std::min(45.f, physics->m_SteerAngle + physics->m_SteerSpeed * dt_);
 		}
 		
 		if (moveUp)
 		{
-			physics->m_CarSpeed = std::min(physics->m_MaxSpeed, physics->m_CarSpeed + physics->m_Acceleration);
+			physics->m_CarSpeed = std::min(physics->m_MaxSpeed, physics->m_CarSpeed + physics->m_Acceleration * dt_);
 		}
 		else if (moveDown)
 		{
-			physics->m_CarSpeed = std::max(physics->m_MinSpeed, physics->m_CarSpeed - physics->m_BreakSpeed);
+			physics->m_CarSpeed = std::max(physics->m_MinSpeed, physics->m_CarSpeed - physics->m_BreakSpeed * dt_);
 		}
 		else
 		{
-			physics->m_CarSpeed = std::max(physics->m_MinSpeed, physics->m_CarSpeed - physics->m_Drag);
+			physics->m_CarSpeed = std::max(physics->m_MinSpeed, physics->m_CarSpeed - physics->m_Drag * dt_);
 		}
-
-		/*if (!wheelTurnintDirection)
-		{
-			if (abs(physics->m_SteerAngle) < 0.1f)
-			{
-				physics->m_SteerAngle = 0.f;
-			}
-
-			if (physics->m_SteerAngle > 0.f)
-			{
-				physics->m_SteerAngle -= 300.f * dt_;
-			}
-			else if(physics->m_SteerAngle < 0.f)
-			{
-				physics->m_SteerAngle += 300.f * dt_;
-			}
-		}
-		else
-		{
-			physics->m_SteerAngle += wheelTurnintDirection * 300.f * dt_;
-			if (physics->m_SteerAngle < -45.f)
-			{
-				physics->m_SteerAngle = -45.f;
-			}
-			else if (physics->m_SteerAngle > 45.f)
-			{
-				physics->m_SteerAngle = 45.f;
-			}
-		}*/
 
 		vec2 frontWheel{};
 		vec2 backWheel{};
@@ -223,58 +195,8 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 
 		transform->m_Rotation = 90.f + RadiansToDegrees( physics->m_CarHeading);
 
-		//
-		//physics->m_CarSpeed += accelerationDirection * physics->m_Acceleration;
-		//physics->m_CarSpeed = std::max(0.f, physics->m_CarSpeed);
-		//physics->m_CarSpeed = std::min(480.f, physics->m_CarSpeed);
-
-		//glm::mat4 rot = glm::mat4(1.f);
-		//vec4 rotateAround = vec4{ transform->m_Position + mover->m_TranslationSpeed, 0.f, 1.f };
-		//glm::rotate(rot, glm::radians(physics->m_SteerAngle > 0.f ? 90.f : -90.f), glm::vec3(0.f, 0.f, 1.f)) * rotateAround;
-
-
-		//rot = glm::mat4(1.f);
-		//rot = glm::rotate(rot, glm::radians(transform->m_Rotation + physics->m_SteerAngle), glm::vec3(rotateAround.x, rotateAround.y, 0.f));
-		//
-		//
-
-		//LOG_INFO(fmt::format("{}", glm::to_string(rot)));
-		//
-		////mover->m_TranslationSpeed = physics->m_Speed * vec2{ (moveRight ? 1.f : 0.f) + (moveLeft ? -1.f : 0.f), physics->m_Speed > 0 ? -1.f : 0.f};
-		//mover->m_TranslationSpeed = physics->m_CarSpeed * (rot * vec4{ 0.f, -1.f, 0.f, 1.f });
-		//mover->m_RotationSpeed = physics->m_SteerAngle;
-
-		//LOG_INFO(fmt::format("{} {}", mover->m_TranslationSpeed.x, mover->m_TranslationSpeed.y));
-		//LOG_INFO(fmt::format("Wheel {}", physics->m_SteerAngle));
-		//LOG_INFO(fmt::format("Rotation {}", transform->m_Rotation));
-		//LOG_INFO(fmt::format("Speed {}",physics->m_CarSpeed));
 
 	}
-
-	//// Update player2
-	//{
-	//	auto player = player2;
-	//	auto otherPlayer = player1;
-	//	auto physics = player->GetComponent<CarPhysicsComponent>();
-	//	auto mover = player->GetComponent<Engine::MoverComponent>();
-	//	auto input = player->GetComponent<Engine::InputComponent>();
-
-
-	//	int tag = PlayerTagToInt(player->GetComponent<PlayerTagComponent>()->m_PlayerTag);
-	//	bool moveUp = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveUp", tag));
-	//	bool moveDown = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveDown", tag));
-	//	bool moveLeft = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveLeft", tag));
-	//	bool moveRight = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveRight", tag));
-
-	//	int accelerationDirection = moveUp - moveDown;
-
-	//	physics->m_Speed += accelerationDirection * physics->m_Acceleration;
-	//	physics->m_Speed = std::max(0.f, physics->m_Speed);
-	//	physics->m_Speed = std::min(480.f, physics->m_Speed);
-	//	mover->m_TranslationSpeed = physics->m_Speed * vec2{ (moveRight ? 1.f : 0.f) + (moveLeft ? -1.f : 0.f), physics->m_Speed > 0 ? -1.f : 0.f };
-	//}
-
-	//auto collided = player1->GetComponent<Engine::CollidedWithComponent>()->m_CollidedWith;
 	
 	
 }
