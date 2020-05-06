@@ -47,6 +47,15 @@ namespace Nitro {
 		return a % modulo;
 	}
 
+	inline float RadiansToDegrees(float rd)
+	{
+		return rd * (180.0f / M_PI);
+	}
+
+	inline float DegreesToRadians(float dg)
+	{
+		return dg * (M_PI / 180.f);
+	}
 
 
 }

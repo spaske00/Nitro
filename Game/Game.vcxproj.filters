@@ -83,11 +83,11 @@
     <ClInclude Include="TrackPatternGenerator.h">
       <Filter>src\Generators</Filter>
     </ClInclude>
-    <ClInclude Include="ModuloMath.h">
-      <Filter>src\Util</Filter>
-    </ClInclude>
     <ClInclude Include="AudioController.h">
       <Filter>src\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="MathUtil.h">
+      <Filter>src\Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

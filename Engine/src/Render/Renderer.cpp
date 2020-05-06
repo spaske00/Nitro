@@ -142,7 +142,6 @@ namespace Engine
 				SDL_RenderDrawRect(m_NativeRenderer, &dst);
 
 			}
-
 			SetBackgroundColor(m_BackgroundColor);
 #endif
 

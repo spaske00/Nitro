@@ -85,6 +85,8 @@ namespace Nitro
 		float m_Acceleration{};
 		float m_Mass{};
 		float m_Speed{};
+		vec2 m_Velocity{};
+		float m_WheelClockwiseAngle{};
 	};
 
 	struct TileInfoComponent : public Engine::Component

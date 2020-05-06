@@ -44,10 +44,11 @@ void Nitro::CameraController::Update(float dt_, Engine::EntityManager* entityMan
 	
 	{
 		auto transform = camera->GetComponent<Engine::TransformComponent>();
-		transform->m_Position.y = (player1Position.y + player2Position.y) / 2;
-		transform->m_Position.x = (player1Position.x + player2Position.x) / 2;
-		static float totalDt = 0;
-		totalDt += dt_;
+		/*transform->m_Position.y = (player1Position.y + player2Position.y) / 2;
+		transform->m_Position.x = (player1Position.x + player2Position.x) / 2;*/
+		
+		transform->m_Position = player1Position;
+
 	/*	transform->m_Size.x = m_WindowData->m_Width * abs(2 * sin(totalDt) + 1.f);
 		transform->m_Size.y = m_WindowData->m_Height * abs(2 * sin(totalDt) + 1.f);*/
 	}
