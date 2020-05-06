@@ -147,10 +147,10 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 		bool moveLeft = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveLeft", tag));
 		bool moveRight = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveRight", tag));
 
-		int accelerationDirection = moveUp - moveDown;
 
 		int wheelTurnintDirection = moveRight - moveLeft;
 		physics->m_SteerAngle = 0;
+
 		if (wheelTurnintDirection < 0)
 		{
 			physics->m_SteerAngle = std::max(-45.f, physics->m_SteerAngle - physics->m_SteerSpeed * dt_);
