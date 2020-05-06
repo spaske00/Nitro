@@ -83,10 +83,17 @@ namespace Nitro
 	struct CarPhysicsComponent : public Engine::Component
 	{
 		float m_Acceleration{};
-		float m_Mass{};
-		float m_Speed{};
+		float m_CarSpeed{};
 		vec2 m_Velocity{};
-		float m_WheelClockwiseAngle{};
+		float m_SteerAngle{};
+		float m_CarHeading{};
+		float m_WheelBase{};
+		float m_BreakSpeed{};
+		float m_Drag{};
+		float m_MaxSpeed{};
+		float m_MinSpeed{};
+		float m_SteerSpeed{};
+
 	};
 
 	struct TileInfoComponent : public Engine::Component

@@ -1,11 +1,8 @@
 #include "precomp.h"
 #include "GameComponents.h"
 #include "TrackPatternGenerator.h"
-
 #include "TrackController.h"
 
-
-#include "MathUtil.h"
 
 
 // TODO(Marko): convert all of these to int, no need for floating point operations

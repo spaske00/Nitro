@@ -3,6 +3,7 @@
 #include "GameComponents.h"
 #include "glm/gtx/string_cast.hpp"
 #include "glm/gtx/perpendicular.hpp"
+
 namespace Nitro
 {
 	Engine::Entity* FindRoadTileAtLayer(Engine::Matrix<Engine::Entity*>& tileMatrix, int layer)
@@ -57,10 +58,18 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		player1->AddComponent<PlayerTagComponent>(PlayerTag::One);
 
 		auto& physics = player1->AddComponent<CarPhysicsComponent>();
-		physics.m_Mass = 300.f;
-		physics.m_Acceleration = 1.f;
-		physics.m_Speed = 0.f;
 		
+		physics.m_Acceleration = 40.f;
+		physics.m_CarSpeed = 0.f;
+		physics.m_CarHeading = -M_PI / 2;
+		physics.m_SteerAngle = 0.f;
+		physics.m_WheelBase = 50.f;
+		physics.m_BreakSpeed = 15.f;
+		physics.m_Drag = 3.f;
+		physics.m_MaxSpeed = 800.f;
+		physics.m_MinSpeed = 0.f;
+		physics.m_SteerSpeed = 1.f;
+
 		entityManager_->AddEntity(std::move(player1));
 	}
 
@@ -86,10 +95,16 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		player2->AddComponent<PlayerTagComponent>(PlayerTag::Two);
 
 		auto& physics = player2->AddComponent<CarPhysicsComponent>();
-		physics.m_Mass = 300.f;
-		physics.m_Acceleration = 1.f;
-		physics.m_Speed = 0.f;
-
+		physics.m_Acceleration = 40.f;
+		physics.m_CarSpeed = 0.f;
+		physics.m_CarHeading = -M_PI/2;
+		physics.m_SteerAngle = 0.f;
+		physics.m_WheelBase = 50.f;
+		physics.m_BreakSpeed = 15.f;
+		physics.m_Drag = 3.f;
+		physics.m_MaxSpeed = 800.f;
+		physics.m_MinSpeed = 0.f;
+		physics.m_SteerSpeed = 1.f;
 		entityManager_->AddEntity(std::move(player2));
 	}
 	
@@ -134,61 +149,105 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 		int accelerationDirection = moveUp - moveDown;
 
 		int wheelTurnintDirection = moveRight - moveLeft;
-		if (!wheelTurnintDirection)
+		physics->m_SteerAngle = 0;
+		if (wheelTurnintDirection < 0)
 		{
-			if (abs(physics->m_WheelClockwiseAngle) < 0.1f)
+			physics->m_SteerAngle = std::min(-45.f, physics->m_SteerAngle - physics->m_SteerSpeed);
+		}
+		else if (wheelTurnintDirection > 0)
+		{
+			physics->m_SteerAngle = std::max(45.f, physics->m_SteerAngle + physics->m_SteerSpeed);
+		}
+		
+		if (moveUp)
+		{
+			physics->m_CarSpeed = std::min(physics->m_MaxSpeed, physics->m_CarSpeed + physics->m_Acceleration);
+		}
+		else if (moveDown)
+		{
+			physics->m_CarSpeed = std::max(physics->m_MinSpeed, physics->m_CarSpeed - physics->m_BreakSpeed);
+		}
+		else
+		{
+			physics->m_CarSpeed = std::max(physics->m_MinSpeed, physics->m_CarSpeed - physics->m_Drag);
+		}
+
+		/*if (!wheelTurnintDirection)
+		{
+			if (abs(physics->m_SteerAngle) < 0.1f)
 			{
-				physics->m_WheelClockwiseAngle = 0.f;
+				physics->m_SteerAngle = 0.f;
 			}
 
-			if (physics->m_WheelClockwiseAngle > 0.f)
+			if (physics->m_SteerAngle > 0.f)
 			{
-				physics->m_WheelClockwiseAngle -= 300.f * dt_;
+				physics->m_SteerAngle -= 300.f * dt_;
 			}
-			else if(physics->m_WheelClockwiseAngle < 0.f)
+			else if(physics->m_SteerAngle < 0.f)
 			{
-				physics->m_WheelClockwiseAngle += 300.f * dt_;
+				physics->m_SteerAngle += 300.f * dt_;
 			}
 		}
 		else
 		{
-			physics->m_WheelClockwiseAngle += wheelTurnintDirection * 400.f * dt_;
-			if (physics->m_WheelClockwiseAngle < -45.f)
+			physics->m_SteerAngle += wheelTurnintDirection * 300.f * dt_;
+			if (physics->m_SteerAngle < -45.f)
 			{
-				physics->m_WheelClockwiseAngle = -45.f;
+				physics->m_SteerAngle = -45.f;
 			}
-			else if (physics->m_WheelClockwiseAngle > 45.f)
+			else if (physics->m_SteerAngle > 45.f)
 			{
-				physics->m_WheelClockwiseAngle = 45.f;
+				physics->m_SteerAngle = 45.f;
 			}
-		}
+		}*/
+
+		vec2 frontWheel{};
+		vec2 backWheel{};
+
+		frontWheel.x = transform->m_Position.x + physics->m_WheelBase / 2 * cos(physics->m_CarHeading);
+		frontWheel.y = transform->m_Position.y + physics->m_WheelBase / 2 * sin(physics->m_CarHeading);
+
+		backWheel.x = transform->m_Position.x - physics->m_WheelBase / 2 * cos(physics->m_CarHeading);
+		backWheel.y = transform->m_Position.y - physics->m_WheelBase / 2 * sin(physics->m_CarHeading);
+
+		backWheel.x += physics->m_CarSpeed * dt_ * cos(physics->m_CarHeading);
+		backWheel.y += physics->m_CarSpeed * dt_ * sin(physics->m_CarHeading);
+
+		frontWheel.x += physics->m_CarSpeed * dt_ * cos(physics->m_CarHeading + DegreesToRadians(physics->m_SteerAngle));
+		frontWheel.y += physics->m_CarSpeed * dt_ * sin(physics->m_CarHeading + DegreesToRadians(physics->m_SteerAngle));
+
+		transform->m_Position.x = (frontWheel.x + backWheel.x) / 2;
+		transform->m_Position.y = (frontWheel.y + backWheel.y) / 2;
+
+		physics->m_CarHeading = atan2(frontWheel.y - backWheel.y, frontWheel.x - backWheel.x);
+
+		transform->m_Rotation = 90.f + RadiansToDegrees( physics->m_CarHeading);
+
+		//
+		//physics->m_CarSpeed += accelerationDirection * physics->m_Acceleration;
+		//physics->m_CarSpeed = std::max(0.f, physics->m_CarSpeed);
+		//physics->m_CarSpeed = std::min(480.f, physics->m_CarSpeed);
+
+		//glm::mat4 rot = glm::mat4(1.f);
+		//vec4 rotateAround = vec4{ transform->m_Position + mover->m_TranslationSpeed, 0.f, 1.f };
+		//glm::rotate(rot, glm::radians(physics->m_SteerAngle > 0.f ? 90.f : -90.f), glm::vec3(0.f, 0.f, 1.f)) * rotateAround;
 
 
-		
-		physics->m_Speed += accelerationDirection * physics->m_Acceleration;
-		physics->m_Speed = std::max(0.f, physics->m_Speed);
-		physics->m_Speed = std::min(480.f, physics->m_Speed);
+		//rot = glm::mat4(1.f);
+		//rot = glm::rotate(rot, glm::radians(transform->m_Rotation + physics->m_SteerAngle), glm::vec3(rotateAround.x, rotateAround.y, 0.f));
+		//
+		//
 
-		glm::mat4 rot = glm::mat4(1.f);
-		vec4 rotateAround = vec4{ transform->m_Position + mover->m_TranslationSpeed, 0.f, 1.f };
-		glm::rotate(rot, glm::radians(physics->m_WheelClockwiseAngle > 0.f ? 90.f : -90.f), glm::vec3(0.f, 0.f, 1.f)) * rotateAround;
+		//LOG_INFO(fmt::format("{}", glm::to_string(rot)));
+		//
+		////mover->m_TranslationSpeed = physics->m_Speed * vec2{ (moveRight ? 1.f : 0.f) + (moveLeft ? -1.f : 0.f), physics->m_Speed > 0 ? -1.f : 0.f};
+		//mover->m_TranslationSpeed = physics->m_CarSpeed * (rot * vec4{ 0.f, -1.f, 0.f, 1.f });
+		//mover->m_RotationSpeed = physics->m_SteerAngle;
 
-
-		rot = glm::mat4(1.f);
-		rot = glm::rotate(rot, glm::radians(transform->m_Rotation + physics->m_WheelClockwiseAngle), glm::vec3(rotateAround.x, rotateAround.y, 0.f));
-		
-		
-
-		LOG_INFO(fmt::format("{}", glm::to_string(rot)));
-		
-		//mover->m_TranslationSpeed = physics->m_Speed * vec2{ (moveRight ? 1.f : 0.f) + (moveLeft ? -1.f : 0.f), physics->m_Speed > 0 ? -1.f : 0.f};
-		mover->m_TranslationSpeed = physics->m_Speed * (rot * vec4{ 0.f, -1.f, 0.f, 1.f });
-		mover->m_RotationSpeed = physics->m_WheelClockwiseAngle;
-
-		LOG_INFO(fmt::format("{} {}", mover->m_TranslationSpeed.x, mover->m_TranslationSpeed.y));
-		LOG_INFO(fmt::format("Wheel {}", physics->m_WheelClockwiseAngle));
-		LOG_INFO(fmt::format("Rotation {}", transform->m_Rotation));
-		LOG_INFO(fmt::format("Speed {}",physics->m_Speed));
+		//LOG_INFO(fmt::format("{} {}", mover->m_TranslationSpeed.x, mover->m_TranslationSpeed.y));
+		//LOG_INFO(fmt::format("Wheel {}", physics->m_SteerAngle));
+		//LOG_INFO(fmt::format("Rotation {}", transform->m_Rotation));
+		//LOG_INFO(fmt::format("Speed {}",physics->m_CarSpeed));
 
 	}
 
