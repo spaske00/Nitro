@@ -6,7 +6,7 @@ namespace Engine {
 
 namespace Nitro
 {
-
+	struct CarPhysicsComponent;
 	class PlayerController
 	{
 	public:
@@ -16,5 +16,11 @@ namespace Nitro
 		{
 			return std::make_unique<PlayerController>();
 		}
+
+	private:
+		void MoveWheel(float dt_, bool moveLeft, bool moveRight, CarPhysicsComponent* physics);
+		void HandleGasAndBreaking(float dt_, bool moveUp, bool moveDown, CarPhysicsComponent* physics);
+		void SteerTheCar(float dt_, Engine::Entity* player);
+		void CollideWithOtherEntities(float dt_, Engine::Entity* player);
 	};
 }

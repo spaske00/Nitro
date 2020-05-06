@@ -84,7 +84,6 @@ namespace Nitro
 	{
 		float m_Acceleration{};
 		float m_CarSpeed{};
-		vec2 m_Velocity{};
 		float m_SteerAngle{};
 		float m_CarHeading{};
 		float m_WheelBase{};
@@ -133,5 +132,7 @@ namespace Nitro
 		TextInfoComponent(PlayerTag PlayerTag, TextInfoType Type, Engine::Entity* Player ) : m_PlayerTag(PlayerTag), m_Type(Type),m_PlayerEntity(Player) {}
 	};
 	
+
+
 	
 }
