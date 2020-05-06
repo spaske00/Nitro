@@ -83,7 +83,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		physics.m_CarHeading = -(float)M_PI / 2;
 		physics.m_SteerAngle = 0.f;
 		physics.m_WheelBase = transform.m_Size.y;
-		physics.m_BreakSpeed = 70.f;
+		physics.m_BreakSpeed = 300.f;
 		physics.m_Drag = 40.f;
 		physics.m_MaxSpeed = 800.f;
 		physics.m_MinSpeed = 0.f;
