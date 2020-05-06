@@ -66,7 +66,7 @@ bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityMan
 
 	
 
-	vec2 tileSize{ 256.f, 512.f };
+	vec2 tileSize{ 256.f, 256.f };
 	int mainTrackColumnBegin = 7;
 	int mainTrackColumnEnd = mainTrackColumnBegin + m_TrackPatternGenerator.Cols();
 	for (int i = 0; i < track.Rows(); ++i)

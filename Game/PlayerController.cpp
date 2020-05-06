@@ -2,7 +2,7 @@
 #include "PlayerController.h"
 #include "GameComponents.h"
 #include "glm/gtx/string_cast.hpp"
-
+#include "glm/gtx/perpendicular.hpp"
 namespace Nitro
 {
 	Engine::Entity* FindRoadTileAtLayer(Engine::Matrix<Engine::Entity*>& tileMatrix, int layer)
@@ -41,7 +41,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 			firstRoadTilePosition.y - firstRoadTileSize.y / 4, 50.f, 50.f);
 
 		player1->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player1Texture");
-		player1->AddComponent<Engine::CollisionComponent>(50.f, 50.f);
+		player1->AddComponent<Engine::CollisionComponent>(50.f);
 		player1->AddComponent<Engine::CollidedWithComponent>();
 		player1->AddComponent<Engine::MoverComponent>();
 		player1->AddComponent<Engine::PlayerComponent>();
@@ -70,7 +70,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		player2->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x + firstRoadTileSize.x / 4,
 			firstRoadTilePosition.y - firstRoadTileSize.y / 4, 50.f, 50.f);
 		player2->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player2Texture");
-		player2->AddComponent<Engine::CollisionComponent>(50.f, 50.f);
+		player2->AddComponent<Engine::CollisionComponent>(50.f);
 		player2->AddComponent<Engine::CollidedWithComponent>();
 		player2->AddComponent<Engine::MoverComponent>();
 		player2->AddComponent<Engine::PlayerComponent>();
@@ -152,7 +152,7 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 		}
 		else
 		{
-			physics->m_WheelClockwiseAngle = physics->m_WheelClockwiseAngle + wheelTurnintDirection * 100.f * dt_;
+			physics->m_WheelClockwiseAngle += wheelTurnintDirection * 400.f * dt_;
 			if (physics->m_WheelClockwiseAngle < -45.f)
 			{
 				physics->m_WheelClockwiseAngle = -45.f;
@@ -170,12 +170,19 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 		physics->m_Speed = std::min(480.f, physics->m_Speed);
 
 		glm::mat4 rot = glm::mat4(1.f);
-		rot = glm::rotate(rot, glm::radians(transform->m_Rotation + physics->m_WheelClockwiseAngle), glm::vec3(0.f, 0.f, 1.f));
+		vec4 rotateAround = vec4{ transform->m_Position + mover->m_TranslationSpeed, 0.f, 1.f };
+		glm::rotate(rot, glm::radians(physics->m_WheelClockwiseAngle > 0.f ? 90.f : -90.f), glm::vec3(0.f, 0.f, 1.f)) * rotateAround;
+
+
+		rot = glm::mat4(1.f);
+		rot = glm::rotate(rot, glm::radians(transform->m_Rotation + physics->m_WheelClockwiseAngle), glm::vec3(rotateAround.x, rotateAround.y, 0.f));
 		
+		
+
 		LOG_INFO(fmt::format("{}", glm::to_string(rot)));
 		
 		//mover->m_TranslationSpeed = physics->m_Speed * vec2{ (moveRight ? 1.f : 0.f) + (moveLeft ? -1.f : 0.f), physics->m_Speed > 0 ? -1.f : 0.f};
-		mover->m_TranslationSpeed = physics->m_Speed * (rot * vec4{ 0.f, -2.f, 0.f, 1.f });
+		mover->m_TranslationSpeed = physics->m_Speed * (rot * vec4{ 0.f, -1.f, 0.f, 1.f });
 		mover->m_RotationSpeed = physics->m_WheelClockwiseAngle;
 
 		LOG_INFO(fmt::format("{} {}", mover->m_TranslationSpeed.x, mover->m_TranslationSpeed.y));

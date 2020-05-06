@@ -5,6 +5,8 @@
 #include "ECS/EntityManager.h"
 #include "ECS/Component.h"
 
+#include "Box2D.h"
+
 namespace Engine
 {
         bool CheckForCollision(Entity * entity1, Entity * entity2);
