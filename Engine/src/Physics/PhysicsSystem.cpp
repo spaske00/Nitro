@@ -5,7 +5,6 @@
 #include "ECS/EntityManager.h"
 #include "ECS/Component.h"
 
-#include "Box2D.h"
 
 namespace Engine
 {

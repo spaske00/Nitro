@@ -91,100 +91,6 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 
 		entityManager_->AddEntity(std::move(player));
 	}
-	//{
-	//	auto player1 = Engine::Entity::Create();
-	//	player1->AddComponent<Engine::DrawableEntity>();
-	//	
-	//	
-	//	auto& transform = player1->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x - firstRoadTileSize.x / 4, 
-	//		firstRoadTilePosition.y - firstRoadTileSize.y / 4, 50.f, 50.f);
-
-	//	player1->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player1Texture");
-	//	player1->AddComponent<Engine::CollisionComponent>(40.f);
-	//	player1->AddComponent<Engine::CollidedWithComponent>();
-	//	player1->AddComponent<Engine::MoverComponent>();
-	//	player1->AddComponent<Engine::PlayerComponent>();
-	//	
-	//	auto& jumping = player1->AddComponent<JumpingComponent>();
-	//	jumping.m_InTheAir = false;
-	//	jumping.m_AirbornTimeLeft = -1.f;
-	//	jumping.m_JumpTimeCooldownLeft = -1.f;
-	//	jumping.m_JumpTimeCooldownLength = 4.f;
-	//	jumping.m_JumpTimeLength = 1.8f;
-	//	jumping.m_OriginalModelSize = transform.m_Size;
-
-	//	auto& input = player1->AddComponent<Engine::InputComponent>();
-
-	//	input.inputActions.emplace_back("Player1MoveUp");
-	//	input.inputActions.emplace_back("Player1MoveDown");
-	//	input.inputActions.emplace_back("Player1MoveLeft");
-	//	input.inputActions.emplace_back("Player1MoveRight");
-	//	input.inputActions.emplace_back("Player1Jump");
-
-	//	// input.inputActions.emplace_back("Player1Jump");
-
-	//	player1->AddComponent<PlayerTagComponent>(PlayerTag::One);
-
-	//	auto& physics = player1->AddComponent<CarPhysicsComponent>();
-	//	
-	//	physics.m_Acceleration = 120.f;
-	//	physics.m_CarSpeed = 0.f;
-	//	physics.m_CarHeading = -(float)M_PI / 2;
-	//	physics.m_SteerAngle = 0.f;
-	//	physics.m_WheelBase = transform.m_Size.y;
-	//	physics.m_BreakSpeed = 25.f;
-	//	physics.m_Drag = 10.f;
-	//	physics.m_MaxSpeed = 800.f;
-	//	physics.m_MinSpeed = 0.f;
-	//	physics.m_SteerSpeed = 15.f;
-
-	//	entityManager_->AddEntity(std::move(player1));
-	//}
-
-	//{
-	//	auto player2 = Engine::Entity::Create();
-	//	player2->AddComponent<Engine::DrawableEntity>();
-	//	auto& transform = player2->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x + firstRoadTileSize.x / 4,
-	//		firstRoadTilePosition.y - firstRoadTileSize.y / 4, 50.f, 50.f);
-	//	player2->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player2Texture");
-	//	player2->AddComponent<Engine::CollisionComponent>(40.f);
-	//	player2->AddComponent<Engine::CollidedWithComponent>();
-	//	player2->AddComponent<Engine::MoverComponent>();
-	//	player2->AddComponent<Engine::PlayerComponent>();
-
-	//	auto& jumping = player2->AddComponent<JumpingComponent>();
-	//	jumping.m_InTheAir = false;
-	//	jumping.m_AirbornTimeLeft = -1.f;
-	//	jumping.m_JumpTimeCooldownLeft = -1.f;
-	//	jumping.m_JumpTimeCooldownLength = 4.f;
-	//	jumping.m_JumpTimeLength = 1.8f;
-	//	jumping.m_OriginalModelSize = transform.m_Size;
-
-	//	auto& input = player2->AddComponent<Engine::InputComponent>();
-
-	//	input.inputActions.emplace_back("Player2MoveUp");
-	//	input.inputActions.emplace_back("Player2MoveDown");
-	//	input.inputActions.emplace_back("Player2MoveLeft");
-	//	input.inputActions.emplace_back("Player2MoveRight");
-	//	input.inputActions.emplace_back("Player2Jump");
-	//	// input.inputActions.emplace_back("Player1Jump");
-
-	//	player2->AddComponent<PlayerTagComponent>(PlayerTag::Two);
-
-	//	auto& physics = player2->AddComponent<CarPhysicsComponent>();
-	//	physics.m_Acceleration = 120.f;
-	//	physics.m_CarSpeed = 0.f;
-	//	physics.m_CarHeading = -(float)M_PI/2;
-	//	physics.m_SteerAngle = 0.f;
-	//	physics.m_WheelBase = transform.m_Size.y;
-	//	physics.m_BreakSpeed = 25.f;
-	//	physics.m_Drag = 10.f;
-	//	physics.m_MaxSpeed = 800.f;
-	//	physics.m_MinSpeed = 0.f;
-	//	physics.m_SteerSpeed = 15.f;
-	//	entityManager_->AddEntity(std::move(player2));
-	//}
-	
 
 	return true;
 }
@@ -201,13 +107,6 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 	{
 		std::swap(players[0], players[1]);
 	}
-	// NOTE: Don't put this in the loop. This way is easier to handle mutual player
-	//       mutual player interaction
-	//       
-	// Update Player1
-	// TODO: Implement collision
-	// TODO: Implement jumping
-
 	
 	for (int i = 0; i < 2; ++i)
 	{
@@ -231,9 +130,6 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 		SteerTheCar(dt_, player);
 		HandleJump(dt_, jump, player);
 		CollideWithOtherEntities(dt_, player);
-
-		
-
 	}
 
 }

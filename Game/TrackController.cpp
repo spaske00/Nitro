@@ -58,7 +58,7 @@ bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityMan
 		return false;
 	}
 
-	Engine::Matrix<TileType> track(36, 18);
+	Engine::Matrix<TileType> track(36, 21);
 	std::fill(std::begin(track), std::end(track), TileType::water);
 
 	
