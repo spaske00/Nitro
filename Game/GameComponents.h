@@ -137,8 +137,10 @@ namespace Nitro
 	{
 		vec2 m_OriginalModelSize;
 		bool m_InTheAir{ false };
-		float m_AirbornEndTime{ -1.f };
-		float m_JumpTimeLength{ 1.f };
+		float m_AirbornTimeLeft{ -1.f };
+		float m_JumpTimeLength;
+		float m_JumpTimeCooldownLeft;
+		float m_JumpTimeCooldownLength;
 	};
 	
 }

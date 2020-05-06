@@ -84,10 +84,15 @@ namespace Engine
 
 
 	
+	enum class RenderPriorty
+	{
+		Normal, Top
+	};
 
 	struct SpriteComponent : public Component
 	{
 		Texture* m_Image{};
+		RenderPriorty m_RenderPriority{ RenderPriorty::Normal };
 		bool m_FlipHorizontal{ false };
 		bool m_FlipVertical{ false };
 	};

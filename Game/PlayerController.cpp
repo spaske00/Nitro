@@ -47,7 +47,15 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		player1->AddComponent<Engine::CollidedWithComponent>();
 		player1->AddComponent<Engine::MoverComponent>();
 		player1->AddComponent<Engine::PlayerComponent>();
-		player1->AddComponent<JumpingComponent>().m_OriginalModelSize = transform.m_Size;
+		
+		auto& jumping = player1->AddComponent<JumpingComponent>();
+		jumping.m_InTheAir = false;
+		jumping.m_AirbornTimeLeft = -1.f;
+		jumping.m_JumpTimeCooldownLeft = -1.f;
+		jumping.m_JumpTimeCooldownLength = 4.f;
+		jumping.m_JumpTimeLength = 1.8f;
+		jumping.m_OriginalModelSize = transform.m_Size;
+
 		auto& input = player1->AddComponent<Engine::InputComponent>();
 
 		input.inputActions.emplace_back("Player1MoveUp");
@@ -86,7 +94,14 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		player2->AddComponent<Engine::CollidedWithComponent>();
 		player2->AddComponent<Engine::MoverComponent>();
 		player2->AddComponent<Engine::PlayerComponent>();
-		player2->AddComponent<JumpingComponent>().m_OriginalModelSize = transform.m_Size;
+
+		auto& jumping = player2->AddComponent<JumpingComponent>();
+		jumping.m_InTheAir = false;
+		jumping.m_AirbornTimeLeft = -1.f;
+		jumping.m_JumpTimeCooldownLeft = -1.f;
+		jumping.m_JumpTimeCooldownLength = 4.f;
+		jumping.m_JumpTimeLength = 1.8f;
+		jumping.m_OriginalModelSize = transform.m_Size;
 
 		auto& input = player2->AddComponent<Engine::InputComponent>();
 
@@ -250,24 +265,31 @@ void Nitro::PlayerController::HandleJump(float dt_, bool jump, Engine::Entity* p
 {
 	if (auto jumpingComponent = player->GetComponent<JumpingComponent>())
 	{
-		if (jumpingComponent->m_InTheAir == false && jump)
+		if (jumpingComponent->m_InTheAir == false && jump && jumpingComponent->m_JumpTimeCooldownLeft < 0.f)
 		{
-			jumpingComponent->m_AirbornEndTime = jumpingComponent->m_JumpTimeLength;
+			jumpingComponent->m_AirbornTimeLeft = jumpingComponent->m_JumpTimeLength;
 			jumpingComponent->m_InTheAir = true;
+			jumpingComponent->m_JumpTimeCooldownLeft = jumpingComponent->m_JumpTimeCooldownLength;
+			player->GetComponent<Engine::SpriteComponent>()->m_RenderPriority = Engine::RenderPriorty::Top;
 		}
 
 		if (jumpingComponent->m_InTheAir)
 		{
-			if (jumpingComponent->m_AirbornEndTime > 0.f)
+			if (jumpingComponent->m_AirbornTimeLeft > 0.f)
 			{
 				auto transform = player->GetComponent<Engine::TransformComponent>();
-				transform->m_Size = jumpingComponent->m_OriginalModelSize + jumpingComponent->m_OriginalModelSize * sin((float)M_PI * jumpingComponent->m_AirbornEndTime / jumpingComponent->m_JumpTimeLength);
-				jumpingComponent->m_AirbornEndTime -= dt_;
+				transform->m_Size = jumpingComponent->m_OriginalModelSize + jumpingComponent->m_OriginalModelSize * sin((float)M_PI * jumpingComponent->m_AirbornTimeLeft / jumpingComponent->m_JumpTimeLength);
+				jumpingComponent->m_AirbornTimeLeft -= dt_;
 			}
 			else
 			{
 				jumpingComponent->m_InTheAir = false;
+				player->GetComponent<Engine::SpriteComponent>()->m_RenderPriority = Engine::RenderPriorty::Normal;
 			}
+		}
+		else
+		{
+			jumpingComponent->m_JumpTimeCooldownLeft -= dt_;
 		}
 		
 	}

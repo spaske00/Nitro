@@ -72,7 +72,12 @@ namespace Engine
         // draw entities
         {
             m_EntitiesBuffer.clear();
+            // So the ones on top end up last 
+            
             entityManager->GetAllEntitiesWithComponent<DrawableEntity>(std::back_inserter(m_EntitiesBuffer));
+            std::partition(m_EntitiesBuffer.begin(), m_EntitiesBuffer.end(), [](auto* e) {
+                return e->GetComponent<Engine::SpriteComponent>()->m_RenderPriority == RenderPriorty::Normal;
+             });
             m_Renderer->DrawEntities(m_EntitiesBuffer, camera);
 
         }
