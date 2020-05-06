@@ -47,13 +47,15 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		player1->AddComponent<Engine::CollidedWithComponent>();
 		player1->AddComponent<Engine::MoverComponent>();
 		player1->AddComponent<Engine::PlayerComponent>();
-		
+		player1->AddComponent<JumpingComponent>().m_OriginalModelSize = transform.m_Size;
 		auto& input = player1->AddComponent<Engine::InputComponent>();
 
 		input.inputActions.emplace_back("Player1MoveUp");
 		input.inputActions.emplace_back("Player1MoveDown");
 		input.inputActions.emplace_back("Player1MoveLeft");
 		input.inputActions.emplace_back("Player1MoveRight");
+		input.inputActions.emplace_back("Player1Jump");
+
 		// input.inputActions.emplace_back("Player1Jump");
 
 		player1->AddComponent<PlayerTagComponent>(PlayerTag::One);
@@ -84,13 +86,15 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		player2->AddComponent<Engine::CollidedWithComponent>();
 		player2->AddComponent<Engine::MoverComponent>();
 		player2->AddComponent<Engine::PlayerComponent>();
-		
+		player2->AddComponent<JumpingComponent>().m_OriginalModelSize = transform.m_Size;
+
 		auto& input = player2->AddComponent<Engine::InputComponent>();
 
 		input.inputActions.emplace_back("Player2MoveUp");
 		input.inputActions.emplace_back("Player2MoveDown");
 		input.inputActions.emplace_back("Player2MoveLeft");
 		input.inputActions.emplace_back("Player2MoveRight");
+		input.inputActions.emplace_back("Player2Jump");
 		// input.inputActions.emplace_back("Player1Jump");
 
 		player2->AddComponent<PlayerTagComponent>(PlayerTag::Two);
@@ -147,12 +151,13 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 		bool moveDown = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveDown", tag));
 		bool moveLeft = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveLeft", tag));
 		bool moveRight = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveRight", tag));
+		bool jump = Engine::InputManager::IsActionActive(input, fmt::format("Player{}Jump", tag));
 
 
 		MoveWheel(dt_, moveLeft, moveRight, physics);
 		HandleGasAndBreaking(dt_, moveUp, moveDown, physics);
 		SteerTheCar(dt_, player);
-
+		HandleJump(dt_, jump, player);
 		CollideWithOtherEntities(dt_, player);
 
 		
@@ -239,6 +244,32 @@ void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity
 
 			entity->GetComponent<Engine::CollidedWithComponent>()->m_CollidedWith.erase(player);
 		}
+	}
+}
+void Nitro::PlayerController::HandleJump(float dt_, bool jump, Engine::Entity* player)
+{
+	if (auto jumpingComponent = player->GetComponent<JumpingComponent>())
+	{
+		if (jumpingComponent->m_InTheAir == false && jump)
+		{
+			jumpingComponent->m_AirbornEndTime = jumpingComponent->m_JumpTimeLength;
+			jumpingComponent->m_InTheAir = true;
+		}
+
+		if (jumpingComponent->m_InTheAir)
+		{
+			if (jumpingComponent->m_AirbornEndTime > 0.f)
+			{
+				auto transform = player->GetComponent<Engine::TransformComponent>();
+				transform->m_Size = jumpingComponent->m_OriginalModelSize + jumpingComponent->m_OriginalModelSize * sin((float)M_PI * jumpingComponent->m_AirbornEndTime / jumpingComponent->m_JumpTimeLength);
+				jumpingComponent->m_AirbornEndTime -= dt_;
+			}
+			else
+			{
+				jumpingComponent->m_InTheAir = false;
+			}
+		}
+		
 	}
 }
 /*

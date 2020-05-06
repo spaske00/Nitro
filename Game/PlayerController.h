@@ -22,5 +22,7 @@ namespace Nitro
 		void HandleGasAndBreaking(float dt_, bool moveUp, bool moveDown, CarPhysicsComponent* physics);
 		void SteerTheCar(float dt_, Engine::Entity* player);
 		void CollideWithOtherEntities(float dt_, Engine::Entity* player);
+		void HandleJump(float dt_, bool jump, Engine::Entity* player);
+
 	};
 }
