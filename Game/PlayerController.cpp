@@ -30,25 +30,33 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 	
 	auto trackComponent = track->GetComponent<TrackComponent>();
 	int lowestLayer = trackComponent->m_LowestLayerIndex;
-	auto firstRoadTile = FindRoadTileAtLayer(trackComponent->m_TracksMatrix, lowestLayer);
+	auto firstRoadTile = FindRoadTileAtLayer(trackComponent->m_TracksMatrix, lowestLayer - 6);
 	auto firstRoadTilePosition = firstRoadTile->GetComponent<Engine::TransformComponent>()->m_Position;
 	auto firstRoadTileSize = firstRoadTile->GetComponent<Engine::TransformComponent>()->m_Size;
 	
+	for (int i = 1; i <= 2; ++i)
 	{
-		auto player1 = Engine::Entity::Create();
-		player1->AddComponent<Engine::DrawableEntity>();
+		auto player = Engine::Entity::Create();
+		player->AddComponent<Engine::DrawableEntity>();
+
 		
-		
-		auto& transform = player1->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x - firstRoadTileSize.x / 4, 
+		auto& transform = player->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x - firstRoadTileSize.x / 4,
 			firstRoadTilePosition.y - firstRoadTileSize.y / 4, 50.f, 50.f);
 
-		player1->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player1Texture");
-		player1->AddComponent<Engine::CollisionComponent>(40.f);
-		player1->AddComponent<Engine::CollidedWithComponent>();
-		player1->AddComponent<Engine::MoverComponent>();
-		player1->AddComponent<Engine::PlayerComponent>();
+		if (i == 2)
+		{
+			transform.m_Position = vec2{ firstRoadTilePosition.x + firstRoadTileSize.x / 4,
+			firstRoadTilePosition.y - firstRoadTileSize.y / 4 };
+		}
 		
-		auto& jumping = player1->AddComponent<JumpingComponent>();
+
+		player->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture(fmt::format("player{}Texture", i));
+		player->AddComponent<Engine::CollisionComponent>(40.f);
+		player->AddComponent<Engine::CollidedWithComponent>();
+		player->AddComponent<Engine::MoverComponent>();
+		player->AddComponent<Engine::PlayerComponent>();
+
+		auto& jumping = player->AddComponent<JumpingComponent>();
 		jumping.m_InTheAir = false;
 		jumping.m_AirbornTimeLeft = -1.f;
 		jumping.m_JumpTimeCooldownLeft = -1.f;
@@ -56,77 +64,126 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		jumping.m_JumpTimeLength = 1.8f;
 		jumping.m_OriginalModelSize = transform.m_Size;
 
-		auto& input = player1->AddComponent<Engine::InputComponent>();
+		auto& input = player->AddComponent<Engine::InputComponent>();
 
-		input.inputActions.emplace_back("Player1MoveUp");
-		input.inputActions.emplace_back("Player1MoveDown");
-		input.inputActions.emplace_back("Player1MoveLeft");
-		input.inputActions.emplace_back("Player1MoveRight");
-		input.inputActions.emplace_back("Player1Jump");
+		input.inputActions.emplace_back(fmt::format("Player{}MoveUp", i));
+		input.inputActions.emplace_back(fmt::format("Player{}MoveDown", i));
+		input.inputActions.emplace_back(fmt::format("Player{}MoveLeft", i));
+		input.inputActions.emplace_back(fmt::format("Player{}MoveRight", i));
+		input.inputActions.emplace_back(fmt::format("Player{}Jump", i));
 
 		// input.inputActions.emplace_back("Player1Jump");
 
-		player1->AddComponent<PlayerTagComponent>(PlayerTag::One);
+		player->AddComponent<PlayerTagComponent>(PlayerTagFromInt(i));
 
-		auto& physics = player1->AddComponent<CarPhysicsComponent>();
-		
+		auto& physics = player->AddComponent<CarPhysicsComponent>();
+
 		physics.m_Acceleration = 120.f;
 		physics.m_CarSpeed = 0.f;
-		physics.m_CarHeading = -M_PI / 2;
+		physics.m_CarHeading = -(float)M_PI / 2;
 		physics.m_SteerAngle = 0.f;
 		physics.m_WheelBase = transform.m_Size.y;
-		physics.m_BreakSpeed = 25.f;
-		physics.m_Drag = 10.f;
+		physics.m_BreakSpeed = 70.f;
+		physics.m_Drag = 40.f;
 		physics.m_MaxSpeed = 800.f;
 		physics.m_MinSpeed = 0.f;
 		physics.m_SteerSpeed = 15.f;
 
-		entityManager_->AddEntity(std::move(player1));
+		entityManager_->AddEntity(std::move(player));
 	}
+	//{
+	//	auto player1 = Engine::Entity::Create();
+	//	player1->AddComponent<Engine::DrawableEntity>();
+	//	
+	//	
+	//	auto& transform = player1->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x - firstRoadTileSize.x / 4, 
+	//		firstRoadTilePosition.y - firstRoadTileSize.y / 4, 50.f, 50.f);
 
-	{
-		auto player2 = Engine::Entity::Create();
-		player2->AddComponent<Engine::DrawableEntity>();
-		auto& transform = player2->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x + firstRoadTileSize.x / 4,
-			firstRoadTilePosition.y - firstRoadTileSize.y / 4, 50.f, 50.f);
-		player2->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player2Texture");
-		player2->AddComponent<Engine::CollisionComponent>(40.f);
-		player2->AddComponent<Engine::CollidedWithComponent>();
-		player2->AddComponent<Engine::MoverComponent>();
-		player2->AddComponent<Engine::PlayerComponent>();
+	//	player1->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player1Texture");
+	//	player1->AddComponent<Engine::CollisionComponent>(40.f);
+	//	player1->AddComponent<Engine::CollidedWithComponent>();
+	//	player1->AddComponent<Engine::MoverComponent>();
+	//	player1->AddComponent<Engine::PlayerComponent>();
+	//	
+	//	auto& jumping = player1->AddComponent<JumpingComponent>();
+	//	jumping.m_InTheAir = false;
+	//	jumping.m_AirbornTimeLeft = -1.f;
+	//	jumping.m_JumpTimeCooldownLeft = -1.f;
+	//	jumping.m_JumpTimeCooldownLength = 4.f;
+	//	jumping.m_JumpTimeLength = 1.8f;
+	//	jumping.m_OriginalModelSize = transform.m_Size;
 
-		auto& jumping = player2->AddComponent<JumpingComponent>();
-		jumping.m_InTheAir = false;
-		jumping.m_AirbornTimeLeft = -1.f;
-		jumping.m_JumpTimeCooldownLeft = -1.f;
-		jumping.m_JumpTimeCooldownLength = 4.f;
-		jumping.m_JumpTimeLength = 1.8f;
-		jumping.m_OriginalModelSize = transform.m_Size;
+	//	auto& input = player1->AddComponent<Engine::InputComponent>();
 
-		auto& input = player2->AddComponent<Engine::InputComponent>();
+	//	input.inputActions.emplace_back("Player1MoveUp");
+	//	input.inputActions.emplace_back("Player1MoveDown");
+	//	input.inputActions.emplace_back("Player1MoveLeft");
+	//	input.inputActions.emplace_back("Player1MoveRight");
+	//	input.inputActions.emplace_back("Player1Jump");
 
-		input.inputActions.emplace_back("Player2MoveUp");
-		input.inputActions.emplace_back("Player2MoveDown");
-		input.inputActions.emplace_back("Player2MoveLeft");
-		input.inputActions.emplace_back("Player2MoveRight");
-		input.inputActions.emplace_back("Player2Jump");
-		// input.inputActions.emplace_back("Player1Jump");
+	//	// input.inputActions.emplace_back("Player1Jump");
 
-		player2->AddComponent<PlayerTagComponent>(PlayerTag::Two);
+	//	player1->AddComponent<PlayerTagComponent>(PlayerTag::One);
 
-		auto& physics = player2->AddComponent<CarPhysicsComponent>();
-		physics.m_Acceleration = 120.f;
-		physics.m_CarSpeed = 0.f;
-		physics.m_CarHeading = -M_PI/2;
-		physics.m_SteerAngle = 0.f;
-		physics.m_WheelBase = transform.m_Size.y;
-		physics.m_BreakSpeed = 25.f;
-		physics.m_Drag = 10.f;
-		physics.m_MaxSpeed = 800.f;
-		physics.m_MinSpeed = 0.f;
-		physics.m_SteerSpeed = 15.f;
-		entityManager_->AddEntity(std::move(player2));
-	}
+	//	auto& physics = player1->AddComponent<CarPhysicsComponent>();
+	//	
+	//	physics.m_Acceleration = 120.f;
+	//	physics.m_CarSpeed = 0.f;
+	//	physics.m_CarHeading = -(float)M_PI / 2;
+	//	physics.m_SteerAngle = 0.f;
+	//	physics.m_WheelBase = transform.m_Size.y;
+	//	physics.m_BreakSpeed = 25.f;
+	//	physics.m_Drag = 10.f;
+	//	physics.m_MaxSpeed = 800.f;
+	//	physics.m_MinSpeed = 0.f;
+	//	physics.m_SteerSpeed = 15.f;
+
+	//	entityManager_->AddEntity(std::move(player1));
+	//}
+
+	//{
+	//	auto player2 = Engine::Entity::Create();
+	//	player2->AddComponent<Engine::DrawableEntity>();
+	//	auto& transform = player2->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x + firstRoadTileSize.x / 4,
+	//		firstRoadTilePosition.y - firstRoadTileSize.y / 4, 50.f, 50.f);
+	//	player2->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture("player2Texture");
+	//	player2->AddComponent<Engine::CollisionComponent>(40.f);
+	//	player2->AddComponent<Engine::CollidedWithComponent>();
+	//	player2->AddComponent<Engine::MoverComponent>();
+	//	player2->AddComponent<Engine::PlayerComponent>();
+
+	//	auto& jumping = player2->AddComponent<JumpingComponent>();
+	//	jumping.m_InTheAir = false;
+	//	jumping.m_AirbornTimeLeft = -1.f;
+	//	jumping.m_JumpTimeCooldownLeft = -1.f;
+	//	jumping.m_JumpTimeCooldownLength = 4.f;
+	//	jumping.m_JumpTimeLength = 1.8f;
+	//	jumping.m_OriginalModelSize = transform.m_Size;
+
+	//	auto& input = player2->AddComponent<Engine::InputComponent>();
+
+	//	input.inputActions.emplace_back("Player2MoveUp");
+	//	input.inputActions.emplace_back("Player2MoveDown");
+	//	input.inputActions.emplace_back("Player2MoveLeft");
+	//	input.inputActions.emplace_back("Player2MoveRight");
+	//	input.inputActions.emplace_back("Player2Jump");
+	//	// input.inputActions.emplace_back("Player1Jump");
+
+	//	player2->AddComponent<PlayerTagComponent>(PlayerTag::Two);
+
+	//	auto& physics = player2->AddComponent<CarPhysicsComponent>();
+	//	physics.m_Acceleration = 120.f;
+	//	physics.m_CarSpeed = 0.f;
+	//	physics.m_CarHeading = -(float)M_PI/2;
+	//	physics.m_SteerAngle = 0.f;
+	//	physics.m_WheelBase = transform.m_Size.y;
+	//	physics.m_BreakSpeed = 25.f;
+	//	physics.m_Drag = 10.f;
+	//	physics.m_MaxSpeed = 800.f;
+	//	physics.m_MinSpeed = 0.f;
+	//	physics.m_SteerSpeed = 15.f;
+	//	entityManager_->AddEntity(std::move(player2));
+	//}
 	
 
 	return true;
