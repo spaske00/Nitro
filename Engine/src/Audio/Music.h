@@ -12,6 +12,7 @@ namespace Engine
 		static void stop();
 		static void resume();
 		void Destroy();
+		~Music();
 	private:
 		Mix_Music* m_music = nullptr;
 	};
