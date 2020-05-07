@@ -9,6 +9,11 @@ bool Nitro::AudioController::Init(Engine::AudioManager* audioManager_)
 		LOG_WARNING("Failed to load music.ogg");
 		return false;
 	}
+	if (!audioManager_->LoadSoundEffect("Resource/Sound/jump.wav", "jump_sound"))
+	{
+		LOG_WARNING("Failed to load jump.wav");
+		return false;
+	}
 	audioManager_->PlayMusic("background_music");
 	return true;
 }

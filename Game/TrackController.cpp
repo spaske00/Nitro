@@ -1,11 +1,8 @@
 #include "precomp.h"
 #include "GameComponents.h"
 #include "TrackPatternGenerator.h"
-
 #include "TrackController.h"
 
-
-#include "ModuloMath.h"
 
 
 // TODO(Marko): convert all of these to int, no need for floating point operations
@@ -61,12 +58,12 @@ bool Nitro::TrackController::Init(Engine::Renderer* renderer_, Engine::EntityMan
 		return false;
 	}
 
-	Engine::Matrix<TileType> track(36, 18);
+	Engine::Matrix<TileType> track(36, 21);
 	std::fill(std::begin(track), std::end(track), TileType::water);
 
 	
 
-	vec2 tileSize{ 256.f, 512.f };
+	vec2 tileSize{ 256.f, 256.f };
 	int mainTrackColumnBegin = 7;
 	int mainTrackColumnEnd = mainTrackColumnBegin + m_TrackPatternGenerator.Cols();
 	for (int i = 0; i < track.Rows(); ++i)

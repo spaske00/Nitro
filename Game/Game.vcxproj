@@ -149,7 +149,7 @@
     <ClInclude Include="DebugController.h" />
     <ClInclude Include="GameApp.h" />
     <ClInclude Include="GameComponents.h" />
-    <ClInclude Include="ModuloMath.h" />
+    <ClInclude Include="MathUtil.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="precomp.h" />
     <ClInclude Include="TextController.h" />
