@@ -111,8 +111,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Audio\AudioManager.cpp" />
-    <ClCompile Include="src\Audio\Music.cpp" />
-    <ClCompile Include="src\Audio\SoundEffect.cpp" />
     <ClCompile Include="src\Core\Application.cpp" />
     <ClCompile Include="src\Core\EntryPoint.h" />
     <ClCompile Include="src\ECS\Component.cpp" />
@@ -431,8 +429,6 @@
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="precomp.h" />
     <ClInclude Include="src\Audio\AudioManager.h" />
-    <ClInclude Include="src\Audio\Music.h" />
-    <ClInclude Include="src\Audio\SoundEffect.h" />
     <ClInclude Include="src\Core\Application.h" />
     <ClInclude Include="src\ECS\Component.h" />
     <ClInclude Include="src\ECS\Entity.h" />

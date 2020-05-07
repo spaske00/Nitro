@@ -1,4 +1,5 @@
 #include "precomp.h"
+
 #include "AudioController.h"
 
 bool Nitro::AudioController::Init(Engine::AudioManager* audioManager_)

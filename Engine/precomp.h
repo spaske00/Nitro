@@ -14,6 +14,7 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <unordered_map>
 
 #include <SDL.h>
 #include <SDL_mixer.h>

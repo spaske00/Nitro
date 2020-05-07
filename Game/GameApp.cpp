@@ -12,6 +12,7 @@
 #include "TrackController.h"
 #include "TextController.h"
 #include "AudioController.h"
+
 void Nitro::GameApp::GameSpecificWindowData()
 {
 	Engine::WindowData windowData;

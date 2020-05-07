@@ -1,20 +1,14 @@
 
 #pragma once
 
-
-namespace Engine {
-
-	class SoundEffect;
-	class Music;
-
+namespace Engine 
+{
 	class AudioManager
 	{
 	public:
-		AudioManager();
 		~AudioManager();
 
 		bool Init();
-		void Destroy();
 
 		bool LoadSoundEffect(const std::string& filePath, const std::string& name);
 		void PlaySoundEffect(const std::string& name);
@@ -22,9 +16,9 @@ namespace Engine {
 		void PlayMusic(const std::string& name);
 
 	private:
-		std::map<std::string, std::unique_ptr<SoundEffect>> m_SoundEffectMap;
-		std::map<std::string, std::unique_ptr<Music>> m_MusicMap;
-		bool m_IsInitialized = false;
+		std::map<std::string, Mix_Chunk*> m_SoundEffectMap;
+		std::map<std::string, Mix_Music*> m_MusicMap;
+		bool m_IsInitialized = false;	
 	};
 
 }

@@ -108,12 +108,6 @@
     <ClCompile Include="Matrix.cpp">
       <Filter>src\Util</Filter>
     </ClCompile>
-    <ClCompile Include="src\Audio\Music.cpp">
-      <Filter>src\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Audio\SoundEffect.cpp">
-      <Filter>src\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="src\Audio\AudioManager.cpp">
       <Filter>src\Audio</Filter>
     </ClCompile>
@@ -1069,12 +1063,6 @@
     </ClInclude>
     <ClInclude Include="Matrix.h">
       <Filter>src\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Audio\SoundEffect.h">
-      <Filter>src\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Audio\Music.h">
-      <Filter>src\Audio</Filter>
     </ClInclude>
     <ClInclude Include="src\Audio\AudioManager.h">
       <Filter>src\Audio</Filter>

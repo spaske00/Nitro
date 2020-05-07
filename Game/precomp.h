@@ -25,5 +25,7 @@ using vec4 = glm::vec4;
 using mat4x4 = glm::mat4x4;
 using Color = glm::u8vec4;
 
+#include <SDL_mixer.h>
+
 #include "Engine.h"
 #include "MathUtil.h"
