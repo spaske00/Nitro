@@ -98,7 +98,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 
 
 
-void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityManager_)
+void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityManager_, Engine::AudioManager* audioManager_)
 {
 	auto players = entityManager_->GetAllEntitiesWithComponents<Engine::PlayerComponent>();
 	ASSERT(players.size() == 2, "Must be excatly two players");
@@ -128,7 +128,7 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 		MoveWheel(dt_, moveLeft, moveRight, physics);
 		HandleGasAndBreaking(dt_, moveUp, moveDown, physics);
 		SteerTheCar(dt_, player);
-		HandleJump(dt_, jump, player);
+		HandleJump(dt_, jump, player, audioManager_);
 		CollideWithOtherEntities(dt_, player);
 	}
 
@@ -214,7 +214,7 @@ void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity
 		}
 	}
 }
-void Nitro::PlayerController::HandleJump(float dt_, bool jump, Engine::Entity* player)
+void Nitro::PlayerController::HandleJump(float dt_, bool jump, Engine::Entity* player, Engine::AudioManager* audioManager_)
 {
 	if (auto jumpingComponent = player->GetComponent<JumpingComponent>())
 	{
@@ -224,6 +224,7 @@ void Nitro::PlayerController::HandleJump(float dt_, bool jump, Engine::Entity* p
 			jumpingComponent->m_InTheAir = true;
 			jumpingComponent->m_JumpTimeCooldownLeft = jumpingComponent->m_JumpTimeCooldownLength;
 			player->GetComponent<Engine::SpriteComponent>()->m_RenderPriority = Engine::RenderPriorty::Top;
+			audioManager_->PlaySoundEffect("jump_sound");
 		}
 
 		if (jumpingComponent->m_InTheAir)
