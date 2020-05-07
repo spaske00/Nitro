@@ -27,10 +27,12 @@ namespace Engine {
         Mix_ResumeMusic();
 
     }
-
     void Music::Destroy() {
         if (nullptr != m_music)
             Mix_FreeMusic(m_music);
+    }
+    Music::~Music() {
+      
     }
 
 

@@ -11,7 +11,11 @@ namespace Engine {
     }
 
     void SoundEffect::Destroy() {
+
         if (nullptr != m_chunk)
             Mix_FreeChunk(m_chunk);
+    }
+    SoundEffect::~SoundEffect() {
+
     }
 };
