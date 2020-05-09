@@ -80,10 +80,9 @@ namespace Nitro {
 				}
 
 				
-				auto player1 = players[0];
-				auto player2 = players[1];
-				if (player1->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::dead || player2->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::dead) {
-					winner = player1->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::dead ? player2 : player1;
+				
+				if (players[0]->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::dead || players[1]->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::dead) {
+					winner = players[0]->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::dead ? players[1] : players[0];
 					winner_jump = winner->GetComponent<JumpingComponent>();
 					audioManager_->PlaySoundEffect("finish_sound");
 					audioManager_->StopMusic();
