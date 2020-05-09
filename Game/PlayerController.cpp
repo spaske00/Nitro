@@ -253,7 +253,7 @@ void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity
 		}
 		// TODO: dodati funkciju koja prekida igricu jer je igrac poginuo
 		if (!entity->HasComponent<Nitro::TileInfoComponent>() && player->GetComponent<JumpingComponent>()->m_InTheAir == false) {
-			player->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::dead;
+			player->GetComponent<PlayerTagComponent>()->m_PlayerState = PlayerState::dead;
 		}
 	}
 }
