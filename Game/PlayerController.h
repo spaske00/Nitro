@@ -12,6 +12,7 @@ namespace Nitro
 	public:
 		bool Init(Engine::EntityManager* entityManager_, Engine::TextureManager* textureManager_);
 		void Update(float dt_, Engine::EntityManager* entityManager_, Engine::AudioManager* audioManager_);
+		void HandleContiniousCollision(float dt_, Engine::Entity* player);
 		static std::unique_ptr<PlayerController> Create()
 		{
 			return std::make_unique<PlayerController>();
