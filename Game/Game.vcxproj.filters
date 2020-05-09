@@ -51,6 +51,9 @@
     <ClCompile Include="AudioController.cpp">
       <Filter>src\Controllers</Filter>
     </ClCompile>
+    <ClCompile Include="GameModeController.cpp">
+      <Filter>src\Controllers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="precomp.h">
@@ -88,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="MathUtil.h">
       <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="GameModeController.h">
+      <Filter>src\Controllers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

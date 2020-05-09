@@ -30,6 +30,9 @@ namespace Engine
 
             transform->m_Position += mover->m_TranslationSpeed * dt;
             transform->m_Rotation += mover->m_RotationSpeed * dt;
+
+            mover->m_TranslationSpeed = { 0,0 };
+            mover->m_RotationSpeed = 0;
         }
 
         // Collide

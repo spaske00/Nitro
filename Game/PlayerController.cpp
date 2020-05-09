@@ -60,7 +60,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		jumping.m_InTheAir = false;
 		jumping.m_AirbornTimeLeft = -1.f;
 		jumping.m_JumpTimeCooldownLeft = -1.f;
-		jumping.m_JumpTimeCooldownLength = 4.f;
+		jumping.m_JumpTimeCooldownLength = 1.f;
 		jumping.m_JumpTimeLength = 1.8f;
 		jumping.m_OriginalModelSize = transform.m_Size;
 
@@ -131,7 +131,7 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 		HandleGasAndBreaking(dt_, moveUp, moveDown, physics);
 		SteerTheCar(dt_, player);
 		HandleJump(dt_, jump, player, audioManager_);
-		CollideWithOtherEntities(dt_, player);
+		CollideWithOtherEntities(dt_, player, audioManager_);
 		HandleContiniousCollision(dt_, player);
 	}
 
@@ -219,7 +219,7 @@ void Nitro::PlayerController::SteerTheCar(float dt_, Engine::Entity* player)
 	transform->m_Rotation = 90.f + RadiansToDegrees(physics->m_CarHeading);
 }
 
-void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity* player)
+void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity* player, Engine::AudioManager* audioManager_)
 {
 	auto collidedWithComponent = player->GetComponent<Engine::CollidedWithComponent>();
 	auto playerCarPhysics = player->GetComponent<CarPhysicsComponent>();
@@ -242,11 +242,12 @@ void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity
 			if (entityCarPhysics->m_State.m_Flag == CarCollisionFlag::NotCollided) {
 				entityCarPhysics->m_State.m_Flag = CarCollisionFlag::JustCollided;
 				entityCarPhysics->m_State.m_EndTime = 1.f;
+				audioManager_->PlaySoundEffect("tump_sound");
 				entityTransformComponent->m_Position += (B - A) * 8.f * dt_;
 				playerTransformComponent->m_Position += (A - B) * 8.f * dt_;
 				entityCarPhysics->m_CarSpeed -= 0.8f * entityCarPhysics->m_CarSpeed * dt_;
 				playerCarPhysics->m_CarSpeed -= 0.7f * playerCarPhysics->m_CarSpeed * dt_;
-
+				
 			}
 
 
@@ -255,6 +256,12 @@ void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity
 		if (!entity->HasComponent<Nitro::TileInfoComponent>() && player->GetComponent<JumpingComponent>()->m_InTheAir == false) {
 			player->GetComponent<PlayerTagComponent>()->m_PlayerState = PlayerState::dead;
 		}
+		/*if (entity->HasComponent<TileInfoComponent>()) {
+			if (entity->GetComponent<TileInfoComponent>()->m_TileType != TileType::road && player->GetComponent<JumpingComponent>()->m_InTheAir == false) {
+				player->GetComponent<PlayerTagComponent>()->m_PlayerState = PlayerState::dead;
+			}
+		
+		}*/
 	}
 }
 void Nitro::PlayerController::HandleJump(float dt_, bool jump, Engine::Entity* player, Engine::AudioManager* audioManager_)

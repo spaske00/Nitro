@@ -62,7 +62,7 @@ namespace Engine
         {
             for (auto& action : component->inputActions)
             {
-                action.m_Active = IsButtonActionActive(action.m_Action, action.m_ActionTriggerState);
+                action.m_Active = IsActionInState(action.m_Action, action.m_ActionTriggerState);
             }
         }
     }
@@ -73,7 +73,7 @@ namespace Engine
         m_InputActionStates.clear();
     }
 
-    bool InputManager::IsButtonActionActive(EInputAction _eAction, EInputActionState _eState) const
+    bool InputManager::IsActionInState(EInputAction _eAction, EInputActionState _eState) const
     {
         ASSERT(m_InputActionStates.find(_eAction) != m_InputActionStates.end(), "Unknown input action: {}", _eAction);
         return m_InputActionStates.at(_eAction) == _eState;
@@ -89,8 +89,6 @@ namespace Engine
         m_InputActions["Player2MoveDown"] = VK_DOWN;
         m_InputActions["Player2MoveRight"] = VK_RIGHT;
         m_InputActions["Player2Jump"] = VK_RSHIFT;
-        m_InputActions["PauseGame"] = VK_ESCAPE;
-        m_InputActions["RestartGame"] = 'R';
         m_InputActions["Player1MoveUp"] = 'W';
         m_InputActions["Player1MoveLeft"] = 'A';
         m_InputActions["Player1MoveDown"] = 'S';
@@ -100,6 +98,10 @@ namespace Engine
         m_InputActions["PanCameraLeft"] = 'Y';
         m_InputActions["PanCameraDown"] = 'Y';
         m_InputActions["PanCameraRight"] = 'Y';
+        m_InputActions["Pause1Game"] = 'E';
+        m_InputActions["Start1Game"] = 'Q';
+        m_InputActions["Pause2Game"] = 'P';
+        m_InputActions["Start2Game"] = VK_RETURN;
     }
 
     bool InputManager::IsActionActive(InputComponent* inputComponent, EInputAction targetAction)
