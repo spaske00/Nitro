@@ -146,8 +146,13 @@ namespace Nitro
 	enum class TextInfoType {
 		Kmh,
 		Speed,
-		Distance
+		Distance,
+		Start,
+		Pause,
+		Score
 	};
+
+
 
 	struct TextInfoComponent : public Engine::Component
 	{
@@ -158,6 +163,13 @@ namespace Nitro
 		TextInfoComponent(PlayerTag PlayerTag, TextInfoType Type, Engine::Entity* Player ) : m_PlayerTag(PlayerTag), m_Type(Type),m_PlayerEntity(Player) {}
 	};
 	
+	enum class GameMode {
+		MenuMode,
+		PlayingMode,
+		PauseMode,
+		ScoreMode
+
+	};
 
 	struct JumpingComponent : public Engine::Component
 	{

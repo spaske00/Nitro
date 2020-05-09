@@ -14,6 +14,9 @@ namespace Engine
 		void PlaySoundEffect(const std::string& name);
 		bool LoadMusic(const std::string& filePath, const std::string& name);
 		void PlayMusic(const std::string& name);
+		void PauseMusic();
+		void ResumeMusic();
+		void StopMusic();
 
 	private:
 		std::map<std::string, Mix_Chunk*> m_SoundEffectMap;

@@ -18,10 +18,10 @@ namespace Engine
         static bool IsActionActive(InputComponent* inputComponent, EInputAction targetAction);
 
         InputManager() = default;
+        bool IsActionInState(EInputAction _eAction, EInputActionState _eState) const;
 
     private:
         void ProcessInput();
-        bool IsButtonActionActive(EInputAction _eAction, EInputActionState _eState) const;
         void InitKeybinds();
 
         std::unordered_map<EInputAction, KeyboardButton> m_InputActions{ };

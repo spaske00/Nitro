@@ -12,6 +12,7 @@
 #include "TrackController.h"
 #include "TextController.h"
 #include "AudioController.h"
+#include "GameModeController.h"
 
 void Nitro::GameApp::GameSpecificWindowData()
 {
@@ -75,23 +76,55 @@ bool Nitro::GameApp::GameSpecificInit()
 		LOG_ERROR("Failed to initilize AUdioController");
 		return false;
 	}
+	
+	m_GameModeController = GameModeController::Create();
 
+	if (!m_GameModeController->Init(m_EntityManager.get()))
+
+	{
+
+		LOG_ERROR("Failed to initilize AUdioController");
+
+		return false;
+
+	}
 
 	return true;
+
 }
+
+
 
 bool Nitro::GameApp::GameSpecificShutdown()
+
 {
+
 	return true;
+
 }
 
+
+
 void Nitro::GameApp::GameSpecificUpdate(float dt)
+
 {
+
 #if _DEBUG
+
 	m_DebugController->Update(dt, m_EntityManager.get());
+
 #endif
-	m_PlayerController->Update(dt, m_EntityManager.get(), m_AudioManager.get());
-	m_TextController->Update(dt, m_EntityManager.get());
+
 	m_CameraController->Update(dt, m_EntityManager.get());
 	m_TrackController->Update(dt, m_EntityManager.get(), m_TextureManager.get());
+	m_GameModeController->Update(dt, m_EntityManager.get(), m_AudioManager.get(), m_InputManager.get());
+
+	switch (m_GameModeController->getGameMode()) {
+	case Nitro::GameMode::PlayingMode: {
+
+		m_PlayerController->Update(dt, m_EntityManager.get(), m_AudioManager.get());
+	}break;
+	default: break;
+	};
+	m_TextController->Update(dt, m_EntityManager.get());
 }
