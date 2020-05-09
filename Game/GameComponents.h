@@ -68,7 +68,10 @@ namespace Nitro
 		return static_cast<PlayerTag>(p);
 	}
 
-	
+	enum class PlayerState {
+		alive = 1,
+		dead = 0
+	};
 	
 	struct PlayerTagComponent : public Engine::Component
 	{
@@ -77,8 +80,31 @@ namespace Nitro
 			: m_PlayerTag(playerTag_)
 		{
 		}
+		PlayerState m_PlayerState = PlayerState::alive;
 	};
 
+	enum class CarCollisionFlag {
+		NotCollided = 1,
+		JustCollided = 2,
+		CurrentlyColliding = 3
+	};
+
+	inline int CarCollisionToInt(CarCollisionFlag c) {
+		return static_cast<int>(c);
+	}
+
+	inline CarCollisionFlag
+		CarCollisionFlagFromInt(int c)
+	{
+		ASSERT(c == 1 || c == 2 || c == 3, "int CarCollision value must be 1 or 2");
+		return static_cast<CarCollisionFlag>(c);
+	}
+
+	struct CollisionInformation {
+		CarCollisionFlag m_Flag;
+		Engine::Entity* m_Entity;
+		float m_EndTime;
+	};
 
 	struct CarPhysicsComponent : public Engine::Component
 	{
@@ -92,7 +118,7 @@ namespace Nitro
 		float m_MaxSpeed{};
 		float m_MinSpeed{};
 		float m_SteerSpeed{};
-
+		CollisionInformation m_State;
 	};
 
 	struct TileInfoComponent : public Engine::Component

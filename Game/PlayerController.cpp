@@ -78,7 +78,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 
 		auto& physics = player->AddComponent<CarPhysicsComponent>();
 
-		physics.m_Acceleration = 120.f;
+		physics.m_Acceleration = 70.f;
 		physics.m_CarSpeed = 0.f;
 		physics.m_CarHeading = -(float)M_PI / 2;
 		physics.m_SteerAngle = 0.f;
@@ -88,6 +88,8 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 		physics.m_MaxSpeed = 800.f;
 		physics.m_MinSpeed = 0.f;
 		physics.m_SteerSpeed = 15.f;
+		physics.m_State.m_Flag = CarCollisionFlag::NotCollided;
+		physics.m_State.m_EndTime = 0.f;
 
 		entityManager_->AddEntity(std::move(player));
 	}
@@ -130,9 +132,26 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 		SteerTheCar(dt_, player);
 		HandleJump(dt_, jump, player, audioManager_);
 		CollideWithOtherEntities(dt_, player);
+		HandleContiniousCollision(dt_, player);
 	}
 
 }
+
+void Nitro::PlayerController::HandleContiniousCollision(float dt_, Engine::Entity* player) {
+	auto collidedWithComponent = player->GetComponent<Engine::CollidedWithComponent>();
+	auto playerCarPhysics = player->GetComponent<CarPhysicsComponent>();
+	int flag = 0;
+	for (auto entity : collidedWithComponent->m_CollidedWith) {
+		if (entity->HasComponent<CarPhysicsComponent>()) {
+			flag = 1;
+		}
+	}
+	if (flag == 0) {
+		playerCarPhysics->m_State.m_Flag = CarCollisionFlag::NotCollided;
+		playerCarPhysics->m_State.m_EndTime = 0.f;
+	}
+}
+
 
 
 
@@ -204,13 +223,37 @@ void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity
 {
 	auto collidedWithComponent = player->GetComponent<Engine::CollidedWithComponent>();
 	auto playerCarPhysics = player->GetComponent<CarPhysicsComponent>();
+	auto playerMoverComponent = player->GetComponent<Engine::MoverComponent>();
+	auto playerTransformComponent = player->GetComponent<Engine::TransformComponent>();
+
+
 	for (auto entity : collidedWithComponent->m_CollidedWith)
 	{
 		if (entity->HasComponent<CarPhysicsComponent>())
 		{
-			auto entityCarPhysics = entity->GetComponent<CarPhysicsComponent>();
 
-			entity->GetComponent<Engine::CollidedWithComponent>()->m_CollidedWith.erase(player);
+			auto entityCarPhysics = entity->GetComponent<CarPhysicsComponent>();
+			auto entityMoverComponent = entity->GetComponent<Engine::MoverComponent>();
+			auto entityTransformComponent = entity->GetComponent<Engine::TransformComponent>();
+
+			auto A = playerTransformComponent->m_Position;
+			auto B = entityTransformComponent->m_Position;
+
+			if (entityCarPhysics->m_State.m_Flag == CarCollisionFlag::NotCollided) {
+				entityCarPhysics->m_State.m_Flag = CarCollisionFlag::JustCollided;
+				entityCarPhysics->m_State.m_EndTime = 1.f;
+				entityTransformComponent->m_Position += (B - A) * 8.f * dt_;
+				playerTransformComponent->m_Position += (A - B) * 8.f * dt_;
+				entityCarPhysics->m_CarSpeed -= 0.8f * entityCarPhysics->m_CarSpeed * dt_;
+				playerCarPhysics->m_CarSpeed -= 0.7f * playerCarPhysics->m_CarSpeed * dt_;
+
+			}
+
+
+		}
+		// TODO: dodati funkciju koja prekida igricu jer je igrac poginuo
+		if (!entity->HasComponent<Nitro::TileInfoComponent>() && player->GetComponent<JumpingComponent>()->m_InTheAir == false) {
+			player->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::dead;
 		}
 	}
 }
