@@ -133,18 +133,26 @@ void::Nitro::RoadItemController::Update(float dt_, Engine::EntityManager* entity
 			itemTile = FindItemsLayerIndexLocations(track, items.front());
 
 			int k = 0;
-			if (lowestLayer == 35) {
-				k = 16;
+			if (lowestLayer == 35 && item->GetComponent<RoadItemTagComponent>()->m_RoadItemTag==RoadItemTag::Boost) {
+				k = 20;
+			}else if (lowestLayer == 35 && item->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Bump) {
+				k = 18;
 			}
-			else if (lowestLayer == 23)
-			{
+			else if (lowestLayer == 23 && item->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Boost) {
 				k = -10;
 			}
-			else if (lowestLayer == 11)
+			else if (lowestLayer == 23 && item->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Bump) {
+				k = -8;
+			}
+			else if (lowestLayer == 11 && item->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Boost) {
 				k = -20;
-				auto tile = RandomRoadTileAtLayer(trackComponent->m_TracksMatrix, lowestLayer-k-r);
-				auto tilePos = tile->GetComponent<Engine::TransformComponent>()->m_Position;
-				auto tileSize = tile->GetComponent<Engine::TransformComponent>()->m_Size;
+			}
+			else if (lowestLayer == 35 && item->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Bump) {
+				k = -18;
+			}
+			auto tile = RandomRoadTileAtLayer(trackComponent->m_TracksMatrix, lowestLayer-k-r);
+			auto tilePos = tile->GetComponent<Engine::TransformComponent>()->m_Position;
+			auto tileSize = tile->GetComponent<Engine::TransformComponent>()->m_Size;
 			
 			if (r % 2 == 0)
 			{
