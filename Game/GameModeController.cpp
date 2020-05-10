@@ -54,9 +54,6 @@ namespace Nitro {
 			std::swap(players[0], players[1]);
 		}
 
-		//auto winner = players[0];
-		//auto winner_jump = winner->GetComponent<JumpingComponent>();
-
 		for (auto text : texts) {
 			auto tekst = text->GetComponent<Engine::TextComponent>();
 			auto info = text->GetComponent<TextInfoComponent>();
@@ -84,8 +81,6 @@ namespace Nitro {
 				
 				
 				if (players[0]->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::dead || players[1]->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::dead) {
-				//	winner = players[0]->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::alive ? players[0] : players[1];
-					//winner_jump = winner->GetComponent<JumpingComponent>();
 					audioManager_->PlaySoundEffect("finish_sound");
 					audioManager_->StopMusic();
 					audioManager_->PlayMusic("score_music");
@@ -102,7 +97,7 @@ namespace Nitro {
 				}
 			}break;
 			case GameMode::ScoreMode: {
-				auto winner = players[0]->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::dead ? players[1] : players[0];
+				auto winner = players[0]->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::alive ? players[0] : players[1];
 				std::string player = winner->GetComponent<PlayerTagComponent>()->m_PlayerTag == PlayerTag::One ? "BLUE PLAYER WON" : "RED PLAYER WON";
 				auto winner_jump = winner->GetComponent<JumpingComponent>();
 
