@@ -132,11 +132,20 @@ void::Nitro::RoadItemController::Update(float dt_, Engine::EntityManager* entity
 			lowestLayer = trackComponent->m_LowestLayerIndex;
 			itemTile = FindItemsLayerIndexLocations(track, items.front());
 
-			auto tile = RandomRoadTileAtLayerY(trackComponent->m_TracksMatrix, itemTile);
-			auto tilePos = tile->GetComponent<Engine::TransformComponent>()->m_Position;
-			auto tileSize = tile->GetComponent<Engine::TransformComponent>()->m_Size;
-
-
+			int k = 0;
+			if (lowestLayer == 35) {
+				k = 16;
+			}
+			else if (lowestLayer == 23)
+			{
+				k = -10;
+			}
+			else if (lowestLayer == 11)
+				k = -20;
+				auto tile = RandomRoadTileAtLayer(trackComponent->m_TracksMatrix, lowestLayer-k-r);
+				auto tilePos = tile->GetComponent<Engine::TransformComponent>()->m_Position;
+				auto tileSize = tile->GetComponent<Engine::TransformComponent>()->m_Size;
+			
 			if (r % 2 == 0)
 			{
 				posIt.x = tilePos.x - tileSize.x / 4;
