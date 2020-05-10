@@ -20,7 +20,17 @@ bool Nitro::TextureController::Init(Engine::Renderer* renderer_, Engine::Texture
 		return false;
 	}
 
-	
+	if (!textureManager_->CreateTexture(renderer_, "barrier", texturesRootDir_ + "/barrier.svg"))
+	{
+		LOG_ERROR("Failed to create barrier Texture");
+		return false;
+	}
+
+	if (!textureManager_->CreateTexture(renderer_, "booster", texturesRootDir_ + "/boost.png"))
+	{
+		LOG_ERROR("Failed to create barrier Texture");
+		return false;
+	}
 
 	for(int i = 0; i < (int)TileType::TileTypeCount; ++i)
 	{

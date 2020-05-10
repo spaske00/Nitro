@@ -11,8 +11,8 @@ namespace Nitro
 	class TextController;
 	class AudioController;
 	class GameModeController;
+	class RoadItemController;
 	enum class GameMode;
-	
 	class GameApp : public Engine::Application
 	{
 		void GameSpecificWindowData() override;
@@ -27,6 +27,7 @@ namespace Nitro
 		std::unique_ptr<TextController> m_TextController;
 		std::unique_ptr<AudioController> m_AudioController;
 		std::unique_ptr<GameModeController> m_GameModeController;
+		std::unique_ptr<RoadItemController> m_RoadItemController;
 
 
 #if _DEBUG

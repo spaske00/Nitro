@@ -180,5 +180,19 @@ namespace Nitro
 		float m_JumpTimeCooldownLeft;
 		float m_JumpTimeCooldownLength;
 	};
-	
+
+	enum class RoadItemTag
+	{
+		Bump,
+		Boost
+	};
+
+
+	struct RoadItemTagComponent : public Engine::Component
+	{
+		RoadItemTag m_RoadItemTag;
+		explicit RoadItemTagComponent(RoadItemTag RoadItemTag)
+			: m_RoadItemTag(RoadItemTag) {}
+	};
+
 }

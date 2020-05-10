@@ -249,6 +249,20 @@ void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity
 				playerCarPhysics->m_CarSpeed -= 0.7f * playerCarPhysics->m_CarSpeed * dt_;
 				
 			}
+			else if (entity->HasComponent<Engine::RoadItemComponent>())
+			{
+				if (entity->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Bump)
+				{
+					auto physics = player->GetComponent<CarPhysicsComponent>();
+					physics->m_CarSpeed -= 50.0f;
+					audioManager_->PlaySoundEffect("tump_sound");
+				}
+				else if (entity->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Boost)
+				{
+					auto physics = player->GetComponent<CarPhysicsComponent>();
+					physics->m_CarSpeed += 50.0f;
+				}
+			}
 
 
 		}
@@ -259,12 +273,6 @@ void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity
 		}
 		// TODO: dodati funkciju koja prekida igricu jer je igrac poginuo
 		
-		/*if (entity->HasComponent<TileInfoComponent>()) {
-			if (entity->GetComponent<TileInfoComponent>()->m_TileType != TileType::road && player->GetComponent<JumpingComponent>()->m_InTheAir == false) {
-				player->GetComponent<PlayerTagComponent>()->m_PlayerState = PlayerState::dead;
-			}
-		
-		}*/
 	}
 
 	if (!onTheRoad && player->GetComponent<JumpingComponent>()->m_InTheAir == false) {
