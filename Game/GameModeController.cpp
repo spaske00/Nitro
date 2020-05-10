@@ -77,9 +77,7 @@ namespace Nitro {
 					audioManager_->PauseMusic();
 					tekst->m_text = "PAUSE II";
 				}
-
-				
-				
+		
 				if (players[0]->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::dead || players[1]->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::dead) {
 					audioManager_->PlaySoundEffect("finish_sound");
 					audioManager_->StopMusic();
@@ -100,7 +98,10 @@ namespace Nitro {
 				auto winner = players[0]->GetComponent<PlayerTagComponent>()->m_PlayerState == PlayerState::alive ? players[0] : players[1];
 				std::string player = winner->GetComponent<PlayerTagComponent>()->m_PlayerTag == PlayerTag::One ? "BLUE PLAYER WON" : "RED PLAYER WON";
 				auto winner_jump = winner->GetComponent<JumpingComponent>();
-
+				auto camera = entityManager_->GetAllEntitiesWithComponents<Engine::CameraComponent>()[0];
+				auto trans = camera->GetComponent<Engine::TransformComponent>();
+				trans->m_Position = winner->GetComponent<Engine::TransformComponent>()->m_Position;
+				
 				if (info->m_Type == TextInfoType::Score) {
 					if (winner_jump->m_InTheAir == false && winner_jump->m_JumpTimeCooldownLeft < 0.f)
 					{
