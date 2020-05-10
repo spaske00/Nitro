@@ -101,6 +101,10 @@ namespace Engine
 	{
 
 	};
+	struct RoadItemComponent : public Component
+	{
+
+	};
 
 	struct HealthComponent : public Component
 	{
