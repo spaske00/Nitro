@@ -54,6 +54,7 @@
     <ClCompile Include="GameModeController.cpp">
       <Filter>src\Controllers</Filter>
     </ClCompile>
+    <ClCompile Include="RoadItemController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="precomp.h">
@@ -95,6 +96,7 @@
     <ClInclude Include="GameModeController.h">
       <Filter>src\Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="RoadItemController.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

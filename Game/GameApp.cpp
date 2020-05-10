@@ -13,6 +13,7 @@
 #include "TextController.h"
 #include "AudioController.h"
 #include "GameModeController.h"
+#include "RoadItemController.h"
 
 void Nitro::GameApp::GameSpecificWindowData()
 {
@@ -62,7 +63,14 @@ bool Nitro::GameApp::GameSpecificInit()
 		LOG_ERROR("Failed to initialize PlayerController");
 		return false;
 	}
-
+	
+	m_RoadItemController = RoadItemController::Create();
+	if (!m_RoadItemController->Init(m_EntityManager.get(), m_TextureManager.get()))
+	{
+		LOG_ERROR("Failed to initialize RoadItemController");
+		return false;
+	}
+	
 	m_TextController = TextController::Create();
 	if (!m_TextController->Init(m_EntityManager.get()))
 	{
@@ -93,17 +101,10 @@ bool Nitro::GameApp::GameSpecificInit()
 
 }
 
-
-
 bool Nitro::GameApp::GameSpecificShutdown()
-
 {
-
 	return true;
-
 }
-
-
 
 void Nitro::GameApp::GameSpecificUpdate(float dt)
 
@@ -127,4 +128,5 @@ void Nitro::GameApp::GameSpecificUpdate(float dt)
 	default: break;
 	};
 	m_TextController->Update(dt, m_EntityManager.get());
+	m_RoadItemController->Update(dt, m_EntityManager.get());
 }

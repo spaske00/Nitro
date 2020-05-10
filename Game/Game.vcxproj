@@ -139,6 +139,7 @@
     <ClCompile Include="GameModeController.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="precomp.cpp" />
+    <ClCompile Include="RoadItemController.cpp" />
     <ClCompile Include="TextController.cpp" />
     <ClCompile Include="TextureController.cpp" />
     <ClCompile Include="TrackController.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="MathUtil.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="precomp.h" />
+    <ClInclude Include="RoadItemController.h" />
     <ClInclude Include="TextController.h" />
     <ClInclude Include="TextureController.h" />
     <ClInclude Include="TrackController.h" />
