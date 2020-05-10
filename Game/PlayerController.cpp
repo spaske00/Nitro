@@ -226,7 +226,7 @@ void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity
 	auto playerMoverComponent = player->GetComponent<Engine::MoverComponent>();
 	auto playerTransformComponent = player->GetComponent<Engine::TransformComponent>();
 
-
+	bool onTheRoad = false;
 	for (auto entity : collidedWithComponent->m_CollidedWith)
 	{
 		if (entity->HasComponent<CarPhysicsComponent>())
@@ -252,16 +252,23 @@ void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity
 
 
 		}
-		// TODO: dodati funkciju koja prekida igricu jer je igrac poginuo
-		if (!entity->HasComponent<Nitro::TileInfoComponent>() && player->GetComponent<JumpingComponent>()->m_InTheAir == false) {
-			player->GetComponent<PlayerTagComponent>()->m_PlayerState = PlayerState::dead;
+		if (auto tileComponent = entity->GetComponent<TileInfoComponent>()) {
+			if (tileComponent->m_TileType == TileType::road)
+				onTheRoad = true;
+		
 		}
+		// TODO: dodati funkciju koja prekida igricu jer je igrac poginuo
+		
 		/*if (entity->HasComponent<TileInfoComponent>()) {
 			if (entity->GetComponent<TileInfoComponent>()->m_TileType != TileType::road && player->GetComponent<JumpingComponent>()->m_InTheAir == false) {
 				player->GetComponent<PlayerTagComponent>()->m_PlayerState = PlayerState::dead;
 			}
 		
 		}*/
+	}
+
+	if (!onTheRoad && player->GetComponent<JumpingComponent>()->m_InTheAir == false) {
+		player->GetComponent<PlayerTagComponent>()->m_PlayerState = PlayerState::dead;
 	}
 }
 void Nitro::PlayerController::HandleJump(float dt_, bool jump, Engine::Entity* player, Engine::AudioManager* audioManager_)
