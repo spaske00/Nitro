@@ -27,19 +27,19 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 
 	auto track = entityManager_->GetEntityWithComponent<TrackComponent>();
 	ASSERT(track != nullptr, "Track must exists");
-	
+
 	auto trackComponent = track->GetComponent<TrackComponent>();
 	int lowestLayer = trackComponent->m_LowestLayerIndex;
 	auto firstRoadTile = FindRoadTileAtLayer(trackComponent->m_TracksMatrix, lowestLayer - 6);
 	auto firstRoadTilePosition = firstRoadTile->GetComponent<Engine::TransformComponent>()->m_Position;
 	auto firstRoadTileSize = firstRoadTile->GetComponent<Engine::TransformComponent>()->m_Size;
-	
+
 	for (int i = 1; i <= 2; ++i)
 	{
 		auto player = Engine::Entity::Create();
 		player->AddComponent<Engine::DrawableEntity>();
 
-		
+
 		auto& transform = player->AddComponent<Engine::TransformComponent>(firstRoadTilePosition.x - firstRoadTileSize.x / 4,
 			firstRoadTilePosition.y - firstRoadTileSize.y / 4, 50.f, 50.f);
 
@@ -48,7 +48,7 @@ bool Nitro::PlayerController::Init(Engine::EntityManager* entityManager_, Engine
 			transform.m_Position = vec2{ firstRoadTilePosition.x + firstRoadTileSize.x / 4,
 			firstRoadTilePosition.y - firstRoadTileSize.y / 4 };
 		}
-		
+
 
 		player->AddComponent<Engine::SpriteComponent>().m_Image = textureManager_->GetTexture(fmt::format("player{}Texture", i));
 		player->AddComponent<Engine::CollisionComponent>(40.f);
@@ -109,16 +109,16 @@ void Nitro::PlayerController::Update(float dt_, Engine::EntityManager* entityMan
 	{
 		std::swap(players[0], players[1]);
 	}
-	
+
 	for (int i = 0; i < 2; ++i)
 	{
 		auto player = players[i];
-		auto otherPlayer = players[(i+1) % 2];
+		auto otherPlayer = players[(i + 1) % 2];
 		auto physics = player->GetComponent<CarPhysicsComponent>();
 		auto mover = player->GetComponent<Engine::MoverComponent>();
 		auto input = player->GetComponent<Engine::InputComponent>();
 		auto transform = player->GetComponent<Engine::TransformComponent>();
-		
+
 		int tag = PlayerTagToInt(player->GetComponent<PlayerTagComponent>()->m_PlayerTag);
 		bool moveUp = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveUp", tag));
 		bool moveDown = Engine::InputManager::IsActionActive(input, fmt::format("Player{}MoveDown", tag));
@@ -247,32 +247,32 @@ void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity
 				playerTransformComponent->m_Position += (A - B) * 8.f * dt_;
 				entityCarPhysics->m_CarSpeed -= 0.8f * entityCarPhysics->m_CarSpeed * dt_;
 				playerCarPhysics->m_CarSpeed -= 0.7f * playerCarPhysics->m_CarSpeed * dt_;
-				
-			}
-			else if (entity->HasComponent<Engine::RoadItemComponent>())
-			{
-				if (entity->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Bump)
-				{
-					auto physics = player->GetComponent<CarPhysicsComponent>();
-					physics->m_CarSpeed -= 50.0f;
-					audioManager_->PlaySoundEffect("tump_sound");
-				}
-				else if (entity->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Boost)
-				{
-					auto physics = player->GetComponent<CarPhysicsComponent>();
-					physics->m_CarSpeed += 50.0f;
-				}
-			}
 
-
+			}
 		}
+		else if (entity->HasComponent<Engine::RoadItemComponent>())
+		{
+			if (entity->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Bump)
+			{
+				auto physics = player->GetComponent<CarPhysicsComponent>();
+				physics->m_CarSpeed -= 50.0f * dt_;
+				audioManager_->PlaySoundEffect("tump_sound");
+			}
+			else if (entity->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Boost)
+			{
+				auto physics = player->GetComponent<CarPhysicsComponent>();
+				physics->m_CarSpeed += 50.0f * dt_;
+				audioManager_->PlaySoundEffect("boost_sound");
+			}
+		}
+
 		if (auto tileComponent = entity->GetComponent<TileInfoComponent>()) {
 			if (tileComponent->m_TileType == TileType::road)
 				onTheRoad = true;
-		
+
 		}
 		// TODO: dodati funkciju koja prekida igricu jer je igrac poginuo
-		
+
 	}
 
 	if (!onTheRoad && player->GetComponent<JumpingComponent>()->m_InTheAir == false) {
@@ -310,14 +310,14 @@ void Nitro::PlayerController::HandleJump(float dt_, bool jump, Engine::Entity* p
 		{
 			jumpingComponent->m_JumpTimeCooldownLeft -= dt_;
 		}
-		
+
 	}
 }
 /*
- * CarPhysics: Jumping, collision, 
+ * CarPhysics: Jumping, collision,
  * AI Cars
  * InfoPrint: KM/h, score, koliko zaostaje za ovim drugim igracem...
  * Generisanje Nivoa
- * 
+ *
  */
-// dodat komentar novi 
+ // dodat komentar novi 
