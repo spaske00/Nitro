@@ -23,6 +23,12 @@ bool Nitro::AudioController::Init(Engine::AudioManager* audioManager_)
 		return false;
 	}
 	
+	if (!audioManager_->LoadSoundEffect("Resource/Sound/boost.wav", "boost_sound"))
+	{
+		LOG_WARNING("Failed to load boost.wav");
+		return false;
+	}
+
 	if (!audioManager_->LoadSoundEffect("Resource/Sound/tump.wav", "tump_sound"))
 	{
 		LOG_WARNING("Failed to load tump.wav");
