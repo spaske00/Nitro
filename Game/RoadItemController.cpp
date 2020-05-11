@@ -5,7 +5,17 @@
 
 namespace Nitro
 {
-
+	/*Engine::Entity* ItemFindRoadTileAtLayer(Engine::Matrix<Engine::Entity*>& tileMatrix, int layer)
+	{
+		for (int j = 0; j < tileMatrix.Cols(); ++j)
+		{
+			if (tileMatrix.At(layer, j)->GetComponent<TileInfoComponent>()->m_TileType == TileType::road)
+			{
+				return tileMatrix.At(layer, j);
+			}
+		}
+		return nullptr;
+	}*/
 
 	Engine::Entity* RandomRoadTileAtLayer(Engine::Matrix<Engine::Entity*>& tileMatrix, int layer)
 	{
@@ -36,7 +46,7 @@ namespace Nitro
 		int r;
 		for (int j = 0; j < tileMatrix.Cols(); ++j)
 		{
-			if (tileMatrix.At(x - 2, j)->GetComponent<TileInfoComponent>()->m_TileType == TileType::road)
+			if (tileMatrix.At(x-2, j)->GetComponent<TileInfoComponent>()->m_TileType == TileType::road)
 			{
 				indexes.push_back(j);
 			}
@@ -44,13 +54,12 @@ namespace Nitro
 		int l = indexes.size();
 		r = rand() % l;
 
-		return tileMatrix.At(x - 2, indexes[r]);
+		return tileMatrix.At(x-2, indexes[r]);
 	}
 }
-
+static int update, minimize;
 bool Nitro::RoadItemController::Init(Engine::EntityManager* entityManager_, Engine::TextureManager* textureManager_)
 {
-
 	ASSERT(entityManager_ != nullptr, "Must pass a valid entity manager");
 	ASSERT(textureManager_ != nullptr, "Must pass a valid texture manager");
 
@@ -62,6 +71,8 @@ bool Nitro::RoadItemController::Init(Engine::EntityManager* entityManager_, Engi
 	auto trackComponent = track->GetComponent<TrackComponent>();
 	int lowestLayer = trackComponent->m_LowestLayerIndex;
 
+	update = 0;
+	minimize = 0;
 	int layerStart = 10;
 
 	for (int i = 0; i < 8; i++)
@@ -90,9 +101,9 @@ bool Nitro::RoadItemController::Init(Engine::EntityManager* entityManager_, Engi
 				tilePos.y - tileSize.y / 4, 50.f, 50.f);
 			layerStart += 4;
 		}
-
+		
 		entityManager_->AddEntity(std::move(item));
-	}
+	}	
 
 	return true;
 }
@@ -110,71 +121,104 @@ void::Nitro::RoadItemController::Update(float dt_, Engine::EntityManager* entity
 	auto trackComponent = track->GetComponent<TrackComponent>();
 
 	auto items = entityManager_->GetAllEntitiesWithComponents<Engine::RoadItemComponent>();
-	ASSERT(items.size() == 8, "Eight bumpers!");
-
-
-	int lowestLayer, maxY;
-	std::pair<int, int> itemTile;
-	auto player1 = players[0];
-	auto player2 = players[1];
+	ASSERT(items.size() == 8, "Eight items!");
+	
+	int lowestLayer;
 	auto cam = cameras[0];
 
 	srand(time(NULL));
 	int r = rand() % 10 + 1;
 
 	auto& posCam = cam->GetComponent<Engine::TransformComponent>()->m_Position;
+	lowestLayer = trackComponent->m_LowestLayerIndex;
 
-	for (auto item : items)
+	for(auto item : items)
 	{
 		auto& posIt = item->GetComponent<Engine::TransformComponent>()->m_Position;
-		if ((posIt.y - 1000.0f) > posCam.y)
+		if ((posIt.y - 600.0f) > posCam.y)
 		{
-			lowestLayer = trackComponent->m_LowestLayerIndex;
-			itemTile = FindItemsLayerIndexLocations(track, items.front());
-
-			int k = 0;
-			if (lowestLayer == 35 && item->GetComponent<RoadItemTagComponent>()->m_RoadItemTag==RoadItemTag::Boost) {
-				k = 20;
-			}else if (lowestLayer == 35 && item->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Bump) {
-				k = 18;
+			if (lowestLayer == 35)
+			{
+				if (update == 0)
+				{
+					minimize = 9;
+				}
+				else if (update == 3)
+				{
+					minimize = 9;
+					update = 1;
+				}
+				else
+				{
+					minimize += 5;
+				}
 			}
-			else if (lowestLayer == 23 && item->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Boost) {
-				k = -10;
+			else if (lowestLayer == 23)
+			{
+				if (update == 0) update = 1;
+				if (update == 1)
+				{
+					minimize = 8;
+					update = 2;
+				}
+				else
+				{
+					minimize += 5;
+				}
 			}
-			else if (lowestLayer == 23 && item->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Bump) {
-				k = -8;
+			else
+			{
+				if (update == 2)
+				{
+					minimize = 7;
+					update = 3;
+				}
+				else
+				{
+					minimize += 3;
+				}
 			}
-			else if (lowestLayer == 11 && item->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Boost) {
-				k = -20;
-			}
-			else if (lowestLayer == 35 && item->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Bump) {
-				k = -18;
-			}
-			auto tile = RandomRoadTileAtLayer(trackComponent->m_TracksMatrix, lowestLayer-k-r);
-			auto tilePos = tile->GetComponent<Engine::TransformComponent>()->m_Position;
-			auto tileSize = tile->GetComponent<Engine::TransformComponent>()->m_Size;
 			
-			if (r % 2 == 0)
+			lowestLayer = trackComponent->m_LowestLayerIndex;
+			if (update != 0)
 			{
-				posIt.x = tilePos.x - tileSize.x / 4;
-			}
-			else
-			{
-				posIt.x = tilePos.x + tileSize.x / 4;
+				int what;
+				if (lowestLayer - minimize <= 0) what = 9;
+				else what = lowestLayer - minimize;
+				auto tile = RandomRoadTileAtLayer(trackComponent->m_TracksMatrix, what);
+				auto tilePos = tile->GetComponent<Engine::TransformComponent>()->m_Position;
+				auto tileSize = tile->GetComponent<Engine::TransformComponent>()->m_Size;
+
+				if (r % 2 == 0)
+				{
+					posIt.x = tilePos.x - tileSize.x / 4;
+				}
+				else
+				{
+					posIt.x = tilePos.x + tileSize.x / 4;
+				}
+
+				if (r < 5)
+				{
+					posIt.y = tilePos.y - tileSize.y / 4;
+				}
+				else
+				{
+					posIt.y = tilePos.y + tileSize.y / 4;
+				}
+
+				r = rand() % 10 + 1;
 			}
 
-			if (r < 5)
-			{
-				posIt.y = tilePos.y - tileSize.y / 4;
-			}
-			else
-			{
-				posIt.y = tilePos.y + tileSize.y / 4;
-			}
-
-			r = rand() % 10 + 1;
 		}
 	}
+}
+
+bool Nitro::RoadItemController::Compare(Engine::Entity* p1, Engine::Entity* p2)
+{
+	int y1 = p1->GetComponent<Engine::TransformComponent>()->m_Position.y;
+	int y2 = p2->GetComponent<Engine::TransformComponent>()->m_Position.y;
+	return (y1 < y2);
 }
 
 void Nitro::RoadItemController::ComponentAdd(Engine::Entity* it)
@@ -183,23 +227,4 @@ void Nitro::RoadItemController::ComponentAdd(Engine::Entity* it)
 	it->AddComponent<Engine::CollisionComponent>(50.f, 50.f);
 	it->AddComponent<Engine::CollidedWithComponent>();
 	it->AddComponent<Engine::RoadItemComponent>();
-}
-
-std::pair<int, int> Nitro::RoadItemController::FindItemsLayerIndexLocations(Engine::Entity* trackEntity, Engine::Entity* item)
-{
-	std::pair<int, int> result{ -1,-1 };
-	auto trackComponent = trackEntity->GetComponent<TrackComponent>();
-	auto tracksMatrix = trackComponent->m_TracksMatrix;
-	auto trackRows = trackComponent->m_TracksMatrix.Rows();
-	vec2 tileSize = trackComponent->m_TileSize;
-	auto it = item->GetComponent<Engine::TransformComponent>();
-	for (int i = 0; i < trackRows; ++i)
-	{
-		auto ithTileLayerRowCenterYCoordiante = tracksMatrix.At(i, 0)->GetComponent<Engine::TransformComponent>()->m_Position.y;
-		if (abs(it->m_Position.y - ithTileLayerRowCenterYCoordiante) < tileSize.y / 2)
-		{
-			result.first = i;
-		}
-	}
-	return result;
 }
