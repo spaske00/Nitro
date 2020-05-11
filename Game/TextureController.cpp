@@ -26,9 +26,9 @@ bool Nitro::TextureController::Init(Engine::Renderer* renderer_, Engine::Texture
 		return false;
 	}
 
-	if (!textureManager_->CreateTexture(renderer_, "booster", texturesRootDir_ + "/boost.png"))
+	if (!textureManager_->CreateTexture(renderer_, "booster", texturesRootDir_ + "/booster.svg"))
 	{
-		LOG_ERROR("Failed to create barrier Texture");
+		LOG_ERROR("Failed to create booster Texture");
 		return false;
 	}
 
