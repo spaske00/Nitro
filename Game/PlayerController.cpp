@@ -231,7 +231,6 @@ void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity
 	{
 		if (entity->HasComponent<CarPhysicsComponent>())
 		{
-
 			auto entityCarPhysics = entity->GetComponent<CarPhysicsComponent>();
 			auto entityMoverComponent = entity->GetComponent<Engine::MoverComponent>();
 			auto entityTransformComponent = entity->GetComponent<Engine::TransformComponent>();
@@ -273,12 +272,13 @@ void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity
 				onTheRoad = true;
 
 		}
-		// TODO: dodati funkciju koja prekida igricu jer je igrac poginuo
-
+		// TODO: dodati funkciju koja prekida igricu jer je igrac poginu
 	}
+	
 
 	if (!onTheRoad && player->GetComponent<JumpingComponent>()->m_InTheAir == false) {
 		player->GetComponent<PlayerTagComponent>()->m_PlayerState = PlayerState::dead;
+		LOG_INFO("Player{} {}", player->GetComponent<PlayerTagComponent>()->m_PlayerTag, collidedWithComponent->m_CollidedWith.size());
 	}
 }
 void Nitro::PlayerController::HandleJump(float dt_, bool jump, Engine::Entity* player, Engine::AudioManager* audioManager_)

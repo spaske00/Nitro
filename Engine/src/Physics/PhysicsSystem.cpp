@@ -58,6 +58,7 @@ namespace Engine
             }
         }
 
+        // TODO: Optimize this to a single buffer m_EntitiesBuffer
         auto passiveCollisionEntities = entityManager->GetAllEntitiesWithComponent<CollisionComponent>();
         for (size_t i = 0; i < m_EntitiesBuffer.size(); ++i)
         {

@@ -28,7 +28,6 @@ void PlaceTrack(const Engine::Matrix<Nitro::TileType>& tileMatrix, Engine::Entit
 			entity->AddComponent <Engine::SpriteComponent>().m_Image = texture;
 
 
-
 			tracksMatrix.At(i, j) = entity.get();
 			entityManager_->AddEntity(std::move(entity));
 		}	

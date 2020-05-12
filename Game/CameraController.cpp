@@ -19,6 +19,31 @@ bool Nitro::CameraController::Init(Engine::EntityManager* entityManager_, const 
 	return true;
 }
 
+Engine::Entity* GetLeadingPlayer(Engine::Entity* player1, Engine::Entity* player2)
+{
+	auto t1 = player1->GetComponent<Engine::TransformComponent>();
+	auto t2 = player2->GetComponent<Engine::TransformComponent>();
+	if (t1->m_Position.y < t2->m_Position.y)
+	{
+		return player1;
+	}
+	else
+	{
+		return player2;
+	}
+}
+
+bool PlayerOutOfCameraOnTheDownSide(Engine::Entity* player, Engine::Entity* camera)
+{
+	auto playerPosition = player->GetComponent<Engine::TransformComponent>()->m_Position;
+	auto playerSize = player->GetComponent<Engine::TransformComponent>()->m_Size;
+
+	auto cameraPosition = camera->GetComponent<Engine::TransformComponent>()->m_Position;
+	auto cameraSize = camera->GetComponent<Engine::TransformComponent>()->m_Size;
+
+	return abs(playerPosition.y - cameraPosition.y) > (abs(cameraSize.y / 2) + (playerSize.x));
+}
+
 
 void Nitro::CameraController::Update(float dt_, Engine::EntityManager* entityManager_)
 {
@@ -39,17 +64,30 @@ void Nitro::CameraController::Update(float dt_, Engine::EntityManager* entityMan
 		std::swap(player1, player2);
 	}
 
-	auto player1Position = player1->GetComponent<Engine::TransformComponent>()->m_Position;
-	auto player2Position = player2->GetComponent<Engine::TransformComponent>()->m_Position;
-	
+	auto leadingPlayer = GetLeadingPlayer(player1, player2);
 	{
 		auto transform = camera->GetComponent<Engine::TransformComponent>();
 		/*transform->m_Position.y = (player1Position.y + player2Position.y) / 2;
 		transform->m_Position.x = (player1Position.x + player2Position.x) / 2;*/
 		
-		transform->m_Position = player1Position;
+		transform->m_Position.y = leadingPlayer->GetComponent<Engine::TransformComponent>()->m_Position.y;
+		transform->m_Position.y -= transform->m_Size.y / 4;
 
-	/*	transform->m_Size.x = m_WindowData->m_Width * abs(2 * sin(totalDt) + 1.f);
-		transform->m_Size.y = m_WindowData->m_Height * abs(2 * sin(totalDt) + 1.f);*/
+	
+		transform->m_Position.x = (player1->GetComponent<Engine::TransformComponent>()->m_Position.x 
+			+ player2->GetComponent<Engine::TransformComponent>()->m_Position.x) / 2;	
 	}
+
+	if (PlayerOutOfCameraOnTheDownSide(player1, camera))
+	{
+		player1->GetComponent<PlayerTagComponent>()->m_PlayerState = PlayerState::dead;
+	}
+	else if (PlayerOutOfCameraOnTheDownSide(player2, camera))
+	{
+		player2->GetComponent<PlayerTagComponent>()->m_PlayerState = PlayerState::dead;
+	}
+	
+
+	
+
 }
