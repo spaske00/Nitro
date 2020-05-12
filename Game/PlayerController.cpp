@@ -225,7 +225,7 @@ void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity
 	auto playerCarPhysics = player->GetComponent<CarPhysicsComponent>();
 	auto playerMoverComponent = player->GetComponent<Engine::MoverComponent>();
 	auto playerTransformComponent = player->GetComponent<Engine::TransformComponent>();
-
+	auto jumpingComponent = player->GetComponent<Nitro::JumpingComponent>();
 	bool onTheRoad = false;
 	for (auto entity : collidedWithComponent->m_CollidedWith)
 	{
@@ -252,16 +252,18 @@ void Nitro::PlayerController::CollideWithOtherEntities(float dt_, Engine::Entity
 		}
 		else if (entity->HasComponent<Engine::RoadItemComponent>())
 		{
-			if (entity->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Bump)
+			if (entity->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Bump
+				&& jumpingComponent->m_InTheAir == false)
 			{
 				auto physics = player->GetComponent<CarPhysicsComponent>();
-				physics->m_CarSpeed -= 50.0f * dt_;
+				physics->m_CarSpeed -= 4000.0f * dt_;
 				audioManager_->PlaySoundEffect("tump_sound");
 			}
-			else if (entity->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Boost)
+			else if (entity->GetComponent<RoadItemTagComponent>()->m_RoadItemTag == RoadItemTag::Boost
+				&& jumpingComponent->m_InTheAir == false)
 			{
 				auto physics = player->GetComponent<CarPhysicsComponent>();
-				physics->m_CarSpeed += 50.0f * dt_;
+				physics->m_CarSpeed += 4000.0f * dt_;
 				audioManager_->PlaySoundEffect("boost_sound");
 			}
 		}
